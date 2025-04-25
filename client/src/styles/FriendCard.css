@@ -1,0 +1,44 @@
+.friend-card {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  max-width: 400px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.friend-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1rem;
+}
+
+.friend-info {
+  flex: 1;
+}
+
+.friend-name {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.2rem;
+}
+
+.friend-count {
+  margin: 0 0 0.5rem 0;
+  color: #666;
+}
+
+.friend-button {
+  padding: 0.5rem 1rem;
+  background-color: #DD1155;
+  color: white;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+}
+
+.follow-button:hover {
+  background-color:  #ff71a0;
+}

@@ -1,0 +1,105 @@
+
+/*Styling for App as a whole*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  background-color: #FBFBFB;
+}
+
+
+.App {
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: "Inter", sans-serif;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 20vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(1px + 2vmin);
+  color: white;
+}
+
+/* Adjust spacing and alignment for heading group */
+.heading-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem; /* Reduce space between h1 and h4 */
+}
+
+h1 {
+  font-family: "Outfit", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 100px;
+  color: #DD1155;
+  margin: 0;
+
+}
+
+h4 {
+  font-family: "Inter", sans-serif;
+  font-size: 20px;
+  font-weight: 200;
+  color: #4A0B2F;
+  margin: 0;
+
+} 
+
+.sign-in-wrapper button {
+  background: none;
+  border: 1px transparent;
+  background-color: #DD1155;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.star {
+  position: absolute;
+  width: 70px;
+  height: auto;
+  opacity: 0.9;
+  z-index: 0;
+}
+
+.star-left-1 {
+  top: 8%;
+  left: 10%;
+  transform: rotate(-20deg) scale(1.8);
+}
+
+.star-left-2 {
+  top: 12%;
+  left: 20%;
+  transform: translateX(-50%) scale(1) rotate(10deg);
+}
+
+.star-right-1 {
+  bottom: 15%;
+  right: 10%;
+  transform: rotate(15deg) scale(2);
+}
+
+.star-right-2 {
+  bottom: 20%;
+  right: 18%;
+  transform: scale(1) rotate(65deg);
+}

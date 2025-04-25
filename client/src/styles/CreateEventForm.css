@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #FBFBFB;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  padding: 4rem 2rem;
+  font-family: "Inter", sans-serif;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 1300px;
+  background: transparent;
+  position: relative;
+}
+
+.modal-close {
+  position: relative;
+  top: 1rem;
+  left: 1rem;
+
+  font-size: 1rem;
+  background: #DD1155;
+  border: none;
+  color: white;
+  border-radius: 100%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+}
+
+.form-grid {
+  display: flex;
+  gap: 5rem;
+}
+
+.form-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 1rem;
+}
+
+input, textarea {
+  background: #EFEFEF;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 999px;
+  width: 90%;
+  font-size: 1rem;
+  font-family: "Inter", sans-serif;
+}
+
+textarea {
+  height: 120px;
+  border-radius: 2rem;
+  resize: none;
+  font-family: "Inter", sans-serif;
+}
+
+h2 {
+  font-size: 30px;
+
+}
+
+label {
+  font-weight: 600;
+  font-size: 25px;
+}
+
+.organizer span {
+  background: #EFEFEF;
+  padding: 1rem 1rem;
+  border-radius: 999px;
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
+  display: inline-block;
+  color: #757575;
+}
+
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.upload-btn, .post-btn {
+  background: #DD1155;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tags span {
+  background: #EFEFEF;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+.tag-add {
+  background: #b0b5c1;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  width: 30px;
+  height: 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+}

@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
+
+.navbar {
+    display: flex;
+    font-family: "Inter", sans-serif;
+    justify-content: space-between;
+    width: 95vw;
+    height: 80px;
+    align-items: center;
+    padding: 0.75rem 3rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    position: fixed; /*sticks on scroll, so the navbar stays put*/
+    top: 0;
+    z-index: 100; /*makes sure navbar is always on top of other components*/
+}
+  
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+  
+.logo {
+    font-size: 5rem;
+    font-weight: 900;
+    color: #DD1155;
+}
+  
+.searchbar {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 100px;
+    min-width: 600px;
+    min-height: 2rem;
+}
+  
+.navbar-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+  
+.nav-button,
+.profile-button, .plus-button {
+    padding: 0.6rem 1rem;
+    background-color: #DD1155;
+    color: white;
+    border: none;
+    border-radius: 100px;
+    font-weight: 500;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+  
+.nav-button:hover,
+.profile-button:hover, 
+.plus-button:hover {
+    background-color: #ff71a0;
+}
+
+
+
+  
