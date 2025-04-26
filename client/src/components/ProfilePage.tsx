@@ -97,20 +97,12 @@ export default function ProfilePage() {
 
             <h2 className="event-header">Event History</h2>
 
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',  // This ensures 2 cards per row
-                  gap: '2rem',
-                }}
-              >
-                <div className="recommended-events-grid">
-                  {events.map((event, idx) => (
-                    <EventCardSmall key={idx} {...event} />
-                  ))}
-                </div>
+              <div className="recommended-events-grid">
+                {events.map((event, idx) => (
+                  <EventCardSmall key={idx} {...event} />
+                ))}
               </div>
-
+       
           </div>
       
         </div>
