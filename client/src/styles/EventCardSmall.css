@@ -1,0 +1,52 @@
+/*This has styling for EventCard*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
+
+
+* {
+    font-size: small;
+    text-align: start; /*left aligned*/
+    font-family: "Inter", sans-serif;
+}
+
+.card-small {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    border: 0.5px solid #131212;
+    overflow: clip;
+    color: white;
+    font-family: "Inter", sans-serif;
+    border-radius: 15px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+  
+.overlay {
+    position: absolute;
+    bottom: 0;
+    width: 450px;
+    height: 300px;
+    padding: 20px;
+    background: linear-gradient(to top, #4A0B2Fbf, rgba(255, 230, 230, 0) 70%), url('http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg'); 
+    /*lowkey what to do about the img gradient?*/
+    background-size: cover;
+    background-position: center;
+}
+  
+.title {
+    font-size: 2.5rem;
+    font-weight: bolder;
+    margin: 0;
+    position: absolute;  
+    bottom: 100px;        
+    left: 20px;          
+    width: 90%; 
+}
+  
+.description {
+    position: absolute;  
+    bottom: 10px;        
+    left: 20px;          
+    width: 90%;         
+}

@@ -18,13 +18,9 @@ import Navbar from "./Navbar";
 import EventPage from "./EventPage";
 
 
-// misc
-
-
 /**
  * Firebase configuration keys
  */
-
 
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
@@ -66,20 +62,6 @@ function Home() {
 
         <CreateEventForm isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
           
-
-
-        {/* <FriendCard 
-        name="Christina Paxson" 
-        profilePictureUrl="http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg"
-        friendCount={1}/>
-
-        <FriendCard 
-        name="Christina Paxson" 
-        profilePictureUrl="http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg"
-        friendCount={5}/> */}
-          
-        {/* <SignOutButton aria-label="Sign Out"/>
-        <UserButton /> */}
       </SignedIn>
       
       
