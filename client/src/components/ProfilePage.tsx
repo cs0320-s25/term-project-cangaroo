@@ -1,17 +1,27 @@
 import React from "react";
 import "../styles/ProfilePage.css";
 import { useUser } from "@clerk/clerk-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EventCardGridSearch from "./EventGridSearch";
+import { SignedIn, SignedOut} from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfilePage() {
   const { user } = useUser();
   const userName = user?.username || user?.fullName || "Anon.";
   const [connections, setConnections] = useState(0);
+  const navigate = useNavigate();
 
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
+  return (   
+    <SignedIn>
+    <div className="profile-overlay">
+      <div className="profile-content">
       
         <div className="profile-grid">
           {/* Left Column */}
@@ -40,10 +50,10 @@ export default function ProfilePage() {
 
             <h2>My Favorite <span id="can-go">CanGo</span> Organizers</h2>
             <div className="organizer-container">
-                <button>OMG</button>
-                <button>YOU ATE THAT @ BROWN</button>
-                <button>SLAY</button>
-                <button>PERIOD</button>
+                <button>Hack@Brown</button>
+                <button>Loving Him Was Brown</button>
+                <button>Cooking Club</button>
+                <button>Assocation of Pots and Pans</button>
                 <input id="add-org" placeholder="Add more..." />
             </div>
             
@@ -58,5 +68,6 @@ export default function ProfilePage() {
         </div>
       </div>
     </div>
+    </SignedIn>
   );
 };
