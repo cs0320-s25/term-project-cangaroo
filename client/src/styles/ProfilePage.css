@@ -15,23 +15,26 @@
 
 .profile-grid {
   display: flex;
-  gap: 5rem;
+  /* grid-template-columns: repeat(2, 1fr); */
+  /* gap: 40px; */
+  /* gap: 5rem; */
   justify-content: space-between;
   min-height: 100vh;
-  padding: 2rem 4rem;
+  /* padding: 2rem 4rem; */
   font-family: "Inter", sans-serif;
 }
 
 .profile-section {
   min-height: 100vh;
-  padding: 2rem 4rem;
+  padding: 2rem 2rem;
   font-family: "Inter", sans-serif;
   flex: 1;
+}
 
 .profile-overlay {
     background: #FBFBFB;
     min-height: 100vh;
-    padding: 2rem 4rem;
+    padding: 2rem 2rem;
     font-family: "Inter", sans-serif;
 }
   
@@ -41,7 +44,6 @@
 }
   
 
-  
 /* --- PROFILE HEADER --- */
 
 .profile-header {

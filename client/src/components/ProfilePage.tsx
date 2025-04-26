@@ -39,31 +39,6 @@ export default function ProfilePage() {
     }
   }, [user, navigate]);
 
-  return (
-    <div>
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <FriendsList isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
-          </div>
-        </div>
-      )}
-    
-      <div className="profile-grid">
-        
-        {/* Left Column */}
-        <div className="profile-section">
-
-          <div className="profile-header">
-              <div className="profile-header-section">
-                  <div className="profile-icon"><h2>{userName.charAt(0)}</h2></div>
-              </div>
-              <div className="profile-header-section">
-                  <h2>{userName}</h2>
-                  <h3>{connections} Connections</h3>
-                  <button id="friend-list" onClick={() => setModalOpen(true)}>Friends List</button>
-              </div>
-          </div>
 
   return (   
     <SignedIn>
@@ -76,6 +51,7 @@ export default function ProfilePage() {
         </div>
       </div>
     )}
+    </div>
       
     <div className="profile-overlay">
       <div className="profile-content">
@@ -91,7 +67,7 @@ export default function ProfilePage() {
                 <div className="profile-header-section">
                     <h2>{userName}</h2>
                     <h3>{connections} Connections</h3>
-                    <button id="friend-list">Friends List</button>
+                    <button id="friend-list" onClick={() => setModalOpen(true)}>Friends List</button>
                 </div>
             </div>
 
@@ -113,25 +89,32 @@ export default function ProfilePage() {
                 <button>Assocation of Pots and Pans</button>
                 <input id="add-org" placeholder="Add more..." />
             </div>
+          </div>
             
           
-        {/* Right Column */}
-        <div className="profile-section">
-          <h2 className="event-header">Event History</h2>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',  // This ensures 2 cards per row
-              gap: '2rem',
-            }}
-          >
-              <div className="recommended-events-grid">
-                {events.map((event, idx) => (
-                  <EventCardSmall key={idx} {...event} />
-                ))}
-            </div>
+          {/* Right Column */}
+          <div className="profile-section">
+
+            <h2 className="event-header">Event History</h2>
+
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2, 1fr)',  // This ensures 2 cards per row
+                  gap: '2rem',
+                }}
+              >
+                <div className="recommended-events-grid">
+                  {events.map((event, idx) => (
+                    <EventCardSmall key={idx} {...event} />
+                  ))}
+                </div>
+              </div>
+
           </div>
+      
         </div>
+
       </div>
     </div>
 
