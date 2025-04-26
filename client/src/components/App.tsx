@@ -17,8 +17,6 @@ import CreateEventForm from "./CreateEventForm";
 import EventCardGridSearch from "./EventGridSearch";
 import Navbar from "./Navbar";
 
-// misc
-
 
 /**
  * Firebase configuration keys
