@@ -27,9 +27,21 @@
   padding: 2rem 4rem;
   font-family: "Inter", sans-serif;
   flex: 1;
-  
-}
 
+.profile-overlay {
+    background: #FBFBFB;
+    min-height: 100vh;
+    padding: 2rem 4rem;
+    font-family: "Inter", sans-serif;
+}
+  
+.profile-content {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+  
+
+  
 /* --- PROFILE HEADER --- */
 
 .profile-header {
@@ -49,7 +61,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #efefef00;
+  background: #EFEFEF;
   color: #8D99AE;
   font-weight: bold;
 }
@@ -113,6 +125,10 @@
   background: #EFEFEF;
   width: 110px;
   font-family: "Inter", sans-serif;
+  font-size: 20px;
+  padding: 0.5rem 1.5rem; /* Explicitly match buttons */
+  line-height: 1; /* Reset line height */
+  height: auto; /* Avoid browser autofixing */
 }
 
 #add-tag::placeholder {
@@ -140,6 +156,10 @@
   color: #4A0B2F;
   width: 110px;
   font-family: "Inter", sans-serif;
+  font-size: 20px;
+  padding: 0.5rem 1.5rem; /* Explicitly match buttons */
+  line-height: 1; /* Reset line height */
+  height: auto; /* Avoid browser autofixing */
 }
 
 #add-org::placeholder {
@@ -158,6 +178,8 @@
 #can-go {
   color: #DD1155;
   font-family: "Outfit", sans-serif;
+  font-size: 30px;
+
 }
 
 .event-header {

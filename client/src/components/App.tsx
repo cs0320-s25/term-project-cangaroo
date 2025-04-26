@@ -6,8 +6,7 @@ import {
   SignedIn,
   SignedOut,
   SignInButton,
-  SignOutButton,
-  UserButton} from "@clerk/clerk-react";
+  SignOutButton} from "@clerk/clerk-react";
 
 import { useState } from "react";
 import ProfilePage from "./ProfilePage";
@@ -16,6 +15,7 @@ import ProfilePage from "./ProfilePage";
 import CreateEventForm from "./CreateEventForm";
 import EventCardGridSearch from "./EventGridSearch";
 import Navbar from "./Navbar";
+import EventPage from "./EventPage";
 
 
 /**
@@ -46,7 +46,7 @@ function Home() {
 
         <div className="heading-group">
           <h1>CanGo</h1>
-          <h4>your go-to application for finding events on campus :)</h4>
+          <h4>your go-to application for finding events on campus :&#41;</h4>
           <div className="sign-in-wrapper">
             <SignInButton aria-label="Sign In" />
           </div>
@@ -75,6 +75,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/event" element={<EventPage />} />
       </Routes>
     </Router>
   );
