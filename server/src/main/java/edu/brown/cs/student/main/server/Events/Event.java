@@ -9,4 +9,5 @@ public record Event(
     String startTime,
     String endTime,
     List<String> tags,
-    int eventID) {}
+    int eventID,
+    String eventOrganizer) {}

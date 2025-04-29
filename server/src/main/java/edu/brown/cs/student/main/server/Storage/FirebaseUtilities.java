@@ -196,12 +196,28 @@ public class FirebaseUtilities implements StorageInterface {
         String startTime = document.get("startTime").toString();
         String endTime = document.get("endTime").toString();
         int eventID = Integer.parseInt(document.get("eventID").toString());
+        String eventOrganizer = document.get("eventOrganizer").toString();
 
         List<String> tags = Arrays.asList(document.get("tags").toString().split(" "));
-        events.add(new Event(name, description, date, startTime, endTime, tags, eventID));
+        events.add(
+            new Event(name, description, date, startTime, endTime, tags, eventID, eventOrganizer));
       }
     }
     return events;
+  }
+
+  @Override
+  public void updateAttending(String uid, String eventID, boolean isAttending) {
+    Firestore db = FirestoreClient.getFirestore();
+    DocumentReference docRef = db.collection("users").document(uid);
+
+    // change database architecture to allow storing all events in their own collection
+
+    ApiFuture<DocumentSnapshot> future = docRef.get();
+
+    // update user's
+    // attendingEvents
+    // update event's attendingUsers
   }
 
   @Override
@@ -228,21 +244,41 @@ public class FirebaseUtilities implements StorageInterface {
     Firestore db = FirestoreClient.getFirestore();
     CollectionReference dataRef = db.collection("users").document(uid).collection(collection_id);
 
-    for (DocumentReference docRef : dataRef.listDocuments()) {
-      ApiFuture<DocumentSnapshot> future = docRef.get();
-      DocumentSnapshot document = future.get();
-      if (document.exists()) {
-        // Get a specific field
-        Long ID = document.getLong("ID");
-        assert ID != null;
-
-        if (ID.equals(Long.valueOf(id))) {
-          deleteDocument(docRef);
-          return;
-        }
+    if (dataRef.document("event-" + id) != null) {
+      dataRef.document("event-" + id).delete();
+      CollectionReference eventRef = db.collection("events");
+      if (eventRef.document("event-" + id) != null) {
+        eventRef.document("event-" + id).delete();
       }
+    } else {
+      throw new NoEventFoundException("Event does not exist.");
     }
-    throw new NoEventFoundException("Event does not exist.");
+    //    for (DocumentReference docRef : dataRef.listDocuments()) {
+    //      ApiFuture<DocumentSnapshot> future = docRef.get();
+    //      DocumentSnapshot document = future.get();
+    //      if (document.exists()) {
+    //        // Get a specific field
+    //        Long ID = document.getLong("ID");
+    //        assert ID != null;
+    //
+    //        if (ID.equals(Long.valueOf(id))) {
+    //          deleteDocument(docRef);
+    //          return;
+    //        }
+    //      }
+    //    }
+  }
+
+  @Override
+  public void addEvent(String user, int id, Map<String, Object> data)
+      throws IllegalArgumentException {
+    if (user == null || id < 0 || data == null) {
+      throw new IllegalArgumentException("addEvent: user, id, or data cannot be null");
+    }
+    Firestore db = FirestoreClient.getFirestore();
+    CollectionReference collection = db.collection("users").document(user).collection("events");
+    collection.document("event-" + id).set(data);
+    db.collection("events").document("event-" + id).set(data);
   }
 
   @Override

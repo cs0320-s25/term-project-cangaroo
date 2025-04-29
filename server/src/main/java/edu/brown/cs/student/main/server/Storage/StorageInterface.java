@@ -46,4 +46,8 @@ public interface StorageInterface {
       throws ExecutionException, InterruptedException, NoProfileFoundException;
 
   List<Event> getAllEvents() throws ExecutionException, InterruptedException;
+
+  void updateAttending(String uid, String eventID, boolean isAttending);
+
+  void addEvent(String user, int id, Map<String, Object> data) throws IllegalArgumentException;
 }
