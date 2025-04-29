@@ -145,23 +145,38 @@ public class FirebaseUtilities implements StorageInterface {
       String date,
       String startTime,
       String endTime,
-      List<String> tags)
+      List<String> tags,
+      String eventOrganizer)
       throws ExecutionException, InterruptedException, NoEventFoundException {
     Firestore db = FirestoreClient.getFirestore();
 
     DocumentReference docRef =
         db.collection("users").document(uid).collection("events").document("event-" + eventID);
-    System.out.println(docRef);
-    if (docRef.get().get().exists()) {
-      docRef.update("name", name);
-      docRef.update("description", description);
-      docRef.update("date", date);
-      docRef.update("startTime", startTime);
-      docRef.update("endTime", endTime);
-      docRef.update("tags", tags);
+    DocumentReference eventRef = db.collection("events").document("event-" + eventID);
+    if ((docRef.get().get().exists()) && (eventRef.get().get().exists())) {
+      updateEventData(name, description, date, startTime, endTime, tags, eventOrganizer, docRef);
+      updateEventData(name, description, date, startTime, endTime, tags, eventOrganizer, eventRef);
     } else {
       throw new NoEventFoundException("Event does not exist.");
     }
+  }
+
+  private void updateEventData(
+      String name,
+      String description,
+      String date,
+      String startTime,
+      String endTime,
+      List<String> tags,
+      String eventOrganizer,
+      DocumentReference docRef) {
+    docRef.update("name", name);
+    docRef.update("description", description);
+    docRef.update("date", date);
+    docRef.update("startTime", startTime);
+    docRef.update("endTime", endTime);
+    docRef.update("tags", tags);
+    docRef.update("eventOrganizer", eventOrganizer);
   }
 
   @Override
@@ -221,11 +236,10 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
-  public Map<String, Object> getEvent(String uid, String eventID)
+  public Map<String, Object> getEvent(String eventID)
       throws ExecutionException, InterruptedException, NoEventFoundException {
     Firestore db = FirestoreClient.getFirestore();
-    DocumentReference docRef =
-        db.collection("users").document(uid).collection("events").document("event-" + eventID);
+    DocumentReference docRef = db.collection("events").document("event-" + eventID);
 
     ApiFuture<DocumentSnapshot> future = docRef.get();
     DocumentSnapshot snapshot = future.get();

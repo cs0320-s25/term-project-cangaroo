@@ -25,7 +25,7 @@ public interface StorageInterface {
 
   int getCurrEventID() throws ExecutionException, InterruptedException;
 
-  Map<String, Object> getEvent(String uid, String eventID)
+  Map<String, Object> getEvent(String eventID)
       throws ExecutionException, InterruptedException, NoEventFoundException;
 
   void editEvent(
@@ -36,7 +36,8 @@ public interface StorageInterface {
       String date,
       String startTime,
       String endTime,
-      List<String> tags)
+      List<String> tags,
+      String eventOrganizer)
       throws ExecutionException, InterruptedException, NoEventFoundException;
 
   void editProfile(String uid, List<String> tags)
