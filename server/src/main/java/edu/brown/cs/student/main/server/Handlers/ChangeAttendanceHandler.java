@@ -9,11 +9,11 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class AttendingEventHandler implements Route {
+public class ChangeAttendanceHandler implements Route {
 
   public StorageInterface storageHandler;
 
-  public AttendingEventHandler(StorageInterface storageHandler) {
+  public ChangeAttendanceHandler(StorageInterface storageHandler) {
     this.storageHandler = storageHandler;
   }
 
@@ -22,14 +22,19 @@ public class AttendingEventHandler implements Route {
     Map<String, Object> responseMap = new HashMap<>();
     String uid = request.queryParams("uid");
     String eventID = request.queryParams("eventID");
-    if ((uid == null) || (eventID == null)) {
+    String isAttending = request.queryParams("isAttending");
+
+    if ((uid == null)
+        || (eventID == null)
+        || (!isAttending.equalsIgnoreCase("false") && !isAttending.equalsIgnoreCase("true"))) {
       responseMap.put("result", "success");
-      responseMap.put("error_message", "Missing required parameters: uid, eventID");
+      responseMap.put(
+          "error_message", "Missing required parameters: uid, eventID, isAttending (boolean)");
       return Utils.toMoshiJson(responseMap);
     }
 
     try {
-      this.storageHandler.updateAttending(uid, eventID, true);
+      this.storageHandler.updateAttending(uid, eventID, Boolean.parseBoolean(isAttending));
       responseMap.put("result", "success");
     } catch (NoProfileFoundException e) {
       responseMap.put("result", "failure");

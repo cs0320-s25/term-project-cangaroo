@@ -251,26 +251,31 @@ public class FirebaseUtilities implements StorageInterface {
         List<String> oldEventModifiable = new ArrayList<>(oldEventAttendingList);
         if (isAttending) {
           oldEventModifiable.add(uid);
-          eventRef.update("usersAttending", oldEventModifiable);
-          DocumentReference eventProfileRef =
-              db.collection("users")
-                  .document(eventCreatorUID)
-                  .collection("events")
-                  .document("event-" + eventID);
-          eventProfileRef.update("usersAttending", oldEventModifiable);
-          // update profile
+        } else {
+          oldEventModifiable.remove(uid);
+        }
+        eventRef.update("usersAttending", oldEventModifiable);
+        DocumentReference eventProfileRef =
+            db.collection("users")
+                .document(eventCreatorUID)
+                .collection("events")
+                .document("event-" + eventID);
+        eventProfileRef.update("usersAttending", oldEventModifiable);
+        // update profile
 
-          Map<String, Object> event = eventSnapshot.getData();
-          assert event != null;
+        Map<String, Object> event = eventSnapshot.getData();
+        assert event != null;
+
+        if (isAttending) {
           event.put("usersAttending", oldEventModifiable);
           oldAttending.add(event);
-          System.out.println(event);
-          profileRef.update("eventsAttending", oldAttending);
-          // update event (get uid)
-
         } else {
-
+          oldAttending.remove(event);
         }
+
+        System.out.println(event);
+        profileRef.update("eventsAttending", oldAttending);
+        // update event (get uid)
 
       } else {
         throw new NoEventFoundException("Event does not exist.");
