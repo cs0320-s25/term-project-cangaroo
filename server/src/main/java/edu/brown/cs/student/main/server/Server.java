@@ -3,6 +3,7 @@ package edu.brown.cs.student.main.server;
 import static spark.Spark.after;
 
 import edu.brown.cs.student.main.server.Handlers.AddFriendHandler;
+import edu.brown.cs.student.main.server.Handlers.AttendingEventHandler;
 import edu.brown.cs.student.main.server.Handlers.DeleteEventHandler;
 import edu.brown.cs.student.main.server.Handlers.EditEventHandler;
 import edu.brown.cs.student.main.server.Handlers.EditProfileHandler;
@@ -58,6 +59,7 @@ public class Server {
       Spark.get("create-profile", new ProfileCreationHandler(storageHandler));
       Spark.get("view-event", new ViewEventHandler(storageHandler));
       Spark.get("view-profile", new ViewProfileHandler(storageHandler));
+      Spark.get("attend-event", new AttendingEventHandler(storageHandler));
 
       Spark.notFound(
           (request, response) -> {

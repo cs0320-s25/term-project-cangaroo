@@ -1,6 +1,7 @@
 package edu.brown.cs.student.main.server.Handlers;
 
 import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +48,7 @@ public class EventCreationHandler implements Route {
 
       int eventID = this.storageHandler.getCurrEventID();
 
+      data.put("uid", uid);
       data.put("name", name);
       data.put("description", description);
       data.put("date", date);
@@ -55,6 +57,7 @@ public class EventCreationHandler implements Route {
       data.put("tags", tags);
       data.put("ID", eventID);
       data.put("eventOrganizer", eventOrganizer);
+      data.put("usersAttending", new ArrayList<>());
 
       this.storageHandler.addEvent(uid, eventID, data);
       this.storageHandler.updateEventID(eventID + 1);

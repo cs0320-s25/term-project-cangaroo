@@ -128,8 +128,6 @@ public class FirebaseUtilities implements StorageInterface {
     // future.get() blocks on response
     DocumentSnapshot document = future.get();
     if (document.exists()) {
-      System.out.println(
-          "THIS: " + Integer.parseInt(Objects.requireNonNull(document.get("eventID")).toString()));
       return Integer.parseInt(Objects.requireNonNull(document.get("eventID")).toString());
     } else {
       return 0;
@@ -222,17 +220,64 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
-  public void updateAttending(String uid, String eventID, boolean isAttending) {
+  public void updateAttending(String uid, String eventID, boolean isAttending)
+      throws ExecutionException,
+          InterruptedException,
+          NoProfileFoundException,
+          NoEventFoundException {
     Firestore db = FirestoreClient.getFirestore();
-    DocumentReference docRef = db.collection("users").document(uid);
-
+    DocumentReference profileRef =
+        db.collection("users").document(uid).collection("profile").document("profileProperties");
+    DocumentReference eventRef = db.collection("events").document("event-" + eventID);
     // change database architecture to allow storing all events in their own collection
 
-    ApiFuture<DocumentSnapshot> future = docRef.get();
+    ApiFuture<DocumentSnapshot> profileFuture = profileRef.get();
+    DocumentSnapshot profileSnapshot = profileFuture.get();
 
-    // update user's
-    // attendingEvents
-    // update event's attendingUsers
+    ApiFuture<DocumentSnapshot> eventFuture = eventRef.get();
+    DocumentSnapshot eventSnapshot = eventFuture.get();
+
+    if (profileSnapshot.exists()) {
+      if (eventSnapshot.exists()) {
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> oldAttending =
+            (List<Map<String, Object>>) profileSnapshot.get("eventsAttending");
+        assert oldAttending != null;
+        String eventCreatorUID = Objects.requireNonNull(eventSnapshot.get("uid")).toString();
+        @SuppressWarnings("unchecked")
+        List<String> oldEventAttendingList = (List<String>) eventSnapshot.get("usersAttending");
+
+        assert oldEventAttendingList != null;
+        List<String> oldEventModifiable = new ArrayList<>(oldEventAttendingList);
+        if (isAttending) {
+          oldEventModifiable.add(uid);
+          eventRef.update("usersAttending", oldEventModifiable);
+          DocumentReference eventProfileRef =
+              db.collection("users")
+                  .document(eventCreatorUID)
+                  .collection("events")
+                  .document("event-" + eventID);
+          eventProfileRef.update("usersAttending", oldEventModifiable);
+          // update profile
+
+          Map<String, Object> event = eventSnapshot.getData();
+          assert event != null;
+          event.put("usersAttending", oldEventModifiable);
+          oldAttending.add(event);
+          System.out.println(event);
+          profileRef.update("eventsAttending", oldAttending);
+          // update event (get uid)
+
+        } else {
+
+        }
+
+      } else {
+        throw new NoEventFoundException("Event does not exist.");
+      }
+    } else {
+      throw new NoProfileFoundException("Profile does not exist.");
+    }
   }
 
   @Override
@@ -258,29 +303,11 @@ public class FirebaseUtilities implements StorageInterface {
     Firestore db = FirestoreClient.getFirestore();
     CollectionReference dataRef = db.collection("users").document(uid).collection(collection_id);
 
-    if (dataRef.document("event-" + id) != null) {
-      dataRef.document("event-" + id).delete();
-      CollectionReference eventRef = db.collection("events");
-      if (eventRef.document("event-" + id) != null) {
-        eventRef.document("event-" + id).delete();
-      }
-    } else {
-      throw new NoEventFoundException("Event does not exist.");
-    }
-    //    for (DocumentReference docRef : dataRef.listDocuments()) {
-    //      ApiFuture<DocumentSnapshot> future = docRef.get();
-    //      DocumentSnapshot document = future.get();
-    //      if (document.exists()) {
-    //        // Get a specific field
-    //        Long ID = document.getLong("ID");
-    //        assert ID != null;
-    //
-    //        if (ID.equals(Long.valueOf(id))) {
-    //          deleteDocument(docRef);
-    //          return;
-    //        }
-    //      }
-    //    }
+    dataRef.document("event-" + id);
+    dataRef.document("event-" + id).delete();
+    CollectionReference eventRef = db.collection("events");
+    eventRef.document("event-" + id);
+    eventRef.document("event-" + id).delete();
   }
 
   @Override
