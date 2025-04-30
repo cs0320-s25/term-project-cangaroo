@@ -285,6 +285,67 @@ public class FirebaseUtilities implements StorageInterface {
     }
   }
 
+  private void checkProfilesExist(String senderID, String receiverID)
+      throws NoProfileFoundException {
+    // probably do some error-checking to see if the ids actually correspond to profiles
+    Firestore db = FirestoreClient.getFirestore();
+    boolean foundUID = false;
+    boolean foundFriendID = false;
+    for (DocumentReference userRef : db.collection("users").listDocuments()) {
+      if (userRef.getId().equals(senderID)) {
+        foundUID = true;
+      } else if (userRef.getId().equals(receiverID)) {
+        foundFriendID = true;
+      }
+    }
+    if (!foundUID || !foundFriendID) {
+      throw new NoProfileFoundException("Profile does not exist.");
+    }
+  }
+
+  @Override
+  public void sendFriendRequest(String senderID, String receiverID) throws NoProfileFoundException {
+
+    Firestore db = FirestoreClient.getFirestore();
+    this.checkProfilesExist(senderID, receiverID);
+    // create a document in the receiver's collection for the friend request
+    db.collection("users")
+        .document(senderID)
+        .collection("outgoingFriendRequests")
+        .document(receiverID)
+        .set(new HashMap<>());
+    // create document in 'outgoing friend requests' collection of sender
+    db.collection("users")
+        .document(receiverID)
+        .collection("receivedFriendRequests")
+        .document(senderID)
+        .set(new HashMap<>());
+  }
+
+  @Override
+  public void unsendFriendRequest(String senderID, String receiverID)
+      throws NoProfileFoundException {
+    Firestore db = FirestoreClient.getFirestore();
+    // will throw NoProfileFoundException if profiles don't exist
+    this.checkProfilesExist(senderID, receiverID);
+
+    deleteDocument(
+        db.collection("users")
+            .document(senderID)
+            .collection("outgoingFriendRequests")
+            .document(receiverID));
+    deleteDocument(
+        db.collection("users")
+            .document(receiverID)
+            .collection("receivedFriendRequests")
+            .document(senderID));
+  }
+
+  // respond-to-friend-request endpoint
+  // unfriend endpoint
+  // unsend-friend-request endpoint (?)
+  // view-friends endpoint
+
   @Override
   public Map<String, Object> getEvent(String eventID)
       throws ExecutionException, InterruptedException, NoEventFoundException {

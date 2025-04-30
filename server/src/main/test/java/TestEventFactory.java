@@ -15,7 +15,7 @@ public class TestEventFactory {
           "10:00",
           "10:00",
           List.of("tag" + i),
-          1
+          1, "eventOrganizer"
       ));
     }
     return events;

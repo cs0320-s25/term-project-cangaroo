@@ -55,4 +55,8 @@ public interface StorageInterface {
           NoEventFoundException;
 
   void addEvent(String user, int id, Map<String, Object> data) throws IllegalArgumentException;
+
+  void sendFriendRequest(String senderID, String receiverID) throws NoProfileFoundException;
+
+  void unsendFriendRequest(String senderID, String receiverID) throws NoProfileFoundException;
 }
