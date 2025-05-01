@@ -9,12 +9,13 @@ import edu.brown.cs.student.main.server.Handlers.EditEventHandler;
 import edu.brown.cs.student.main.server.Handlers.EditProfileHandler;
 import edu.brown.cs.student.main.server.Handlers.EventCreationHandler;
 import edu.brown.cs.student.main.server.Handlers.GetFriendsHandler;
+import edu.brown.cs.student.main.server.Handlers.GetOutgoingFriendRequests;
+import edu.brown.cs.student.main.server.Handlers.GetReceivedFriendRequests;
 import edu.brown.cs.student.main.server.Handlers.ProfileCreationHandler;
 import edu.brown.cs.student.main.server.Handlers.RSVPHandler;
 import edu.brown.cs.student.main.server.Handlers.RandomRecommendHandler;
 import edu.brown.cs.student.main.server.Handlers.RateHandler;
 import edu.brown.cs.student.main.server.Handlers.RecommendHandler;
-import edu.brown.cs.student.main.server.Handlers.RemoveFriendHandler;
 import edu.brown.cs.student.main.server.Handlers.RespondToFriendRequestHandler;
 import edu.brown.cs.student.main.server.Handlers.SearchHandler;
 import edu.brown.cs.student.main.server.Handlers.SendFriendRequestHandler;
@@ -51,7 +52,6 @@ public class Server {
 
       Spark.get("send-friend-request", new SendFriendRequestHandler(storageHandler));
       Spark.get("unsend-friend-request", new UnsendFriendRequestHandler(storageHandler));
-      Spark.get("remove-friend", new RemoveFriendHandler());
       Spark.get("edit-event", new EditEventHandler(storageHandler));
       Spark.get("edit-profile", new EditProfileHandler(storageHandler));
       Spark.get("create-event", new EventCreationHandler(storageHandler));
@@ -69,6 +69,8 @@ public class Server {
       Spark.get("respond-to-friend-request", new RespondToFriendRequestHandler(storageHandler));
       Spark.get("unfriend", new UnfriendHandler(storageHandler));
       Spark.get("view-friends", new ViewFriendsHandler(storageHandler));
+      Spark.get("get-received-friend-requests", new GetReceivedFriendRequests(storageHandler));
+      Spark.get("get-outgoing-friend-requests", new GetOutgoingFriendRequests(storageHandler));
 
       Spark.get("delete-all", new DeleteAllHandler(storageHandler));
 

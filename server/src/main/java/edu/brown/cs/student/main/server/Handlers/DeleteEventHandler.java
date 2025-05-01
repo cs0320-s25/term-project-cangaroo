@@ -1,6 +1,5 @@
 package edu.brown.cs.student.main.server.Handlers;
 
-import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
 import edu.brown.cs.student.main.server.Storage.StorageInterface;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,9 +28,6 @@ public class DeleteEventHandler implements Route {
       }
       this.storageHandler.deleteEvent(uid, "events", eventID);
       responseMap.put("status", "success");
-    } catch (NoEventFoundException e) {
-      responseMap.put("result", "failure");
-      responseMap.put("error_message", "Event does not exist.");
     } catch (Exception e) {
       // error likely occurred in the storage handler
       e.printStackTrace();

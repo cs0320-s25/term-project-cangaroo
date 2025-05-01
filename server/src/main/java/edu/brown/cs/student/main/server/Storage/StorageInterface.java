@@ -20,8 +20,7 @@ public interface StorageInterface {
 
   void clearUser(String user) throws InterruptedException, ExecutionException;
 
-  void deleteEvent(String uid, String collection_id, String id)
-      throws NoEventFoundException, ExecutionException, InterruptedException;
+  void deleteEvent(String uid, String collection_id, String id);
 
   void updateEventID(int newVal);
 
@@ -80,5 +79,8 @@ public interface StorageInterface {
       throws NoProfileFoundException, NotFriendsException, ExecutionException, InterruptedException;
 
   Map<String, String> viewFriends(String uid)
+      throws NoProfileFoundException, ExecutionException, InterruptedException;
+
+  Map<String, String> getFriendRequests(String uid, boolean isOutgoing)
       throws NoProfileFoundException, ExecutionException, InterruptedException;
 }

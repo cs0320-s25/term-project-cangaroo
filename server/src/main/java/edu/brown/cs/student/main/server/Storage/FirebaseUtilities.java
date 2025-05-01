@@ -442,11 +442,30 @@ public class FirebaseUtilities implements StorageInterface {
     Firestore db = FirestoreClient.getFirestore();
     DocumentReference userRef =
         db.collection("users").document(uid).collection("profile").document("profileProperties");
-    Map<String, String> nameToID = new HashMap<>();
+    Map<String, String> idToName = new HashMap<>();
     for (String friend : (List<String>) userRef.get().get().get("friendsList")) {
-      nameToID.put(friend, getNameFromID(friend));
+      idToName.put(friend, getNameFromID(friend));
     }
-    return nameToID;
+    return idToName;
+  }
+
+  @Override
+  public Map<String, String> getFriendRequests(String uid, boolean isOutgoing)
+      throws NoProfileFoundException, ExecutionException, InterruptedException {
+    this.checkProfilesExist(uid, null);
+    Firestore db = FirestoreClient.getFirestore();
+    Map<String, String> idToName = new HashMap<>();
+    String friendRequestCollection;
+    if (isOutgoing) {
+      friendRequestCollection = "outgoingFriendRequests";
+    } else {
+      friendRequestCollection = "receivedFriendRequests";
+    }
+    for (DocumentReference docRef :
+        db.collection("users").document(uid).collection(friendRequestCollection).listDocuments()) {
+      idToName.put(docRef.getId(), this.getNameFromID(docRef.getId()));
+    }
+    return idToName;
   }
 
   @Override
@@ -466,8 +485,7 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
-  public void deleteEvent(String uid, String collection_id, String id)
-      throws NoEventFoundException, ExecutionException, InterruptedException {
+  public void deleteEvent(String uid, String collection_id, String id) {
 
     Firestore db = FirestoreClient.getFirestore();
     CollectionReference dataRef = db.collection("users").document(uid).collection(collection_id);
