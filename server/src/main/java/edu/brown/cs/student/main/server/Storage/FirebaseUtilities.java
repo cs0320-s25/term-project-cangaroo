@@ -5,6 +5,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
@@ -13,6 +14,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import edu.brown.cs.student.main.server.Events.Event;
 import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
+import edu.brown.cs.student.main.server.Exceptions.NoExistingFriendRequestException;
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -341,9 +343,63 @@ public class FirebaseUtilities implements StorageInterface {
             .document(senderID));
   }
 
+  @Override
+  public void respondToFriendRequest(String senderID, String receiverID, boolean isAccepted)
+      throws NoProfileFoundException,
+          ExecutionException,
+          InterruptedException,
+          NoExistingFriendRequestException {
+    this.checkProfilesExist(senderID, receiverID);
+    Firestore db = FirestoreClient.getFirestore();
+
+    // check if there is a friend request there
+    if (!db.collection("users")
+        .document(senderID)
+        .collection("outgoingFriendRequests")
+        .document(receiverID)
+        .get()
+        .get()
+        .exists()) {
+      throw new NoExistingFriendRequestException("Friend request does not exist between friends.");
+    }
+    if (isAccepted) {
+      // add to both friend lists
+      db.collection("users")
+          .document(senderID)
+          .collection("profile")
+          .document("profileProperties")
+          .update("friendsList", FieldValue.arrayUnion(receiverID));
+
+      db.collection("users")
+          .document(receiverID)
+          .collection("profile")
+          .document("profileProperties")
+          .update("friendsList", FieldValue.arrayUnion(senderID));
+    }
+    // remove from both friend request lists of each user after
+    this.unsendFriendRequest(senderID, receiverID);
+  }
+
+  @Override
+  public void addProfile(String uid, Map<String, Object> data) {
+    Firestore db = FirestoreClient.getFirestore();
+    db.collection("users")
+        .document(uid)
+        .collection("profile")
+        .document("profileProperties")
+        .set(data);
+  }
+
+  @Override
+  public void deleteDatabase() {
+    Firestore db = FirestoreClient.getFirestore();
+    clearCollection(db.collection("users"));
+    clearCollection(db.collection("events"));
+    clearCollection(db.collection("currentIDs"));
+  }
+
   // respond-to-friend-request endpoint
   // unfriend endpoint
-  // unsend-friend-request endpoint (?)
   // view-friends endpoint
 
   @Override
@@ -378,12 +434,19 @@ public class FirebaseUtilities implements StorageInterface {
 
   @Override
   public void addEvent(String user, int id, Map<String, Object> data)
-      throws IllegalArgumentException {
+      throws IllegalArgumentException,
+          ExecutionException,
+          InterruptedException,
+          NoProfileFoundException {
     if (user == null || id < 0 || data == null) {
       throw new IllegalArgumentException("addEvent: user, id, or data cannot be null");
     }
     Firestore db = FirestoreClient.getFirestore();
+    if (!db.collection("users").document(user).get().get().exists()) {
+      throw new NoProfileFoundException("Profile does not exist");
+    }
     CollectionReference collection = db.collection("users").document(user).collection("events");
+
     collection.document("event-" + id).set(data);
     db.collection("events").document("event-" + id).set(data);
   }
@@ -456,6 +519,15 @@ public class FirebaseUtilities implements StorageInterface {
       // solution would involve batching the collection.get() call.
     } catch (Exception e) {
       System.err.println("Error deleting collection : " + e.getMessage());
+    }
+  }
+
+  private void clearCollection(CollectionReference collection) {
+    for (DocumentReference docRef : collection.listDocuments()) {
+      for (CollectionReference collectionRef : docRef.listCollections()) {
+        deleteCollection(collectionRef);
+      }
+      deleteDocument(docRef);
     }
   }
 }

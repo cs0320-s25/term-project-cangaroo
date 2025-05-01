@@ -2,6 +2,7 @@ package edu.brown.cs.student.main.server.Storage;
 
 import edu.brown.cs.student.main.server.Events.Event;
 import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
+import edu.brown.cs.student.main.server.Exceptions.NoExistingFriendRequestException;
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
 import java.util.List;
 import java.util.Map;
@@ -54,9 +55,23 @@ public interface StorageInterface {
           NoProfileFoundException,
           NoEventFoundException;
 
-  void addEvent(String user, int id, Map<String, Object> data) throws IllegalArgumentException;
+  void addEvent(String user, int id, Map<String, Object> data)
+      throws IllegalArgumentException,
+          ExecutionException,
+          InterruptedException,
+          NoProfileFoundException;
 
   void sendFriendRequest(String senderID, String receiverID) throws NoProfileFoundException;
 
   void unsendFriendRequest(String senderID, String receiverID) throws NoProfileFoundException;
+
+  void respondToFriendRequest(String senderID, String receiverID, boolean isAccepted)
+      throws NoProfileFoundException,
+          ExecutionException,
+          InterruptedException,
+          NoExistingFriendRequestException;
+
+  void addProfile(String uid, Map<String, Object> data);
+
+  void deleteDatabase();
 }

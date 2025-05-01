@@ -34,7 +34,8 @@ public class ProfileCreationHandler implements Route {
     data.put("friendsList", new ArrayList<>());
     data.put("eventsAttending", new ArrayList<>());
 
-    this.storageHandler.addDocument(uid, "profile", "profileProperties", data);
+    //    this.storageHandler.addDocument(uid, "profile", "profileProperties", data);
+    this.storageHandler.addProfile(uid, data);
     responseMap.put("result", "success");
     return Utils.toMoshiJson(responseMap);
   }

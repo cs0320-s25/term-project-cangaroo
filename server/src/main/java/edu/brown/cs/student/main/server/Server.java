@@ -3,6 +3,7 @@ package edu.brown.cs.student.main.server;
 import static spark.Spark.after;
 
 import edu.brown.cs.student.main.server.Handlers.ChangeAttendanceHandler;
+import edu.brown.cs.student.main.server.Handlers.DeleteAllHandler;
 import edu.brown.cs.student.main.server.Handlers.DeleteEventHandler;
 import edu.brown.cs.student.main.server.Handlers.EditEventHandler;
 import edu.brown.cs.student.main.server.Handlers.EditProfileHandler;
@@ -14,6 +15,7 @@ import edu.brown.cs.student.main.server.Handlers.RandomRecommendHandler;
 import edu.brown.cs.student.main.server.Handlers.RateHandler;
 import edu.brown.cs.student.main.server.Handlers.RecommendHandler;
 import edu.brown.cs.student.main.server.Handlers.RemoveFriendHandler;
+import edu.brown.cs.student.main.server.Handlers.RespondToFriendRequestHandler;
 import edu.brown.cs.student.main.server.Handlers.SearchHandler;
 import edu.brown.cs.student.main.server.Handlers.SendFriendRequestHandler;
 import edu.brown.cs.student.main.server.Handlers.UnsendFriendRequestHandler;
@@ -62,6 +64,9 @@ public class Server {
       Spark.get("view-event", new ViewEventHandler(storageHandler));
       Spark.get("view-profile", new ViewProfileHandler(storageHandler));
       Spark.get("change-attendance", new ChangeAttendanceHandler(storageHandler));
+      Spark.get("respond-to-friend-request", new RespondToFriendRequestHandler(storageHandler));
+
+      Spark.get("delete-all", new DeleteAllHandler(storageHandler));
 
       Spark.notFound(
           (request, response) -> {
