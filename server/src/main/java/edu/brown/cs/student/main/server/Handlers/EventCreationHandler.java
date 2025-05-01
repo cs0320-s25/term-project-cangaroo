@@ -27,6 +27,7 @@ public class EventCreationHandler implements Route {
       String startTime = request.queryParams("startTime");
       String endTime = request.queryParams("endTime");
       String tagsString = request.queryParams("tags");
+      String eventOrganizer = request.queryParams("eventOrganizer");
 
       if ((uid == null)
           || (name == null)
@@ -34,7 +35,8 @@ public class EventCreationHandler implements Route {
           || (date == null)
           || (startTime == null)
           || (endTime == null)
-          || (tagsString == null)) {
+          || (tagsString == null)
+          || (eventOrganizer == null)){
         responseMap.put("result", "failure");
         responseMap.put("error_message", "Missing required parameters");
         return Utils.toMoshiJson(responseMap);
@@ -52,6 +54,7 @@ public class EventCreationHandler implements Route {
       data.put("endTime", endTime);
       data.put("tags", tags);
       data.put("ID", eventID);
+      data.put("eventOrganizer", eventOrganizer);
 
       this.storageHandler.addDocument(uid, "events", "event-" + eventID, data);
       this.storageHandler.updateEventID(eventID + 1);

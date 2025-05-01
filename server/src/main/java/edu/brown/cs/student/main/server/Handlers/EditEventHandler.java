@@ -30,6 +30,7 @@ public class EditEventHandler implements Route {
     String tagsString = request.queryParams("tags");
     String eventID = request.queryParams("eventID");
     List<String> tags = Arrays.asList(tagsString.trim().split(","));
+    String eventOrganizer = request.queryParams("eventOrganizer");
 
     if ((uid == null)
         || (name == null)
@@ -37,14 +38,16 @@ public class EditEventHandler implements Route {
         || (date == null)
         || (startTime == null)
         || (endTime == null)
-        || (tags.isEmpty())) {
+        || (tags.isEmpty())
+        || (eventID == null)
+        || (eventOrganizer == null)) {
       responseMap.put("status", "failure");
       responseMap.put("error_message", "Missing parameters");
       return Utils.toMoshiJson(responseMap);
     }
     try {
       this.storageHandler.editEvent(
-          uid, eventID, name, description, date, startTime, endTime, tags);
+          uid, eventID, name, description, date, startTime, endTime, tags, eventOrganizer);
       responseMap.put("result", "success");
       responseMap.put("eventID", eventID);
     } catch (NoEventFoundException e) {

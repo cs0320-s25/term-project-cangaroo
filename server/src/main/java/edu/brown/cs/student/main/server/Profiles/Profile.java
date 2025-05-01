@@ -7,4 +7,5 @@ public record Profile(
     String username,
     List<String> interestedTags,
     List<String> friendNames,
-    List<Event> eventsAttending) {}
+    List<Event> eventsAttending,
+    List<String> interestedOrganizations) {}

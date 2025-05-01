@@ -19,7 +19,7 @@ public class RandomRecommendHandler implements Route {
           "08:00",
           "10:00",
           List.of("food", "health"),
-          1);
+          1, null);
   Event e2 =
       new Event(
           List.of("Book", "Club"),
@@ -28,7 +28,7 @@ public class RandomRecommendHandler implements Route {
           "17:00",
           "10:00",
           List.of("reading"),
-          2);
+          2, null);
   Event e3 =
       new Event(
           List.of("Sprint", "Practice"),
@@ -37,7 +37,7 @@ public class RandomRecommendHandler implements Route {
           "10:00",
           "10:00",
           List.of("track"),
-          3);
+          3, null);
 
   private Map<String, Object> responseMap;
 

@@ -22,17 +22,20 @@ public class ProfileCreationHandler implements Route {
     Map<String, Object> responseMap = new HashMap<>();
     String uid = request.queryParams("uid");
     String interestedTags = request.queryParams("interestedTags");
+    String favEventOrganizersString = request.queryParams("favEventOrganizers");
     if ((uid == null) || (interestedTags == null)) {
       responseMap.put("result", "failure");
       responseMap.put("error_message", "Missing required parameters: uid, interestedTags");
       return Utils.toMoshiJson(responseMap);
     }
     List<String> tags = Arrays.asList(interestedTags.trim().split(","));
+    List<String> favEventOrganizers = Arrays.asList(favEventOrganizersString.trim().split(","));
 
     Map<String, Object> data = new HashMap<>();
     data.put("interestedTags", tags);
     data.put("friendsList", new ArrayList<>());
     data.put("eventsAttending", new ArrayList<>());
+    data.put("interestedOrganizations", favEventOrganizers);
 
     this.storageHandler.addDocument(uid, "profile", "profileProperties", data);
     responseMap.put("result", "success");

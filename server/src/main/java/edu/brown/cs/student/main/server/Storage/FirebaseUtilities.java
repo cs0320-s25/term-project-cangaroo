@@ -21,9 +21,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 public class FirebaseUtilities implements StorageInterface {
@@ -145,7 +147,8 @@ public class FirebaseUtilities implements StorageInterface {
       String date,
       String startTime,
       String endTime,
-      List<String> tags)
+      List<String> tags,
+      String eventOrganizer)
       throws ExecutionException, InterruptedException, NoEventFoundException {
     Firestore db = FirestoreClient.getFirestore();
 
@@ -158,20 +161,57 @@ public class FirebaseUtilities implements StorageInterface {
       docRef.update("date", date);
       docRef.update("startTime", startTime);
       docRef.update("endTime", endTime);
-      docRef.update("tags", tags);
+      DocumentSnapshot snapshot = docRef.get().get();
+
+      List<String> existingTags = (List<String>) snapshot.get("tags");
+      if (existingTags == null) {
+        existingTags = new ArrayList<>();
+      }
+      Set<String> mergedTags = new HashSet<>(existingTags);
+      mergedTags.addAll(tags); // avoid duplicates
+      docRef.update("tags", new ArrayList<>(mergedTags));
+
+      docRef.update("eventOrganizer", eventOrganizer);
     } else {
       throw new NoEventFoundException("Event does not exist.");
     }
   }
 
   @Override
-  public void editProfile(String uid, List<String> tags)
+  public void editProfile(String uid, List<String> tags, List<String> favEventOrganizers)
       throws ExecutionException, InterruptedException, NoProfileFoundException {
+
     Firestore db = FirestoreClient.getFirestore();
     DocumentReference docRef =
         db.collection("users").document(uid).collection("profile").document("profileProperties");
+
     if (docRef.get().get().exists()) {
-      docRef.update("interestedTags", tags);
+      DocumentSnapshot snapshot = docRef.get().get();
+
+      if (tags != null) {
+        List<String> existingTags = (List<String>) snapshot.get("interestedTags");
+        if (existingTags == null) existingTags = new ArrayList<>();
+        List<String> cleanedTags = tags.stream()
+            .map(String::trim)
+            .filter(t -> !t.isEmpty())
+            .toList();
+        Set<String> mergedTags = new HashSet<>(existingTags);
+        mergedTags.addAll(cleanedTags);
+        docRef.update("interestedTags", new ArrayList<>(mergedTags));
+      }
+
+      if (favEventOrganizers != null) {
+        List<String> existingOrgs = (List<String>) snapshot.get("favoriteOrganizers");
+        if (existingOrgs == null) existingOrgs = new ArrayList<>();
+        List<String> cleanedOrgs = favEventOrganizers.stream()
+            .map(String::trim)
+            .filter(o -> !o.isEmpty())
+            .toList();
+        Set<String> mergedOrgs = new HashSet<>(existingOrgs);
+        mergedOrgs.addAll(cleanedOrgs);
+        docRef.update("favoriteOrganizers", new ArrayList<>(mergedOrgs));
+      }
+
     } else {
       throw new NoProfileFoundException("No such profile.");
     }
@@ -198,7 +238,9 @@ public class FirebaseUtilities implements StorageInterface {
         int eventID = Integer.parseInt(document.get("eventID").toString());
 
         List<String> tags = Arrays.asList(document.get("tags").toString().split(" "));
-        events.add(new Event(name, description, date, startTime, endTime, tags, eventID));
+        String eventOrganizer = document.get("eventOrganizer").toString();
+
+        events.add(new Event(name, description, date, startTime, endTime, tags, eventID, eventOrganizer));
       }
     }
     return events;

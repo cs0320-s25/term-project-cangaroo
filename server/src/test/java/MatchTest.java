@@ -42,7 +42,7 @@ public class MatchTest {
         "10:00",
         "10:00",
         List.of("exercise", "fitness"),
-        1);
+        1, null);
 
     Event e2 = new Event(
         List.of("Cooking", "Class"),
@@ -51,13 +51,13 @@ public class MatchTest {
         "18:00",
         "18:00",
         List.of("food", "hobby"),
-        2);
+        2, null);
 
     // This simulates a profile with interest tags like "run" (should match e1)
     List<String> profileTags = List.of("run");
 
     MatchEvents matcher = new MatchEvents();
-    List<Event> results = matcher.getMatchedEvents(profileTags, List.of(e1, e2));
+    List<Event> results = matcher.getMatchedEvents(profileTags, null, List.of(e1, e2));
 
     // Assert only one event matched and it was e1
     assertEquals(1, results.size());
@@ -74,7 +74,7 @@ public class MatchTest {
         "10:00",
         "10:00",
         List.of("exercise", "fitness"),
-        1);
+        1, null);
 
     Event e2 = new Event(
         List.of("Cooking", "Class"),
@@ -83,7 +83,7 @@ public class MatchTest {
         "18:00",
         "18:00",
         List.of("food", "hobby"),
-        2);
+        2, null);
 
     Event e3 = new Event(
         List.of("Coding", "Class"),
@@ -92,7 +92,7 @@ public class MatchTest {
         "18:00",
         "18:00",
         List.of("technology", "STEM"),
-        3);
+        3, null);
 
     Event e4 = new Event(
         List.of("Pet", "Rocks"),
@@ -101,13 +101,13 @@ public class MatchTest {
         "18:00",
         "18:00",
         List.of("pets", "rocks"),
-        4);
+        4, null);
 
     // This simulates a profile with interest tags like "run" (should match e1)
     List<String> profileTags = List.of("science", "biology", "computer science", "running", "jogging", "gym");
 
     MatchEvents matcher = new MatchEvents();
-    List<Event> results = matcher.getMatchedEvents(profileTags, List.of(e1, e2, e3, e4));
+    List<Event> results = matcher.getMatchedEvents(profileTags, null, List.of(e1, e2, e3, e4));
 
     // Assert only one event matched and it was e1
     assertEquals(2, results.size());
