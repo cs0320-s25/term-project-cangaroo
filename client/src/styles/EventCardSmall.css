@@ -15,38 +15,35 @@
     background-size: cover;
     background-position: center;
     border: 0.5px solid #131212;
-    overflow: clip;
+    overflow: hidden;
     color: white;
     font-family: "Inter", sans-serif;
     border-radius: 15px; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+    cursor: pointer;
+  }
   
-.overlay {
-    position: absolute;
-    bottom: 0;
-    width: 450px;
-    height: 300px;
+  .overlay {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     padding: 20px;
-    background: linear-gradient(to top, #4A0B2Fbf, rgba(255, 230, 230, 0) 70%), url('http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg'); 
-    /*lowkey what to do about the img gradient?*/
-    background-size: cover;
-    background-position: center;
-}
+    background: linear-gradient(to top, rgba(74, 11, 47, 0.75), rgba(255, 230, 230, 0) 70%);
+    color: white;
+    height: 100%;
+    box-sizing: border-box;
+  }
   
-.title {
-    font-size: 2.5rem;
-    font-weight: bolder;
+  h2.title {
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
     margin: 0;
-    position: absolute;  
-    bottom: 100px;        
-    left: 20px;          
-    width: 90%; 
-}
+  }
   
-.description {
-    position: absolute;  
-    bottom: 10px;        
-    left: 20px;          
-    width: 90%;         
-}
+  .description {
+    font-size: 12px;
+    color: white;
+    margin-top: 0.5rem;
+  }
+  

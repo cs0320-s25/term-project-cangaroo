@@ -4,7 +4,16 @@ import { useUser } from "@clerk/clerk-react";
 import { useState, useEffect } from "react";
 import EventCardGridSearch from "./EventGridSearch";
 
-export default function ProfilePage() {
+interface EventPageProps {
+  event: {
+    title: string;
+    description: string;
+    imageUrl: string;
+  };
+  onClose: () => void;
+}
+
+export default function EventPage({ event, onClose }: EventPageProps) {
   const [organizer, setOrganizer] = useState("Organizer");
   const [rsvp, setRSVP] = useState(false);
   const [attendeeCount, setAttendeeCount] = useState(0);
@@ -16,6 +25,9 @@ export default function ProfilePage() {
   return (   
     <div className="event-overlay">
       <div className="event-content">
+      <button className="return-home-button" onClick={onClose}>
+        ← Return to Home
+      </button>
       
         <div className="event-grid">
           {/* Left Column */}
@@ -66,6 +78,7 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
     </div>
   );
 };

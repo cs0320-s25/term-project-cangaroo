@@ -14,8 +14,6 @@ import ProfilePage from "./ProfilePage";
 // components
 import CreateEventForm from "./CreateEventForm";
 import EventCardGridSearch from "./EventGridSearch";
-import Navbar from "./Navbar";
-import EventPage from "./EventPage";
 
 
 /**
@@ -54,9 +52,9 @@ function Home() {
       </SignedOut>
 
       <SignedIn>
-        <Navbar onPlusClick={() => setModalOpen(true)}/>
+        {/* <Navbar onPlusClick={() => setModalOpen(true)}/> */}
         
-        <EventCardGridSearch/>
+        <EventCardGridSearch onPlusClick={() => setModalOpen(true)}/>
 
         <SignOutButton aria-label="Sign Out"/>
 
@@ -75,7 +73,6 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/event" element={<EventPage />} />
       </Routes>
     </Router>
   );

@@ -11,7 +11,7 @@
     background-color: #ffffff;
     border-bottom: 1px solid #ddd;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-    position: fixed; /*sticks on scroll, so the navbar stays put*/
+    position: relative; /*sticks on scroll, so the navbar stays put*/
     top: 0;
     z-index: 100; /*makes sure navbar is always on top of other components*/
 }
