@@ -41,9 +41,9 @@ export default function ProfilePage() {
 
 
   return (   
-    <SignedIn>
-      
+    <SignedIn>      
     <div>
+
     {isModalOpen && (
       <div className="modal-overlay">
         <div className="modal-content">
@@ -55,6 +55,10 @@ export default function ProfilePage() {
       
     <div className="profile-overlay">
       <div className="profile-content">
+
+      <button className="return-home-button" onClick={() => navigate("/")}>
+        ← Return to Home
+      </button>
       
         <div className="profile-grid">
           {/* Left Column */}

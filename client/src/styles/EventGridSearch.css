@@ -1,11 +1,34 @@
-.card-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
-    padding: 900px 40px 40px 40px;
-}
+/* Overall page wrapper */
+.event-grid-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    font-family: "Inter", sans-serif;
+  }
   
-@media (max-width: 900px) {
+  /* Scrollable area for event cards */
+  .scrollable-grid {
+    flex: 1; /* takes all remaining space below navbar */
+    overflow-y: auto;
+    padding-top: 8px;
+    box-sizing: border-box;
+  }
+  
+  /* Responsive grid inside the scrollable area */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* start with 3 columns */
+    gap: 40px;
+    justify-content: center;
+    padding: 40px;
+    box-sizing: border-box;
+  }
+  
+  
+  
+
+@media (max-width: 1000px) {
 .card-grid {
     grid-template-columns: repeat(2, 1fr);
 }
