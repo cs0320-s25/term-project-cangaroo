@@ -39,7 +39,7 @@ public class EventCreationHandler implements Route {
         || (tagsString == null)
         || (eventOrganizer == null)) {
       responseMap.put("result", "failure");
-      responseMap.put("error_message", "Missing required parameters");
+      responseMap.put("error_message", "Missing required parameters: uid, name, description, date, startTime, endTime, tags, eventOrganizer");
       return Utils.toMoshiJson(responseMap);
     }
 
@@ -63,7 +63,8 @@ public class EventCreationHandler implements Route {
       this.storageHandler.addEvent(uid, eventID, data);
       this.storageHandler.updateEventID(eventID + 1);
       responseMap.put("result", "success");
-      responseMap.put("data", data);
+      responseMap.put("event", data);
+      responseMap.put("eventID", eventID);
     } catch (NoProfileFoundException e) {
       responseMap.put("result", "failure");
       responseMap.put("error_message", "Profile doesn't exist.");

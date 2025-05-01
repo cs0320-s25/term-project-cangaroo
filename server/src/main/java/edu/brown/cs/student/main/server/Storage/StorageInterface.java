@@ -20,7 +20,7 @@ public interface StorageInterface {
 
   void clearUser(String user) throws InterruptedException, ExecutionException;
 
-  void deleteEvent(String uid, String collection_id, String id);
+  void deleteEvent(String uid, String id) throws NoEventFoundException;
 
   void updateEventID(int newVal);
 
