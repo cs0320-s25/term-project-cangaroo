@@ -21,6 +21,7 @@ import edu.brown.cs.student.main.server.Handlers.SendFriendRequestHandler;
 import edu.brown.cs.student.main.server.Handlers.UnfriendHandler;
 import edu.brown.cs.student.main.server.Handlers.UnsendFriendRequestHandler;
 import edu.brown.cs.student.main.server.Handlers.ViewEventHandler;
+import edu.brown.cs.student.main.server.Handlers.ViewFriendsHandler;
 import edu.brown.cs.student.main.server.Handlers.ViewProfileHandler;
 import edu.brown.cs.student.main.server.Storage.FirebaseUtilities;
 import edu.brown.cs.student.main.server.Storage.StorageInterface;
@@ -67,6 +68,7 @@ public class Server {
       Spark.get("change-attendance", new ChangeAttendanceHandler(storageHandler));
       Spark.get("respond-to-friend-request", new RespondToFriendRequestHandler(storageHandler));
       Spark.get("unfriend", new UnfriendHandler(storageHandler));
+      Spark.get("view-friends", new ViewFriendsHandler(storageHandler));
 
       Spark.get("delete-all", new DeleteAllHandler(storageHandler));
 

@@ -22,7 +22,8 @@ public class ProfileCreationHandler implements Route {
     Map<String, Object> responseMap = new HashMap<>();
     String uid = request.queryParams("uid");
     String interestedTags = request.queryParams("interestedTags");
-    if ((uid == null) || (interestedTags == null)) {
+    String username = request.queryParams("username");
+    if ((uid == null) || (interestedTags == null) || (username == null)) {
       responseMap.put("result", "failure");
       responseMap.put("error_message", "Missing required parameters: uid, interestedTags");
       return Utils.toMoshiJson(responseMap);
@@ -30,6 +31,7 @@ public class ProfileCreationHandler implements Route {
     List<String> tags = Arrays.asList(interestedTags.trim().split(","));
 
     Map<String, Object> data = new HashMap<>();
+    data.put("username", username);
     data.put("interestedTags", tags);
     data.put("friendsList", new ArrayList<>());
     data.put("eventsAttending", new ArrayList<>());

@@ -300,7 +300,8 @@ public class FirebaseUtilities implements StorageInterface {
         foundUser2 = true;
       }
     }
-    if (!foundUser1 || !foundUser2) {
+
+    if (!foundUser1 || (user2 != null && !foundUser2)) {
       throw new NoProfileFoundException("Profile does not exist.");
     }
   }
@@ -422,8 +423,31 @@ public class FirebaseUtilities implements StorageInterface {
     user2Ref.update("friendsList", FieldValue.arrayRemove(user1));
   }
 
-  // unfriend endpoint
-  // view-friends endpoint
+  private String getNameFromID(String id) throws ExecutionException, InterruptedException {
+    Firestore db = FirestoreClient.getFirestore();
+    return db.collection("users")
+        .document(id)
+        .collection("profile")
+        .document("profileProperties")
+        .get()
+        .get()
+        .get("username")
+        .toString();
+  }
+
+  @Override
+  public Map<String, String> viewFriends(String uid)
+      throws NoProfileFoundException, ExecutionException, InterruptedException {
+    this.checkProfilesExist(uid, null);
+    Firestore db = FirestoreClient.getFirestore();
+    DocumentReference userRef =
+        db.collection("users").document(uid).collection("profile").document("profileProperties");
+    Map<String, String> nameToID = new HashMap<>();
+    for (String friend : (List<String>) userRef.get().get().get("friendsList")) {
+      nameToID.put(friend, getNameFromID(friend));
+    }
+    return nameToID;
+  }
 
   @Override
   public Map<String, Object> getEvent(String eventID)

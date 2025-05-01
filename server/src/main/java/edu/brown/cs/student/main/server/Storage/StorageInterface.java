@@ -78,4 +78,7 @@ public interface StorageInterface {
 
   void removeFriends(String user1, String user2)
       throws NoProfileFoundException, NotFriendsException, ExecutionException, InterruptedException;
+
+  Map<String, String> viewFriends(String uid)
+      throws NoProfileFoundException, ExecutionException, InterruptedException;
 }
