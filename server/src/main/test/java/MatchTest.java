@@ -42,7 +42,7 @@ public class MatchTest {
         "10:00",
         "10:00",
         List.of("exercise", "fitness"),
-        1);
+        1, "Brown Running Club");
 
     Event e2 = new Event(
         List.of("Cooking", "Class"),
@@ -51,7 +51,7 @@ public class MatchTest {
         "18:00",
         "18:00",
         List.of("food", "hobby"),
-        2);
+        2, "Noodle Society");
 
     // This simulates a profile with interest tags like "run" (should match e1)
     List<String> profileTags = List.of("run");
@@ -74,7 +74,7 @@ public class MatchTest {
         "10:00",
         "10:00",
         List.of("exercise", "fitness"),
-        1);
+        1, "Brown Running Club");
 
     Event e2 = new Event(
         List.of("Cooking", "Class"),
@@ -83,7 +83,7 @@ public class MatchTest {
         "18:00",
         "18:00",
         List.of("food", "hobby"),
-        2);
+        2, "Noodle Society");
 
     Event e3 = new Event(
         List.of("Coding", "Class"),
@@ -92,7 +92,7 @@ public class MatchTest {
         "18:00",
         "18:00",
         List.of("technology", "STEM"),
-        3);
+        3, "Computer Science Club");
 
     Event e4 = new Event(
         List.of("Pet", "Rocks"),
@@ -101,7 +101,7 @@ public class MatchTest {
         "18:00",
         "18:00",
         List.of("pets", "rocks"),
-        4);
+        4, "Rock Petting Club");
 
     // This simulates a profile with interest tags like "run" (should match e1)
     List<String> profileTags = List.of("science", "biology", "computer science", "running", "jogging", "gym");

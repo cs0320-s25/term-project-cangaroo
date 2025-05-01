@@ -7,17 +7,24 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class GetFriendsHandler implements Route {
+public class DeleteAllHandler implements Route {
   public StorageInterface storageHandler;
 
-  public GetFriendsHandler(StorageInterface storageHandler) {
+  public DeleteAllHandler(StorageInterface storageHandler) {
     this.storageHandler = storageHandler;
   }
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
     Map<String, Object> responseMap = new HashMap<>();
+    try {
+      this.storageHandler.deleteDatabase();
+      responseMap.put("result", "success");
+    } catch (Exception e) {
+      e.printStackTrace();
+      responseMap.put("result", "failure");
+    }
 
-    return null;
+    return Utils.toMoshiJson(responseMap);
   }
 }

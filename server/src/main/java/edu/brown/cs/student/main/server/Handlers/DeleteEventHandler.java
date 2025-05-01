@@ -24,19 +24,20 @@ public class DeleteEventHandler implements Route {
       String eventID = request.queryParams("eventID");
       if (eventID == null || uid == null) {
         responseMap.put("result", "failure");
-        responseMap.put("error_message", "Missing required parameters");
+        responseMap.put("error_message", "Missing required parameters: uid, eventID");
         return Utils.toMoshiJson(responseMap);
       }
-      this.storageHandler.deleteEvent(uid, "events", eventID);
-      responseMap.put("status", "success");
+      this.storageHandler.deleteEvent(uid, eventID);
+      responseMap.put("result", "success");
+      responseMap.put("eventID", eventID);
     } catch (NoEventFoundException e) {
       responseMap.put("result", "failure");
       responseMap.put("error_message", "Event does not exist.");
     } catch (Exception e) {
       // error likely occurred in the storage handler
       e.printStackTrace();
-      responseMap.put("status", "failure");
-      responseMap.put("error", e.getMessage());
+      responseMap.put("result", "failure");
+      responseMap.put("error_message", e.getMessage());
     }
 
     return Utils.toMoshiJson(responseMap);
