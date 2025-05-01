@@ -18,6 +18,7 @@ import edu.brown.cs.student.main.server.Handlers.RemoveFriendHandler;
 import edu.brown.cs.student.main.server.Handlers.RespondToFriendRequestHandler;
 import edu.brown.cs.student.main.server.Handlers.SearchHandler;
 import edu.brown.cs.student.main.server.Handlers.SendFriendRequestHandler;
+import edu.brown.cs.student.main.server.Handlers.UnfriendHandler;
 import edu.brown.cs.student.main.server.Handlers.UnsendFriendRequestHandler;
 import edu.brown.cs.student.main.server.Handlers.ViewEventHandler;
 import edu.brown.cs.student.main.server.Handlers.ViewProfileHandler;
@@ -65,6 +66,7 @@ public class Server {
       Spark.get("view-profile", new ViewProfileHandler(storageHandler));
       Spark.get("change-attendance", new ChangeAttendanceHandler(storageHandler));
       Spark.get("respond-to-friend-request", new RespondToFriendRequestHandler(storageHandler));
+      Spark.get("unfriend", new UnfriendHandler(storageHandler));
 
       Spark.get("delete-all", new DeleteAllHandler(storageHandler));
 

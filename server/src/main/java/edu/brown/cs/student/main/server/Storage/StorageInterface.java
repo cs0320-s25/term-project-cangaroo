@@ -4,6 +4,7 @@ import edu.brown.cs.student.main.server.Events.Event;
 import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
 import edu.brown.cs.student.main.server.Exceptions.NoExistingFriendRequestException;
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
+import edu.brown.cs.student.main.server.Exceptions.NotFriendsException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -74,4 +75,7 @@ public interface StorageInterface {
   void addProfile(String uid, Map<String, Object> data);
 
   void deleteDatabase();
+
+  void removeFriends(String user1, String user2)
+      throws NoProfileFoundException, NotFriendsException, ExecutionException, InterruptedException;
 }

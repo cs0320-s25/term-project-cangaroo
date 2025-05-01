@@ -26,7 +26,9 @@ public class RespondToFriendRequestHandler implements Route {
         || receiverID == null
         || (!isAccepted.equalsIgnoreCase("true") && !isAccepted.equalsIgnoreCase("false"))) {
       responseMap.put("result", "success");
-      responseMap.put("error_message", "Missing required parameters: senderID, receiverID, isAccepted (boolean)");
+      responseMap.put(
+          "error_message",
+          "Missing required parameters: senderID, receiverID, isAccepted (boolean)");
       return Utils.toMoshiJson(responseMap);
     }
 

@@ -16,6 +16,7 @@ import edu.brown.cs.student.main.server.Events.Event;
 import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
 import edu.brown.cs.student.main.server.Exceptions.NoExistingFriendRequestException;
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
+import edu.brown.cs.student.main.server.Exceptions.NotFriendsException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -287,20 +288,19 @@ public class FirebaseUtilities implements StorageInterface {
     }
   }
 
-  private void checkProfilesExist(String senderID, String receiverID)
-      throws NoProfileFoundException {
+  private void checkProfilesExist(String user1, String user2) throws NoProfileFoundException {
     // probably do some error-checking to see if the ids actually correspond to profiles
     Firestore db = FirestoreClient.getFirestore();
-    boolean foundUID = false;
-    boolean foundFriendID = false;
+    boolean foundUser1 = false;
+    boolean foundUser2 = false;
     for (DocumentReference userRef : db.collection("users").listDocuments()) {
-      if (userRef.getId().equals(senderID)) {
-        foundUID = true;
-      } else if (userRef.getId().equals(receiverID)) {
-        foundFriendID = true;
+      if (userRef.getId().equals(user1)) {
+        foundUser1 = true;
+      } else if (userRef.getId().equals(user2)) {
+        foundUser2 = true;
       }
     }
-    if (!foundUID || !foundFriendID) {
+    if (!foundUser1 || !foundUser2) {
       throw new NoProfileFoundException("Profile does not exist.");
     }
   }
@@ -398,7 +398,30 @@ public class FirebaseUtilities implements StorageInterface {
     clearCollection(db.collection("currentIDs"));
   }
 
-  // respond-to-friend-request endpoint
+  @Override
+  public void removeFriends(String user1, String user2)
+      throws NoProfileFoundException,
+          NotFriendsException,
+          ExecutionException,
+          InterruptedException {
+    this.checkProfilesExist(user1, user2);
+
+    Firestore db = FirestoreClient.getFirestore();
+
+    // check if they are friends
+    DocumentReference user1Ref =
+        db.collection("users").document(user1).collection("profile").document("profileProperties");
+    DocumentReference user2Ref =
+        db.collection("users").document(user2).collection("profile").document("profileProperties");
+    if (!((List<String>) (Objects.requireNonNull(user1Ref.get().get().get("friendsList"))))
+        .contains(user2)) {
+      throw new NotFriendsException("Not friends of user.");
+    }
+
+    user1Ref.update("friendsList", FieldValue.arrayRemove(user2));
+    user2Ref.update("friendsList", FieldValue.arrayRemove(user1));
+  }
+
   // unfriend endpoint
   // view-friends endpoint
 
