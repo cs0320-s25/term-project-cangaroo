@@ -2,10 +2,10 @@
 .event-grid-page {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100vh;
     width: 100%;
+    margin-top: 74px;
     font-family: "Inter", sans-serif;
-    overflow: hidden;
   }
   
   /* Scrollable area for event cards */
