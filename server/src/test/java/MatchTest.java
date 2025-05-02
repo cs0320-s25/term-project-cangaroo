@@ -22,15 +22,14 @@ public class MatchTest {
   }
 
   // tests that if there are less than 10 events, all the events are automatically returned
-  //  @Test
-  //  public void testRandomReturnsAllIfLessThanTen() {
-  //    List<Event> events = TestEventFactory.generateDummyEvents(5);
-  //    RandomMatch randomMatch = new RandomMatch();
-  //    List<Integer> selected = randomMatch.getRandomEvent(events);
-  //
-  //    assertEquals(5, selected.size(), "Should return all available events if fewer than 10");
-  //    assertTrue(events.containsAll(selected), "All selected events must be from original list");
-  //  }
+  @Test
+  public void testRandomReturnsAllIfLessThanTen() {
+    List<Event> events = TestEventFactory.generateDummyEvents(5);
+    RandomMatch randomMatch = new RandomMatch();
+    List<Integer> selected = randomMatch.getRandomEvent(events);
+
+    assertEquals(5, selected.size(), "Should return all available events if fewer than 10");
+  }
 
   // regular stemming works for matches
   @Test
