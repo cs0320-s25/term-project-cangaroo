@@ -31,7 +31,6 @@ public class EditEventHandler implements Route {
     String eventID = request.queryParams("eventID");
     String eventOrganizer = request.queryParams("eventOrganizer");
     List<String> tags = Arrays.asList(tagsString.trim().split(","));
-    String eventOrganizer = request.queryParams("eventOrganizer");
 
     if ((uid == null)
         || (name == null)

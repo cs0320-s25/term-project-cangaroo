@@ -22,6 +22,7 @@ public class ProfileCreationHandler implements Route {
     Map<String, Object> responseMap = new HashMap<>();
     String uid = request.queryParams("uid");
     String interestedTags = request.queryParams("interestedTags");
+    String favEventOrganizerString = request.queryParams("favEventOrganizer");
 
     String username = request.queryParams("username");
     if ((uid == null) || (interestedTags == null) || (username == null)) {
@@ -31,7 +32,7 @@ public class ProfileCreationHandler implements Route {
       return Utils.toMoshiJson(responseMap);
     }
     List<String> tags = Arrays.asList(interestedTags.trim().split(","));
-    List<String> favEventOrganizers = Arrays.asList(favEventOrganizersString.trim().split(","));
+    List<String> favEventOrganizers = Arrays.asList(favEventOrganizerString.trim().split(","));
 
     Map<String, Object> data = new HashMap<>();
     data.put("username", username);
