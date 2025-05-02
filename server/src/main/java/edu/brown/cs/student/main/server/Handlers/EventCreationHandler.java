@@ -21,6 +21,7 @@ public class EventCreationHandler implements Route {
   @Override
   public Object handle(Request request, Response response) throws Exception {
     Map<String, Object> responseMap = new HashMap<>();
+
     String uid = request.queryParams("uid");
     String name = request.queryParams("name");
     String description = request.queryParams("description");

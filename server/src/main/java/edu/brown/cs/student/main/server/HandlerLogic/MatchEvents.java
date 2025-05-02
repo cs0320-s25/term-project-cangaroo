@@ -8,7 +8,7 @@ public class MatchEvents {
 
   public MatchEvents() {}
 
-  public List<Event> getMatchedEvents(List<String> personalTags, List<Event> allEvents) {
+  public List<Event> getMatchedEvents(List<String> personalTags, List<String> favEventOrgs, List<Event> allEvents) {
     Set<String> expandedInputStems = new HashSet<>();
 
     try {
@@ -57,18 +57,35 @@ public class MatchEvents {
         e.printStackTrace();
       }
 
-      for (String tag : event.tags()) {
-        if (tag != null) {
-          try {
-            String tagStem = Stemmer.stemWord(tag);
-            if (expandedInputStems.contains(tagStem)) {
-              score += 1;
+      if (event.tags() != null) {
+        for (String tag : event.tags()) {
+          if (tag != null) {
+            try {
+              String tagStem = Stemmer.stemWord(tag);
+              if (expandedInputStems.contains(tagStem)) {
+                score += 1;
+              }
+            } catch (IOException e) {
+              e.printStackTrace();
             }
-          } catch (IOException e) {
-            e.printStackTrace();
           }
         }
       }
+
+
+
+      //compare all the person's fav event organizers with the event organizer
+      if (favEventOrgs != null) {
+        for (String favOrganizer : favEventOrgs) {
+
+          if (event.eventOrganizer() != null && favOrganizer != null) {
+            if (event.eventOrganizer().toLowerCase().contains(favOrganizer.toLowerCase())) {
+              score += 10;
+            }
+          }
+
+          }
+        }
 
       if (score > 0) {
         eventScores.put(event, score);

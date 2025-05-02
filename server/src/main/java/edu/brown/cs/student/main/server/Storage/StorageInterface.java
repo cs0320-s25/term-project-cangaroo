@@ -41,7 +41,7 @@ public interface StorageInterface {
       String eventOrganizer)
       throws ExecutionException, InterruptedException, NoEventFoundException;
 
-  void editProfile(String uid, List<String> tags)
+  void editProfile(String uid, List<String> tags, List<String> favEventOrganizers)
       throws ExecutionException, InterruptedException, NoProfileFoundException;
 
   Map<String, Object> getProfile(String uid)

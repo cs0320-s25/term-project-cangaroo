@@ -31,6 +31,7 @@ public class EditEventHandler implements Route {
     String eventID = request.queryParams("eventID");
     String eventOrganizer = request.queryParams("eventOrganizer");
     List<String> tags = Arrays.asList(tagsString.trim().split(","));
+    String eventOrganizer = request.queryParams("eventOrganizer");
 
     if ((uid == null)
         || (name == null)
@@ -39,7 +40,9 @@ public class EditEventHandler implements Route {
         || (startTime == null)
         || (endTime == null)
         || (tags.isEmpty())
-        || (eventID == null)) {
+        || (eventID == null)
+        || (eventOrganizer == null)) {
+
       responseMap.put("status", "failure");
       responseMap.put("error_message", "Missing parameters");
       return Utils.toMoshiJson(responseMap);

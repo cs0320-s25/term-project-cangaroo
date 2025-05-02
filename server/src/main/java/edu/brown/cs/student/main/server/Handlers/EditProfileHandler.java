@@ -23,17 +23,20 @@ public class EditProfileHandler implements Route {
 
     String uid = request.queryParams("uid");
     String tagsString = request.queryParams("interestedTags");
+    String favEventOrganizersString = request.queryParams("eventOrganizer");
 
-    if ((uid == null) || (tagsString == null)) {
+    if ((uid == null) || (tagsString == null) || (favEventOrganizersString == null)) {
       responseMap.put("result", "failure");
       responseMap.put("error_message", "Missing required parameters: uid, interestedTags");
       return Utils.toMoshiJson(responseMap);
     }
     List<String> tags = Arrays.asList(tagsString.trim().split(","));
+    List<String> favEventOrganizers = Arrays.asList(favEventOrganizersString.trim().split(","));
     try {
-      this.storageHandler.editProfile(uid, tags);
+      this.storageHandler.editProfile(uid, tags, favEventOrganizers);
       responseMap.put("result", "success");
       responseMap.put("newTags", tags);
+      responseMap.put("newFavEventOrganizer", favEventOrganizers);
     } catch (NoProfileFoundException e) {
       responseMap.put("result", "failure");
       responseMap.put("error_message", "Profile does not exist.");

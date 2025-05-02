@@ -19,8 +19,8 @@ public class RecommendHandler implements Route {
           "08:00",
           "10:00",
           List.of("food", "health"),
-          1,
-          "Brown Running Club");
+          1, null);
+
   Event e2 =
       new Event(
           List.of("Book", "Club"),
@@ -29,8 +29,8 @@ public class RecommendHandler implements Route {
           "17:00",
           "10:00",
           List.of("reading"),
-          2,
-          "Noodle Society");
+          2, null);
+
   Event e3 =
       new Event(
           List.of("Sprint", "Practice"),
@@ -39,8 +39,8 @@ public class RecommendHandler implements Route {
           "10:00",
           "10:00",
           List.of("track"),
-          3,
-          "Ping Pong Club");
+          3, null);
+
 
   List<String> mockedTags = List.of("cooking");
 
@@ -52,7 +52,7 @@ public class RecommendHandler implements Route {
   public Object handle(Request request, Response response) throws Exception {
     this.responseMap = new HashMap<>();
     MatchEvents matchEvents = new MatchEvents();
-    List<Event> results = matchEvents.getMatchedEvents(this.mockedTags, List.of(e1, e2, e3));
+    List<Event> results = matchEvents.getMatchedEvents(this.mockedTags, null, List.of(e1, e2, e3));
 
     // no events matched
     if (results == null || results.isEmpty()) {
