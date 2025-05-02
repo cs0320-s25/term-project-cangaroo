@@ -18,6 +18,7 @@ import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
 import edu.brown.cs.student.main.server.Exceptions.NoExistingFriendRequestException;
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
 import edu.brown.cs.student.main.server.Exceptions.NotFriendsException;
+import edu.brown.cs.student.main.server.Profiles.Profile;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -96,6 +97,30 @@ public class FirebaseUtilities implements StorageInterface {
     } else {
       throw new NoProfileFoundException("Profile does not exist");
     }
+  }
+
+  public Profile getProfileRecord(DocumentSnapshot snapshot) {
+    String username = snapshot.getString("username");
+
+    List<String> interestedTags = (List<String>) snapshot.get("interestedTags");
+    if (interestedTags == null) interestedTags = new ArrayList<>();
+
+    List<String> friendNames = (List<String>) snapshot.get("friendsList");
+    if (friendNames == null) friendNames = new ArrayList<>();
+
+    List<Long> rawEvents = (List<Long>) snapshot.get("eventsAttending");
+    List<Integer> eventsAttending = new ArrayList<>();
+    if (rawEvents != null) {
+      for (Long eventId : rawEvents) {
+        eventsAttending.add(eventId.intValue());
+      }
+    }
+
+    List<String> interestedOrganizations = (List<String>) snapshot.get("interestedOrganizations");
+    if (interestedOrganizations == null) interestedOrganizations = new ArrayList<>();
+
+    return new Profile(
+        username, interestedTags, friendNames, eventsAttending, interestedOrganizations);
   }
 
   @Override
@@ -188,6 +213,7 @@ public class FirebaseUtilities implements StorageInterface {
       throws ExecutionException, InterruptedException, NoProfileFoundException {
 
     Firestore db = FirestoreClient.getFirestore();
+
     DocumentReference docRef = db.collection("users").document(uid);
 
     if (docRef.get().get().exists()) {
@@ -495,6 +521,30 @@ public class FirebaseUtilities implements StorageInterface {
     } else {
       throw new NoEventFoundException("Event does not exist.");
     }
+  }
+
+  public Event getEventRecord(String eventID)
+      throws ExecutionException, InterruptedException, NoEventFoundException {
+    Firestore db = FirestoreClient.getFirestore();
+    DocumentReference docRef = db.collection("events").document("event-" + eventID);
+
+    DocumentSnapshot snapshot = docRef.get().get();
+
+    if (!snapshot.exists()) {
+      throw new NoEventFoundException("Event does not exist.");
+    }
+
+    List<String> name = Arrays.asList(snapshot.get("name").toString().split(" "));
+    List<String> description = Arrays.asList(snapshot.get("description").toString().split(" "));
+    String date = snapshot.getString("date");
+    String startTime = snapshot.getString("startTime");
+    String endTime = snapshot.getString("endTime");
+    int parsedEventID = Integer.parseInt(snapshot.get("eventID").toString());
+    String eventOrganizer = snapshot.getString("eventOrganizer");
+    List<String> tags = Arrays.asList(snapshot.get("tags").toString().split(" "));
+
+    return new Event(
+        name, description, date, startTime, endTime, tags, parsedEventID, eventOrganizer);
   }
 
   @Override
