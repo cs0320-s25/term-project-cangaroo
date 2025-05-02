@@ -19,11 +19,11 @@ public class Rate {
    * output: add event organizer if you do
    */
 
-  public void rateEvent(StorageInterface storageHandler, String profileID, String eventUID, String eventID, Boolean likedEvent)
+  public void rateEvent(StorageInterface storageHandler, String profileID, String eventID, Boolean likedEvent)
       throws ExecutionException, InterruptedException, NoEventFoundException, NoProfileFoundException {
     if (likedEvent) {
       //ask if storageHandler should
-      String eventOrganizer = (String) storageHandler.getEvent(eventUID, eventID).get("eventOrganizer");
+      String eventOrganizer = (String) storageHandler.getEvent(eventID).get("eventOrganizer");
       storageHandler.editProfile(profileID, null, List.of(eventOrganizer));
 
     }
