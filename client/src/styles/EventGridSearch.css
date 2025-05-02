@@ -1,33 +1,78 @@
 /* Overall page wrapper */
 .event-grid-page {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-    font-family: "Inter", sans-serif;
-    overflow: hidden;
-  }
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  font-family: "Inter", sans-serif;
+  overflow: hidden;
+}
+
+/* Scrollable area for event cards */
+.scrollable-grid {
+  flex: 1; /* takes all remaining space below navbar */
+  overflow-y: auto;
+  padding-top: 8px;
+  box-sizing: border-box;
+}
+
+/* Responsive grid inside the scrollable area */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* start with 3 columns */
+  gap: 40px;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.event-search-bar {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 100px;
+  min-height: 2rem;
+  max-width:600px;
+  color: black;
+}
+
+
+.event-search {
+  display: flex;
+  font-family: "Inter", sans-serif;
+  justify-content: center;
+  width: 50vw;
+  height: 80px;
+  align-items: center;
+  padding: 0.75rem 3rem;
+  background-color: #ffffff;
+  /* border-bottom: 1px solid #ddd; */
+  /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); */
+  position: absolute; 
+  top: -10;
+  z-index: 200; /*makes sure navbar is always on top of other components*/
+  left: 20vw;
+}
+
+.search-button {
+  padding: 0.6rem 1rem;
+  background-color: #DD1155;
+  color: white;
+  border: none;
+  border-radius: 100px;
+  font-weight: 500;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  min-height: 40px;
+  min-width: 100px;
+  text-align: center;
+}
   
-  /* Scrollable area for event cards */
-  .scrollable-grid {
-    flex: 1; /* takes all remaining space below navbar */
-    overflow-y: auto;
-    padding-top: 8px;
-    box-sizing: border-box;
-  }
-  
-  /* Responsive grid inside the scrollable area */
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* start with 3 columns */
-    gap: 40px;
-    justify-content: center;
-    padding: 40px;
-    box-sizing: border-box;
-  }
-  
-  
-  
+.search-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
 
 @media (max-width: 1000px) {
 .card-grid {

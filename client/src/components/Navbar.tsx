@@ -31,40 +31,13 @@ function Navbar({onPlusClick, minimal = false}: NavbarProps) {
     <nav className="navbar">
       <div className="navbar-left">
         <div className="logo" onClick={() => navigate("/")}>CanGo</div>
-        {!minimal && (
+        {/* {!minimal && (
           <input type="text" placeholder="search for an event" className="searchbar" />
-        )}
+        )} */}
       </div>
       <div className="navbar-buttons">
         {!minimal && (
           <>
-          <div className="sort-wrapper">
-            <button className="nav-button" onClick={toggleSortMenu}>Sort By</button>
-            {sortMenuOpen && (
-              <div className="sort-dropdown">
-                <button>Duration</button>
-                <button>Date and Time</button>
-                <button>Number of Attendees</button>
-                <button>Number of Friends Attending</button>
-
-                <div className="sort-toggle">
-                  <label className="toggle-switch">
-                    <input
-                      type="checkbox"
-                      checked={sortDirection === "asc"}
-                      onChange={() => setSortDirection(sortDirection === "asc" ? "desc" : "asc")}
-                    />
-                    <span className="slider" />
-                  </label>
-                  <span className="sort-label">
-                    {sortDirection === "asc" ? "Low to High" : "High to Low"}
-                  </span>
-                </div>
-
-              </div>
-            )}
-          </div>
-            <button className="nav-button">Filter</button>
             <button className="plus-button" onClick={onPlusClick}>+</button>
             <button className="nav-button">Recommend</button>
           </>
