@@ -5,6 +5,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
@@ -12,8 +13,12 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import edu.brown.cs.student.main.server.Events.Event;
+import edu.brown.cs.student.main.server.Exceptions.EventAlreadyAttendingException;
 import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
+import edu.brown.cs.student.main.server.Exceptions.NoExistingFriendRequestException;
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
+import edu.brown.cs.student.main.server.Exceptions.NotFriendsException;
+import edu.brown.cs.student.main.server.Profiles.Profile;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -21,9 +26,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 public class FirebaseUtilities implements StorageInterface {
@@ -80,8 +87,7 @@ public class FirebaseUtilities implements StorageInterface {
       throws ExecutionException, InterruptedException, NoProfileFoundException {
 
     Firestore db = FirestoreClient.getFirestore();
-    DocumentReference docRef =
-        db.collection("users").document(uid).collection("profile").document("profileProperties");
+    DocumentReference docRef = db.collection("users").document(uid);
 
     ApiFuture<DocumentSnapshot> future = docRef.get();
     DocumentSnapshot snapshot = future.get();
@@ -91,6 +97,30 @@ public class FirebaseUtilities implements StorageInterface {
     } else {
       throw new NoProfileFoundException("Profile does not exist");
     }
+  }
+
+  public Profile getProfileRecord(DocumentSnapshot snapshot) {
+    String username = snapshot.getString("username");
+
+    List<String> interestedTags = (List<String>) snapshot.get("interestedTags");
+    if (interestedTags == null) interestedTags = new ArrayList<>();
+
+    List<String> friendNames = (List<String>) snapshot.get("friendsList");
+    if (friendNames == null) friendNames = new ArrayList<>();
+
+    List<Long> rawEvents = (List<Long>) snapshot.get("eventsAttending");
+    List<Integer> eventsAttending = new ArrayList<>();
+    if (rawEvents != null) {
+      for (Long eventId : rawEvents) {
+        eventsAttending.add(eventId.intValue());
+      }
+    }
+
+    List<String> interestedOrganizations = (List<String>) snapshot.get("interestedOrganizations");
+    if (interestedOrganizations == null) interestedOrganizations = new ArrayList<>();
+
+    return new Profile(
+        username, interestedTags, friendNames, eventsAttending, interestedOrganizations);
   }
 
   @Override
@@ -128,8 +158,6 @@ public class FirebaseUtilities implements StorageInterface {
     // future.get() blocks on response
     DocumentSnapshot document = future.get();
     if (document.exists()) {
-      System.out.println(
-          "THIS: " + Integer.parseInt(Objects.requireNonNull(document.get("eventID")).toString()));
       return Integer.parseInt(Objects.requireNonNull(document.get("eventID")).toString());
     } else {
       return 0;
@@ -145,33 +173,72 @@ public class FirebaseUtilities implements StorageInterface {
       String date,
       String startTime,
       String endTime,
-      List<String> tags)
+      List<String> tags,
+      String eventOrganizer)
       throws ExecutionException, InterruptedException, NoEventFoundException {
     Firestore db = FirestoreClient.getFirestore();
 
     DocumentReference docRef =
         db.collection("users").document(uid).collection("events").document("event-" + eventID);
-    System.out.println(docRef);
-    if (docRef.get().get().exists()) {
-      docRef.update("name", name);
-      docRef.update("description", description);
-      docRef.update("date", date);
-      docRef.update("startTime", startTime);
-      docRef.update("endTime", endTime);
-      docRef.update("tags", tags);
+
+    DocumentReference eventRef = db.collection("events").document("event-" + eventID);
+    if ((docRef.get().get().exists()) && (eventRef.get().get().exists())) {
+      updateEventData(name, description, date, startTime, endTime, tags, eventOrganizer, docRef);
+      updateEventData(name, description, date, startTime, endTime, tags, eventOrganizer, eventRef);
     } else {
       throw new NoEventFoundException("Event does not exist.");
     }
   }
 
+  private void updateEventData(
+      String name,
+      String description,
+      String date,
+      String startTime,
+      String endTime,
+      List<String> tags,
+      String eventOrganizer,
+      DocumentReference docRef) {
+    docRef.update("name", name);
+    docRef.update("description", description);
+    docRef.update("date", date);
+    docRef.update("startTime", startTime);
+    docRef.update("endTime", endTime);
+    docRef.update("tags", tags);
+    docRef.update("eventOrganizer", eventOrganizer);
+  }
+
   @Override
-  public void editProfile(String uid, List<String> tags)
+  public void editProfile(String uid, List<String> tags, List<String> favEventOrganizers)
       throws ExecutionException, InterruptedException, NoProfileFoundException {
+
     Firestore db = FirestoreClient.getFirestore();
-    DocumentReference docRef =
-        db.collection("users").document(uid).collection("profile").document("profileProperties");
+
+    DocumentReference docRef = db.collection("users").document(uid);
+
     if (docRef.get().get().exists()) {
-      docRef.update("interestedTags", tags);
+      DocumentSnapshot snapshot = docRef.get().get();
+
+      if (tags != null) {
+        List<String> existingTags = (List<String>) snapshot.get("interestedTags");
+        if (existingTags == null) existingTags = new ArrayList<>();
+        List<String> cleanedTags =
+            tags.stream().map(String::trim).filter(t -> !t.isEmpty()).toList();
+        Set<String> mergedTags = new HashSet<>(existingTags);
+        mergedTags.addAll(cleanedTags);
+        docRef.update("interestedTags", new ArrayList<>(mergedTags));
+      }
+
+      if (favEventOrganizers != null) {
+        List<String> existingOrgs = (List<String>) snapshot.get("interestedOrganizations");
+        if (existingOrgs == null) existingOrgs = new ArrayList<>();
+        List<String> cleanedOrgs =
+            favEventOrganizers.stream().map(String::trim).filter(o -> !o.isEmpty()).toList();
+        Set<String> mergedOrgs = new HashSet<>(existingOrgs);
+        mergedOrgs.addAll(cleanedOrgs);
+        docRef.update("interestedOrganizations", new ArrayList<>(mergedOrgs));
+      }
+
     } else {
       throw new NoProfileFoundException("No such profile.");
     }
@@ -196,20 +263,255 @@ public class FirebaseUtilities implements StorageInterface {
         String startTime = document.get("startTime").toString();
         String endTime = document.get("endTime").toString();
         int eventID = Integer.parseInt(document.get("eventID").toString());
+        String eventOrganizer = document.get("eventOrganizer").toString();
 
         List<String> tags = Arrays.asList(document.get("tags").toString().split(" "));
-        events.add(new Event(name, description, date, startTime, endTime, tags, eventID));
+
+        events.add(
+            new Event(name, description, date, startTime, endTime, tags, eventID, eventOrganizer));
       }
     }
     return events;
   }
 
   @Override
-  public Map<String, Object> getEvent(String uid, String eventID)
+  public void updateAttending(String uid, int eventID, boolean isAttending)
+      throws ExecutionException,
+          InterruptedException,
+          NoProfileFoundException,
+          NoEventFoundException,
+          EventAlreadyAttendingException {
+    Firestore db = FirestoreClient.getFirestore();
+    DocumentReference profileRef = db.collection("users").document(uid);
+    DocumentReference eventRef = db.collection("events").document("event-" + eventID);
+    // change database architecture to allow storing all events in their own collection
+
+    ApiFuture<DocumentSnapshot> profileFuture = profileRef.get();
+    DocumentSnapshot profileSnapshot = profileFuture.get();
+
+    ApiFuture<DocumentSnapshot> eventFuture = eventRef.get();
+    DocumentSnapshot eventSnapshot = eventFuture.get();
+
+    if (profileSnapshot.exists()) {
+      if (eventSnapshot.exists()) {
+        List<Integer> oldAttending = (List<Integer>) profileSnapshot.get("eventsAttending");
+        assert oldAttending != null;
+        assert oldAttending != null;
+        String eventCreatorUID = Objects.requireNonNull(eventSnapshot.get("uid")).toString();
+        @SuppressWarnings("unchecked")
+        List<String> oldEventAttendingList = (List<String>) eventSnapshot.get("usersAttending");
+
+        assert oldEventAttendingList != null;
+        List<String> oldEventModifiable = new ArrayList<>(oldEventAttendingList);
+        if (isAttending && !oldEventAttendingList.contains((long) eventID)) {
+          oldEventModifiable.add(uid);
+        } else if (!isAttending) {
+          oldEventModifiable.remove(uid);
+        } else {
+          throw new EventAlreadyAttendingException("Event already attending");
+        }
+        eventRef.update("usersAttending", oldEventModifiable);
+        DocumentReference eventProfileRef =
+            db.collection("users")
+                .document(eventCreatorUID)
+                .collection("events")
+                .document("event-" + eventID);
+        eventProfileRef.update("usersAttending", oldEventModifiable);
+        // update profile
+
+        //        assert event != null;
+
+        if (isAttending) {
+          //          event.put("usersAttending", oldEventModifiable);
+          oldAttending.add(eventID);
+        } else {
+          oldAttending.remove(eventID);
+        }
+
+        //        System.out.println(event);
+        profileRef.update("eventsAttending", oldAttending);
+        // update event (get uid)
+
+      } else {
+        throw new NoEventFoundException("Event does not exist.");
+      }
+    } else {
+      throw new NoProfileFoundException("Profile does not exist.");
+    }
+  }
+
+  private void checkProfilesExist(String user1, String user2) throws NoProfileFoundException {
+    // probably do some error-checking to see if the ids actually correspond to profiles
+    Firestore db = FirestoreClient.getFirestore();
+    boolean foundUser1 = false;
+    boolean foundUser2 = false;
+    for (DocumentReference userRef : db.collection("users").listDocuments()) {
+      if (userRef.getId().equals(user1)) {
+        foundUser1 = true;
+      } else if (userRef.getId().equals(user2)) {
+        foundUser2 = true;
+      }
+    }
+
+    if (!foundUser1 || (user2 != null && !foundUser2)) {
+      throw new NoProfileFoundException("Profile does not exist.");
+    }
+  }
+
+  @Override
+  public void sendFriendRequest(String senderID, String receiverID) throws NoProfileFoundException {
+
+    Firestore db = FirestoreClient.getFirestore();
+    this.checkProfilesExist(senderID, receiverID);
+    // create a document in the receiver's collection for the friend request
+    db.collection("users")
+        .document(senderID)
+        .collection("outgoingFriendRequests")
+        .document(receiverID)
+        .set(new HashMap<>());
+    // create document in 'outgoing friend requests' collection of sender
+    db.collection("users")
+        .document(receiverID)
+        .collection("receivedFriendRequests")
+        .document(senderID)
+        .set(new HashMap<>());
+  }
+
+  @Override
+  public void unsendFriendRequest(String senderID, String receiverID)
+      throws NoProfileFoundException {
+    Firestore db = FirestoreClient.getFirestore();
+    // will throw NoProfileFoundException if profiles don't exist
+    this.checkProfilesExist(senderID, receiverID);
+
+    deleteDocument(
+        db.collection("users")
+            .document(senderID)
+            .collection("outgoingFriendRequests")
+            .document(receiverID));
+    deleteDocument(
+        db.collection("users")
+            .document(receiverID)
+            .collection("receivedFriendRequests")
+            .document(senderID));
+  }
+
+  @Override
+  public void respondToFriendRequest(String senderID, String receiverID, boolean isAccepted)
+      throws NoProfileFoundException,
+          ExecutionException,
+          InterruptedException,
+          NoExistingFriendRequestException {
+    this.checkProfilesExist(senderID, receiverID);
+    Firestore db = FirestoreClient.getFirestore();
+
+    // check if there is a friend request there
+    if (!db.collection("users")
+        .document(senderID)
+        .collection("outgoingFriendRequests")
+        .document(receiverID)
+        .get()
+        .get()
+        .exists()) {
+      throw new NoExistingFriendRequestException("Friend request does not exist between friends.");
+    }
+    if (isAccepted) {
+      // add to both friend lists
+      db.collection("users")
+          .document(senderID)
+          .update("friendsList", FieldValue.arrayUnion(receiverID));
+
+      db.collection("users")
+          .document(receiverID)
+          .update("friendsList", FieldValue.arrayUnion(senderID));
+    }
+    // remove from both friend request lists of each user after
+    this.unsendFriendRequest(senderID, receiverID);
+  }
+
+  @Override
+  public void addProfile(String uid, Map<String, Object> data) {
+    Firestore db = FirestoreClient.getFirestore();
+    //    db.collection("users")
+    //        .document(uid)
+    //        .collection("profile")
+    //        .document("profileProperties")
+    //        .set(data);
+    db.collection("users").document(uid).set(data);
+  }
+
+  @Override
+  public void deleteDatabase() {
+    Firestore db = FirestoreClient.getFirestore();
+    clearCollection(db.collection("users"));
+    clearCollection(db.collection("events"));
+    clearCollection(db.collection("currentIDs"));
+  }
+
+  @Override
+  public void removeFriends(String user1, String user2)
+      throws NoProfileFoundException,
+          NotFriendsException,
+          ExecutionException,
+          InterruptedException {
+    this.checkProfilesExist(user1, user2);
+
+    Firestore db = FirestoreClient.getFirestore();
+
+    // check if they are friends
+    DocumentReference user1Ref = db.collection("users").document(user1);
+    DocumentReference user2Ref = db.collection("users").document(user2);
+    if (!((List<String>) (Objects.requireNonNull(user1Ref.get().get().get("friendsList"))))
+        .contains(user2)) {
+      throw new NotFriendsException("Not friends of user.");
+    }
+
+    user1Ref.update("friendsList", FieldValue.arrayRemove(user2));
+    user2Ref.update("friendsList", FieldValue.arrayRemove(user1));
+  }
+
+  private String getNameFromID(String id) throws ExecutionException, InterruptedException {
+    Firestore db = FirestoreClient.getFirestore();
+    return db.collection("users").document(id).get().get().get("username").toString();
+  }
+
+  @Override
+  public Map<String, String> viewFriends(String uid)
+      throws NoProfileFoundException, ExecutionException, InterruptedException {
+    this.checkProfilesExist(uid, null);
+    Firestore db = FirestoreClient.getFirestore();
+    DocumentReference userRef = db.collection("users").document(uid);
+    Map<String, String> idToName = new HashMap<>();
+    for (String friend : (List<String>) userRef.get().get().get("friendsList")) {
+      idToName.put(friend, getNameFromID(friend));
+    }
+    return idToName;
+  }
+
+  @Override
+  public Map<String, String> getFriendRequests(String uid, boolean isOutgoing)
+      throws NoProfileFoundException, ExecutionException, InterruptedException {
+    this.checkProfilesExist(uid, null);
+    Firestore db = FirestoreClient.getFirestore();
+    Map<String, String> idToName = new HashMap<>();
+    String friendRequestCollection;
+    if (isOutgoing) {
+      friendRequestCollection = "outgoingFriendRequests";
+    } else {
+      friendRequestCollection = "receivedFriendRequests";
+    }
+    for (DocumentReference docRef :
+        db.collection("users").document(uid).collection(friendRequestCollection).listDocuments()) {
+      idToName.put(docRef.getId(), this.getNameFromID(docRef.getId()));
+    }
+    return idToName;
+  }
+
+  @Override
+  public Map<String, Object> getEvent(String eventID)
       throws ExecutionException, InterruptedException, NoEventFoundException {
     Firestore db = FirestoreClient.getFirestore();
-    DocumentReference docRef =
-        db.collection("users").document(uid).collection("events").document("event-" + eventID);
+    DocumentReference docRef = db.collection("events").document("event-" + eventID);
 
     ApiFuture<DocumentSnapshot> future = docRef.get();
     DocumentSnapshot snapshot = future.get();
@@ -221,28 +523,60 @@ public class FirebaseUtilities implements StorageInterface {
     }
   }
 
+  public Event getEventRecord(String eventID)
+      throws ExecutionException, InterruptedException, NoEventFoundException {
+    Firestore db = FirestoreClient.getFirestore();
+    DocumentReference docRef = db.collection("events").document("event-" + eventID);
+
+    DocumentSnapshot snapshot = docRef.get().get();
+
+    if (!snapshot.exists()) {
+      throw new NoEventFoundException("Event does not exist.");
+    }
+
+    List<String> name = Arrays.asList(snapshot.get("name").toString().split(" "));
+    List<String> description = Arrays.asList(snapshot.get("description").toString().split(" "));
+    String date = snapshot.getString("date");
+    String startTime = snapshot.getString("startTime");
+    String endTime = snapshot.getString("endTime");
+    int parsedEventID = Integer.parseInt(snapshot.get("eventID").toString());
+    String eventOrganizer = snapshot.getString("eventOrganizer");
+    List<String> tags = Arrays.asList(snapshot.get("tags").toString().split(" "));
+
+    return new Event(
+        name, description, date, startTime, endTime, tags, parsedEventID, eventOrganizer);
+  }
+
   @Override
-  public void deleteEvent(String uid, String collection_id, String id)
-      throws NoEventFoundException, ExecutionException, InterruptedException {
+  public void deleteEvent(String uid, String id) throws NoEventFoundException {
 
     Firestore db = FirestoreClient.getFirestore();
-    CollectionReference dataRef = db.collection("users").document(uid).collection(collection_id);
+    CollectionReference dataRef = db.collection("users").document(uid).collection("events");
 
-    for (DocumentReference docRef : dataRef.listDocuments()) {
-      ApiFuture<DocumentSnapshot> future = docRef.get();
-      DocumentSnapshot document = future.get();
-      if (document.exists()) {
-        // Get a specific field
-        Long ID = document.getLong("ID");
-        assert ID != null;
-
-        if (ID.equals(Long.valueOf(id))) {
-          deleteDocument(docRef);
-          return;
-        }
+    for (DocumentReference eventRef : dataRef.listDocuments()) {
+      if (eventRef.getId().equals("event-" + id)) {
+        deleteDocument(eventRef);
+        deleteDocument(db.collection("events").document("event-" + id));
+        return;
       }
     }
     throw new NoEventFoundException("Event does not exist.");
+  }
+
+  @Override
+  public void addEvent(String user, int id, Map<String, Object> data)
+      throws IllegalArgumentException,
+          ExecutionException,
+          InterruptedException,
+          NoProfileFoundException {
+    Firestore db = FirestoreClient.getFirestore();
+    if (!db.collection("users").document(user).get().get().exists()) {
+      throw new NoProfileFoundException("Profile does not exist");
+    }
+    CollectionReference collection = db.collection("users").document(user).collection("events");
+
+    collection.document("event-" + id).set(data);
+    db.collection("events").document("event-" + id).set(data);
   }
 
   @Override
@@ -313,6 +647,16 @@ public class FirebaseUtilities implements StorageInterface {
       // solution would involve batching the collection.get() call.
     } catch (Exception e) {
       System.err.println("Error deleting collection : " + e.getMessage());
+    }
+  }
+
+  // helper function to remove a collection by recursively removing its sub-documents
+  private void clearCollection(CollectionReference collection) {
+    for (DocumentReference docRef : collection.listDocuments()) {
+      for (CollectionReference collectionRef : docRef.listCollections()) {
+        deleteCollection(collectionRef);
+      }
+      deleteDocument(docRef);
     }
   }
 }

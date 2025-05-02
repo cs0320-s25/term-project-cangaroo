@@ -2,20 +2,27 @@ package edu.brown.cs.student.main.server;
 
 import static spark.Spark.after;
 
-import edu.brown.cs.student.main.server.Handlers.AddFriendHandler;
+import edu.brown.cs.student.main.server.Handlers.ChangeAttendanceHandler;
+import edu.brown.cs.student.main.server.Handlers.DeleteAllHandler;
 import edu.brown.cs.student.main.server.Handlers.DeleteEventHandler;
 import edu.brown.cs.student.main.server.Handlers.EditEventHandler;
 import edu.brown.cs.student.main.server.Handlers.EditProfileHandler;
 import edu.brown.cs.student.main.server.Handlers.EventCreationHandler;
 import edu.brown.cs.student.main.server.Handlers.GetFriendsHandler;
+import edu.brown.cs.student.main.server.Handlers.GetOutgoingFriendRequests;
+import edu.brown.cs.student.main.server.Handlers.GetReceivedFriendRequests;
 import edu.brown.cs.student.main.server.Handlers.ProfileCreationHandler;
 import edu.brown.cs.student.main.server.Handlers.RSVPHandler;
 import edu.brown.cs.student.main.server.Handlers.RandomRecommendHandler;
 import edu.brown.cs.student.main.server.Handlers.RateHandler;
 import edu.brown.cs.student.main.server.Handlers.RecommendHandler;
-import edu.brown.cs.student.main.server.Handlers.RemoveFriendHandler;
+import edu.brown.cs.student.main.server.Handlers.RespondToFriendRequestHandler;
 import edu.brown.cs.student.main.server.Handlers.SearchHandler;
+import edu.brown.cs.student.main.server.Handlers.SendFriendRequestHandler;
+import edu.brown.cs.student.main.server.Handlers.UnfriendHandler;
+import edu.brown.cs.student.main.server.Handlers.UnsendFriendRequestHandler;
 import edu.brown.cs.student.main.server.Handlers.ViewEventHandler;
+import edu.brown.cs.student.main.server.Handlers.ViewFriendsHandler;
 import edu.brown.cs.student.main.server.Handlers.ViewProfileHandler;
 import edu.brown.cs.student.main.server.Storage.FirebaseUtilities;
 import edu.brown.cs.student.main.server.Storage.StorageInterface;
@@ -43,14 +50,14 @@ public class Server {
     try {
       StorageInterface storageHandler = new FirebaseUtilities();
 
-      Spark.get("add-friend", new AddFriendHandler());
-      Spark.get("remove-friend", new RemoveFriendHandler());
+      Spark.get("send-friend-request", new SendFriendRequestHandler(storageHandler));
+      Spark.get("unsend-friend-request", new UnsendFriendRequestHandler(storageHandler));
       Spark.get("edit-event", new EditEventHandler(storageHandler));
       Spark.get("edit-profile", new EditProfileHandler(storageHandler));
       Spark.get("create-event", new EventCreationHandler(storageHandler));
-      Spark.get("get-friends", new GetFriendsHandler());
+      Spark.get("get-friends", new GetFriendsHandler(storageHandler));
       Spark.get("random-recommend", new RandomRecommendHandler());
-      Spark.get("rate", new RateHandler());
+      Spark.get("rate", new RateHandler(storageHandler));
       Spark.get("recommend", new RecommendHandler());
       Spark.get("delete-event", new DeleteEventHandler(storageHandler));
       Spark.get("rsvp", new RSVPHandler());
@@ -58,6 +65,14 @@ public class Server {
       Spark.get("create-profile", new ProfileCreationHandler(storageHandler));
       Spark.get("view-event", new ViewEventHandler(storageHandler));
       Spark.get("view-profile", new ViewProfileHandler(storageHandler));
+      Spark.get("change-attendance", new ChangeAttendanceHandler(storageHandler));
+      Spark.get("respond-to-friend-request", new RespondToFriendRequestHandler(storageHandler));
+      Spark.get("unfriend", new UnfriendHandler(storageHandler));
+      Spark.get("view-friends", new ViewFriendsHandler(storageHandler));
+      Spark.get("get-received-friend-requests", new GetReceivedFriendRequests(storageHandler));
+      Spark.get("get-outgoing-friend-requests", new GetOutgoingFriendRequests(storageHandler));
+
+      Spark.get("delete-all", new DeleteAllHandler(storageHandler));
 
       Spark.notFound(
           (request, response) -> {
