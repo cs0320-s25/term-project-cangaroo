@@ -26,6 +26,8 @@
     font-size: 5rem;
     font-weight: 900;
     color: #DD1155;
+    font-family: "Outfit", sans-serif;
+    cursor: pointer;
 }
   
 .searchbar {
