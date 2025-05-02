@@ -13,10 +13,9 @@ public class Rate {
   public Rate() {}
 
   /*
-   * input: event, profile, whether you liked the event/not
-   * output: add event organizer if you do
+   * this method should append the eventorganizer of an event that a profile really likes
+   * to the profile's favorite organizations
    */
-
   public void rateEvent(
       StorageInterface storageHandler, String profileID, String eventID, Boolean likedEvent)
       throws ExecutionException,
@@ -48,7 +47,6 @@ public class Rate {
       }
 
       storageHandler.editProfile(profileID, tagList, profileFavOrganizersList);
-
     }
   }
 }

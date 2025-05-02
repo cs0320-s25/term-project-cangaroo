@@ -52,7 +52,7 @@ public class RandomRecommendHandler implements Route {
   public Object handle(Request request, Response response) throws Exception {
     this.responseMap = new HashMap<>();
     RandomMatch randomMatch = new RandomMatch();
-    List<Event> results = randomMatch.getRandomEvent(List.of(e1, e2, e3));
+    List<Integer> results = randomMatch.getRandomEvent(List.of(e1, e2, e3));
 
     // no events matched
     if (results == null || results.isEmpty()) {

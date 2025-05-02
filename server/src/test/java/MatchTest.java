@@ -16,7 +16,7 @@ public class MatchTest {
   public void testRandomSelectionSizeLimit() {
     List<Event> events = TestEventFactory.generateDummyEvents(25);
     RandomMatch randomMatch = new RandomMatch();
-    List<Event> selected = randomMatch.getRandomEvent(events);
+    List<Integer> selected = randomMatch.getRandomEvent(events);
 
     assertEquals(10, selected.size(), "Should return 10 events at most");
   }
@@ -26,7 +26,7 @@ public class MatchTest {
   public void testRandomReturnsAllIfLessThanTen() {
     List<Event> events = TestEventFactory.generateDummyEvents(5);
     RandomMatch randomMatch = new RandomMatch();
-    List<Event> selected = randomMatch.getRandomEvent(events);
+    List<Integer> selected = randomMatch.getRandomEvent(events);
 
     assertEquals(5, selected.size(), "Should return all available events if fewer than 10");
     assertTrue(events.containsAll(selected), "All selected events must be from original list");
@@ -62,11 +62,11 @@ public class MatchTest {
     List<String> profileTags = List.of("run");
 
     MatchEvents matcher = new MatchEvents();
-    List<Event> results = matcher.getMatchedEvents(profileTags, null, List.of(e1, e2));
+    List<Integer> results = matcher.getMatchedEvents(profileTags, null, List.of(e1, e2));
 
     // Assert only one event matched and it was e1
     assertEquals(1, results.size());
-    assertEquals(e1, results.get(0));
+    assertEquals(1, results.get(0));
   }
 
   @Test
@@ -121,13 +121,13 @@ public class MatchTest {
         List.of("science", "biology", "computer science", "running", "jogging", "gym");
 
     MatchEvents matcher = new MatchEvents();
-    List<Event> results = matcher.getMatchedEvents(profileTags, null, List.of(e1, e2, e3, e4));
+    List<Integer> results = matcher.getMatchedEvents(profileTags, null, List.of(e1, e2, e3, e4));
 
     // Assert only one event matched and it was e1
     assertEquals(2, results.size());
-    assertTrue(results.contains(e1));
-    assertTrue(results.contains(e3));
-    assertFalse(results.contains(e2));
-    assertFalse(results.contains(e4));
+    assertTrue(results.contains(1));
+    assertTrue(results.contains(3));
+    assertFalse(results.contains(2));
+    assertFalse(results.contains(4));
   }
 }

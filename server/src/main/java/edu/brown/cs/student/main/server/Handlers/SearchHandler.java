@@ -68,7 +68,7 @@ public class SearchHandler implements Route {
 
     List<String> words = Arrays.asList(input.split("\\s+"));
     Search search = new Search();
-    List<Event> results = search.getSearchedEvents(words, List.of(e1, e2, e3));
+    List<Integer> results = search.getSearchedEvents(words, List.of(e1, e2, e3));
 
     // no events matched
     if (results == null || results.isEmpty()) {

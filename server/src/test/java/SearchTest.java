@@ -33,10 +33,10 @@ public class SearchTest {
 
     Search search = new Search();
 
-    List<Event> results = search.getSearchedEvents(List.of("run"), List.of(e1, e2));
+    List<Integer> results = search.getSearchedEvents(List.of("run"), List.of(e1, e2));
 
     assertEquals(1, results.size());
-    assertEquals(e1, results.get(0));
+    assertEquals(1, results.get(0));
   }
 
   // checks to make sure that the search algorithm searches for all versions of jump in event
@@ -65,10 +65,10 @@ public class SearchTest {
             null);
 
     Search search = new Search();
-    List<Event> results = search.getSearchedEvents(List.of("jump"), List.of(e1, e2));
+    List<Integer> results = search.getSearchedEvents(List.of("jump"), List.of(e1, e2));
 
     assertEquals(1, results.size());
-    assertEquals(e1, results.get(0));
+    assertEquals(1, results.get(0));
   }
 
   // checks to make sure that the search algorithm searches for all versions of kick in event tag
@@ -96,10 +96,10 @@ public class SearchTest {
             null);
 
     Search search = new Search();
-    List<Event> results = search.getSearchedEvents(List.of("kick"), List.of(e1, e2));
+    List<Integer> results = search.getSearchedEvents(List.of("kick"), List.of(e1, e2));
 
     assertEquals(1, results.size());
-    assertEquals(e1, results.get(0));
+    assertEquals(1, results.get(0));
   }
 
   // checks to make sure that the search algorithm handles no matches correctly
@@ -127,7 +127,7 @@ public class SearchTest {
             null);
 
     Search search = new Search();
-    List<Event> results = search.getSearchedEvents(List.of("swim"), List.of(e1, e2));
+    List<Integer> results = search.getSearchedEvents(List.of("swim"), List.of(e1, e2));
 
     assertTrue(results.isEmpty());
   }
@@ -157,11 +157,11 @@ public class SearchTest {
             null);
 
     Search search = new Search();
-    List<Event> results = search.getSearchedEvents(List.of("run", "jump"), List.of(e1, e2));
+    List<Integer> results = search.getSearchedEvents(List.of("run", "jump"), List.of(e1, e2));
 
     assertEquals(2, results.size());
-    assertEquals(e1, results.get(0)); // Higher score for multiple matches
-    assertEquals(e2, results.get(1));
+    assertEquals(1, results.get(0)); // Higher score for multiple matches
+    assertEquals(2, results.get(1));
   }
 
   // checks to make sure that all synonyms of an input are found
@@ -199,11 +199,11 @@ public class SearchTest {
             null);
 
     Search search = new Search();
-    List<Event> results = search.getSearchedEvents(List.of("sport"), List.of(e1, e2, e3));
+    List<Integer> results = search.getSearchedEvents(List.of("sport"), List.of(e1, e2, e3));
 
-    assertTrue(results.contains(e1));
-    assertTrue(results.contains(e3));
-    assertFalse(results.contains(e2));
+    assertTrue(results.contains(1));
+    assertTrue(results.contains(3));
+    assertFalse(results.contains(2));
   }
 
   // checks to make sure that all synonyms of an input are found
@@ -242,18 +242,18 @@ public class SearchTest {
             null);
 
     Search search = new Search();
-    List<Event> results = search.getSearchedEvents(List.of("cooking"), List.of(e1, e2, e3));
+    List<Integer> results = search.getSearchedEvents(List.of("cooking"), List.of(e1, e2, e3));
 
-    assertTrue(results.contains(e1));
-    assertFalse(results.contains(e3));
-    assertFalse(results.contains(e2));
+    assertTrue(results.contains(1));
+    assertFalse(results.contains(3));
+    assertFalse(results.contains(2));
   }
 
   @Test
   public void testNullSearch() {
 
     Search search = new Search();
-    List<Event> results = search.getSearchedEvents(List.of("cooking"), List.of());
+    List<Integer> results = search.getSearchedEvents(List.of("cooking"), List.of());
     assertTrue(results.isEmpty());
   }
 }
