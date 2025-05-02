@@ -187,7 +187,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
                 onDeclineRequest={() => {}}
                 onSendRequest={() => {}}
                 onUnfriend={() => handleUnfriend(friend.name)}
-                handleNameClick={() => handleFriendCardNameClick(user.name)}
+                handleNameClick={() => handleFriendCardNameClick(friend.name)}
               />
             ))}
           </div>

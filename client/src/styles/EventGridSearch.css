@@ -1,5 +1,33 @@
 /* Overall page wrapper */
 .event-grid-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    margin-top: 74px;
+    font-family: "Inter", sans-serif;
+  }
+  
+  /* Scrollable area for event cards */
+  .scrollable-grid {
+    flex: 1; /* takes all remaining space below navbar */
+    overflow-y: auto;
+    padding-top: 8px;
+    box-sizing: border-box;
+  }
+  
+  /* Responsive grid inside the scrollable area */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* start with 3 columns */
+    gap: 40px;
+    justify-content: center;
+    padding: 40px;
+    box-sizing: border-box;
+  }
+  
+  
+=======
   display: flex;
   flex-direction: column;
   height: 100%;

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "../styles/Navbar.css";
 import { useNavigate } from "react-router-dom";
+import {SignOutButton} from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
 
 // not rlly sure if interface is the way to go here?
 interface NavbarProps {
@@ -16,9 +18,11 @@ interface NavbarProps {
  */
 function Navbar({onPlusClick, minimal = false}: NavbarProps) {
   const navigate = useNavigate();
+  const { user } = useUser();
+  const userName = user?.username || user?.fullName || "Anon.";
 
   const handleProfileClick = () => {
-    navigate("/profile");
+    navigate(`/profile/${userName}`);
   };
 
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
@@ -40,9 +44,13 @@ function Navbar({onPlusClick, minimal = false}: NavbarProps) {
           <>
             <button className="plus-button" onClick={onPlusClick}>+</button>
             <button className="nav-button">Recommend</button>
+            
           </>
         )}
         <button className="profile-button" onClick={handleProfileClick}>Profile</button>
+        <SignOutButton>
+            <button className="nav-button">Sign Out</button>
+            </SignOutButton>
       </div>
     </nav>
   );
