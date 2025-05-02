@@ -1,6 +1,12 @@
 import "../styles/ProfilePage.css";
 import { useUser } from "@clerk/clerk-react";
+import { useState, useEffect } from "react";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import { useNavigate, useParams } from "react-router-dom";
+import Navbar from "./Navbar";
 
+
+// components
 import EventCardSmall from "./EventCardSmall";
 import FriendsList from "./FriendsList";
 
@@ -20,16 +26,11 @@ const events = [
     imageUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg" },
 ];
 
-import { useState, useEffect } from "react";
-import EventCardGridSearch from "./EventGridSearch";
-import { SignedIn, SignedOut} from "@clerk/clerk-react";
-import { useNavigate } from "react-router-dom";
-import Navbar from "./Navbar";
-
 
 export default function ProfilePage() {
   const { user } = useUser();
-  const userName = user?.username || user?.fullName || "Anon.";
+  const { name } = useParams<{ name: string }>();
+  const userName = name || user?.username || user?.fullName || 'Anon.';
   const [connections, setConnections] = useState(0);
   const [isModalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -39,7 +40,6 @@ export default function ProfilePage() {
       navigate("/");
     }
   }, [user, navigate]);
-
 
   return (   
     <SignedIn> 
@@ -71,7 +71,7 @@ export default function ProfilePage() {
                       <button id="friend-list" onClick={() => setModalOpen(true)}>Friends List</button>
                   </div>
               </div>
-
+              
               <h2>My Interests</h2>
               <div className="tag-container">            
                   <button>Arts and Crafts</button>
@@ -111,6 +111,16 @@ export default function ProfilePage() {
     </div>
   </div>
 
+
+    <div>
+        {isModalOpen && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <FriendsList isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+            </div>
+          </div>
+        )}
+      </div>
 
     </SignedIn>
 
