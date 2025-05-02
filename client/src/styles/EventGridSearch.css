@@ -5,6 +5,7 @@
     height: 100%;
     width: 100%;
     font-family: "Inter", sans-serif;
+    overflow: hidden;
   }
   
   /* Scrollable area for event cards */
