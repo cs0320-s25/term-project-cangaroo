@@ -8,7 +8,8 @@ public class MatchEvents {
 
   public MatchEvents() {}
 
-  public List<Event> getMatchedEvents(List<String> personalTags, List<String> favEventOrgs, List<Event> allEvents) {
+  public List<Event> getMatchedEvents(
+      List<String> personalTags, List<String> favEventOrgs, List<Event> allEvents) {
     Set<String> expandedInputStems = new HashSet<>();
 
     try {
@@ -72,9 +73,7 @@ public class MatchEvents {
         }
       }
 
-
-
-      //compare all the person's fav event organizers with the event organizer
+      // compare all the person's fav event organizers with the event organizer
       if (favEventOrgs != null) {
         for (String favOrganizer : favEventOrgs) {
 
@@ -83,9 +82,8 @@ public class MatchEvents {
               score += 10;
             }
           }
-
-          }
         }
+      }
 
       if (score > 0) {
         eventScores.put(event, score);

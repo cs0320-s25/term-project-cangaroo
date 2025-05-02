@@ -1,5 +1,6 @@
 package edu.brown.cs.student.main.server.Handlers;
 
+import edu.brown.cs.student.main.server.Exceptions.EventAlreadyAttendingException;
 import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
 import edu.brown.cs.student.main.server.Storage.StorageInterface;
@@ -34,7 +35,8 @@ public class ChangeAttendanceHandler implements Route {
     }
 
     try {
-      this.storageHandler.updateAttending(uid, eventID, Boolean.parseBoolean(isAttending));
+      this.storageHandler.updateAttending(
+          uid, Integer.parseInt(eventID), Boolean.parseBoolean(isAttending));
       responseMap.put("result", "success");
     } catch (NoProfileFoundException e) {
       responseMap.put("result", "failure");
@@ -42,6 +44,9 @@ public class ChangeAttendanceHandler implements Route {
     } catch (NoEventFoundException e) {
       responseMap.put("result", "failure");
       responseMap.put("error_message", "Event does not exist.");
+    } catch (EventAlreadyAttendingException e) {
+      responseMap.put("result", "failure");
+      responseMap.put("error_message", "User already attending event.");
     }
     return Utils.toMoshiJson(responseMap);
   }

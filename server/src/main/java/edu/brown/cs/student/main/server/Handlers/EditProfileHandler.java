@@ -27,7 +27,8 @@ public class EditProfileHandler implements Route {
 
     if ((uid == null) || (tagsString == null) || (favEventOrganizersString == null)) {
       responseMap.put("result", "failure");
-      responseMap.put("error_message", "Missing required parameters: uid, interestedTags");
+      responseMap.put(
+          "error_message", "Missing required parameters: uid, interestedTags, eventOrganizer");
       return Utils.toMoshiJson(responseMap);
     }
     List<String> tags = Arrays.asList(tagsString.trim().split(","));

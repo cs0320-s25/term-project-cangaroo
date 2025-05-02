@@ -19,7 +19,8 @@ public class RecommendHandler implements Route {
           "08:00",
           "10:00",
           List.of("food", "health"),
-          1, null);
+          1,
+          null);
 
   Event e2 =
       new Event(
@@ -29,7 +30,8 @@ public class RecommendHandler implements Route {
           "17:00",
           "10:00",
           List.of("reading"),
-          2, null);
+          2,
+          null);
 
   Event e3 =
       new Event(
@@ -39,8 +41,8 @@ public class RecommendHandler implements Route {
           "10:00",
           "10:00",
           List.of("track"),
-          3, null);
-
+          3,
+          null);
 
   List<String> mockedTags = List.of("cooking");
 
