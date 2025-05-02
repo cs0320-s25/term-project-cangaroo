@@ -1,5 +1,6 @@
 import "../styles/Navbar.css";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "@clerk/clerk-react";
 
 // not rlly sure if interface is the way to go here?
 interface NavbarProps {
@@ -14,9 +15,11 @@ interface NavbarProps {
  */
 function Navbar({onPlusClick}: NavbarProps) {
   const navigate = useNavigate();
+  const { user } = useUser();
+  const userName = user?.username || user?.fullName || "Anon.";
 
   const handleProfileClick = () => {
-    navigate("/profile");
+    navigate(`/profile/${userName}`);
   };
 
   return (

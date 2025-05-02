@@ -3,7 +3,7 @@
     padding: 8rem;
     border-radius: 10px;
     position: relative;
-    max-width: 900px;
+    max-width: 1500px;
     margin: auto;
 }
 
@@ -30,9 +30,10 @@
 
 .friends-list-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 2rem;
 }
+
 
 .friends-column.left {
     display: flex;
