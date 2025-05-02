@@ -8,7 +8,7 @@ public class Search {
 
   public Search() {}
 
-  public List<Event> getSearchedEvents(List<String> inputWords, List<Event> allEvents) {
+  public List<Integer> getSearchedEvents(List<String> inputWords, List<Event> allEvents) {
     Set<String> expandedInputStems = new HashSet<>();
 
     try {
@@ -82,6 +82,11 @@ public class Search {
       rankedResults.add(entry.getKey());
     }
 
-    return rankedResults;
+    List<Integer> sortedEventIDs = new ArrayList<>();
+    for (Event event : rankedResults) {
+      sortedEventIDs.add(event.eventID());
+    }
+
+    return sortedEventIDs;
   }
 }

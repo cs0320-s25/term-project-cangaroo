@@ -8,7 +8,7 @@ public class MatchEvents {
 
   public MatchEvents() {}
 
-  public List<Event> getMatchedEvents(
+  public List<Integer> getMatchedEvents(
       List<String> personalTags, List<String> favEventOrgs, List<Event> allEvents) {
     Set<String> expandedInputStems = new HashSet<>();
 
@@ -98,6 +98,11 @@ public class MatchEvents {
       rankedResults.add(entry.getKey());
     }
 
-    return rankedResults;
+    List<Integer> sortedEventIDs = new ArrayList<>();
+    for (Event event : rankedResults) {
+      sortedEventIDs.add(event.eventID());
+    }
+
+    return sortedEventIDs;
   }
 }

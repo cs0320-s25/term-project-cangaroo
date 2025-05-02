@@ -13,10 +13,9 @@ public class Rate {
   public Rate() {}
 
   /*
-   * input: event, profile, whether you liked the event/not
-   * output: add event organizer if you do
+   * this method should append the eventorganizer of an event that a profile really likes
+   * to the profile's favorite organizations
    */
-
   public void rateEvent(
       StorageInterface storageHandler, String profileID, String eventID, Boolean likedEvent)
       throws ExecutionException,
@@ -26,12 +25,10 @@ public class Rate {
 
     if (likedEvent) {
       String eventOrganizer = (String) storageHandler.getEvent(eventID).get("eventOrganizer");
-      String profileFavOrganizers =
-          (String) storageHandler.getProfile(profileID).get("interestedOrganizations");
+      List<String> profileFavOrganizers = (List<String>) storageHandler.getProfile(profileID).get("interestedOrganizations");
       String tags = (String) storageHandler.getEvent(eventID).get("tags");
 
       List<String> tagList;
-      List<String> profileFavOrganizersList;
 
       if (tags != null && !tags.isEmpty()) {
         tagList = Arrays.asList(tags.split(","));
@@ -40,15 +37,13 @@ public class Rate {
       }
 
       if (profileFavOrganizers != null && !profileFavOrganizers.isEmpty()) {
-        profileFavOrganizersList = Arrays.asList(profileFavOrganizers.split(","));
-        profileFavOrganizersList.add(eventOrganizer);
+        profileFavOrganizers.add(eventOrganizer);
       } else {
-        profileFavOrganizersList = new ArrayList<>();
-        profileFavOrganizersList.add(eventOrganizer);
+        profileFavOrganizers = new ArrayList<>();
+        profileFavOrganizers.add(eventOrganizer);
       }
 
-      storageHandler.editProfile(profileID, tagList, profileFavOrganizersList);
-
+      storageHandler.editProfile(profileID, tagList, profileFavOrganizers);
     }
   }
 }
