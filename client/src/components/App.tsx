@@ -72,7 +72,8 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        {/* <Route path="/profile" element={<ProfilePage />} /> */}
+        <Route path="/profile/:name" element={<ProfilePage />} />
       </Routes>
     </Router>
   );

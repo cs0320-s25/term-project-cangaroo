@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import "../styles/FriendCard.css";
 
 type FriendCardProps = {
@@ -6,6 +6,7 @@ type FriendCardProps = {
   profilePictureUrl: string;
   initialIsFollowing?: boolean; // optional, since will default to false
   friendCount: number;
+  onProfileClick: () => void;
 };
 
 /**
@@ -13,7 +14,7 @@ type FriendCardProps = {
  * 
  * @returns - the JSX FriendCard component.
  */
-function FriendCard({name, profilePictureUrl, initialIsFollowing = false, friendCount}: FriendCardProps) {
+function FriendCard({name, profilePictureUrl, initialIsFollowing = false, friendCount, onProfileClick }: FriendCardProps) {
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing); // react hook to keep track of whether or not the displayed user is friended
 
   const toggleFollow = () => { // for button click to set the new state for isFollowing
@@ -27,7 +28,13 @@ function FriendCard({name, profilePictureUrl, initialIsFollowing = false, friend
 
       <div className="friend-info">
 
-        <h2 className="friend-name">{name}</h2>
+        <h2 
+          className="friend-name" 
+          onClick={onProfileClick} 
+          style={{ cursor: 'pointer' }} // pointer hover so user knows to click
+        >
+          {name}
+        </h2>
 
         <p className="friend-count">
           {friendCount} friend{friendCount !== 1 ? 's' : ''} 
