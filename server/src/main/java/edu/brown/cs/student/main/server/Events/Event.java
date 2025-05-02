@@ -11,4 +11,3 @@ public record Event(
     List<String> tags,
     int eventID,
     String eventOrganizer) {}
-
