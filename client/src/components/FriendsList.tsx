@@ -39,13 +39,19 @@ const incomingRequests: User[] = [
 
 const existingFriends: User[] = [
   {
-    name: "John Doe",
+    name: "Bruno",
     profilePictureUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg",
     friendCount: 45,
     requestStatus: "friend", 
   },
   {
-    name: "Jane Smith",
+    name: "Ratty Rat",
+    profilePictureUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg",
+    friendCount: 112,
+    requestStatus: "friend", 
+  },
+  {
+    name: "Ratty Rat #2",
     profilePictureUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg",
     friendCount: 112,
     requestStatus: "friend", 
@@ -54,19 +60,18 @@ const existingFriends: User[] = [
 
 const allUsers: User[] = [
   {
-    name: "Mike Johnson",
+    name: "CS32 Warrior",
     profilePictureUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg",
     friendCount: 15,
     requestStatus: "none", 
   },
   {
-    name: "Sarah Lee",
+    name: "Ronald McDonald",
     profilePictureUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg",
     friendCount: 30,
     requestStatus: "none",
   },
 ];
-
 
 
 export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
@@ -82,28 +87,49 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   const [searchTermFriends, setSearchTermFriends] = useState("");
   const [searchTermUsers, setSearchTermUsers] = useState("");
 
-  const filteredFriends = friends
-    .filter(friend => friend.requestStatus == "friend") 
-    .filter(friend => friend.name.toLowerCase().includes(searchTermFriends.toLowerCase()) // filter
-  );
+  // TODO: add in later
+  // const filteredFriends = friends
+  //   .filter(friend => friend.requestStatus == "friend") 
+  //   .filter(friend => friend.name.toLowerCase().includes(searchTermFriends.toLowerCase()) // filter
+  // );
 
-  const filteredUsers = users
-    .filter(user => user.requestStatus=="none" || "incoming") 
-    .filter(user => user.name.toLowerCase().includes(searchTermUsers.toLowerCase()) // filter
-  );
+  // const filteredUsers = users
+  //   .filter(user => user.requestStatus=="none" || "incoming") 
+  //   .filter(user => user.name.toLowerCase().includes(searchTermUsers.toLowerCase()) // filter
+  // );
 
-  // handling actions
+  // handling actions (various button clicks)
   const handleAcceptRequest = (name: string) => {
-    // Move incoming request to friends list
-    const acceptedFriend = incoming.find((user) => user.name === name);
+    // Filter out the user from incoming requests
+    setIncoming(prevState => prevState.filter(friend => friend.name !== name));
+    
+    // Find the user from incoming requests
+    const acceptedFriend = incoming.find(friend => friend.name === name);
+  
     if (acceptedFriend) {
-      setFriends([...friends, { ...acceptedFriend, requestStatus: "friend" }]);
-      setIncoming(incoming.filter((user) => user.name !== name));
+      // Add the user to the friends list with the updated status
+      setFriends(prevState => [
+        ...prevState,
+        { ...acceptedFriend, status: 'friend' } // Make sure to spread the original object and add the status
+      ]);
     }
   };
 
+  const handleDeclineRequest = (name: string) => {
+    setIncoming(prevState => prevState.filter(friend => friend.name !== name));
+  };
+
+  const handleSendRequest = (name: string) => {
+    setUsers(prevState => prevState.map(user => user.name === name ? { ...user, status: 'user' } : user));
+  };
+
+  const handleUnfriend = (name: string) => {
+    setFriends(prevState => prevState.filter(friend => friend.name !== name));
+  };
+
+
   // navigate to new profile
-  const handleFriendProfileClick = (name: string) => {
+  const handleFriendCardNameClick= (name: string) => {
     // close modal, go back to profile pg
     onClose();
     navigate(`/profile/${name}`);
@@ -114,6 +140,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
 
   return (
     <div className="friends-list-modal">
+
       <button className="close-friend-list" onClick={onClose}>
       ← Return to My Profile
       </button>
@@ -121,21 +148,23 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
       <div className="friends-list-grid">
         {/* column 1: incoming requests */}
         <div className="friends-column left">
+
           <h3>Incoming Friend Requests</h3>
 
           <div className="friend-cards-container">
-            {incoming.map((user, index) => (
-              <div key={index} className="friend-card">
-                <FriendCard {...user} onProfileClick={() => handleFriendProfileClick(user.name)} />
-                <button
-                  onClick={() => handleAcceptRequest(user.name)}
-                  className="friend-button"
-                >
-                  Accept Request
-                </button>
-              </div>
-            ))}
+          {incoming.map((user, index) => (
+            <FriendCard
+              key={index}
+              {...user}
+              onAcceptRequest={() => handleAcceptRequest(user.name)}
+              onDeclineRequest={() => handleDeclineRequest(user.name)}
+              onSendRequest={() => {}}
+              onUnfriend={() => {}}
+              handleNameClick={() => handleFriendCardNameClick(user.name)}
+            />
+          ))}
           </div>
+
         </div>
 
         {/* column 2: current friends */}
@@ -150,14 +179,19 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           />
 
           <div className="friend-cards-container">
-            {filteredFriends.map((friend, index) => (
+            {friends.map((friend, index) => (
               <FriendCard 
-              key={index} 
-              {...friend} 
-              onProfileClick={() => handleFriendProfileClick(friend.name)}/>
+                key={index} 
+                {...friend} 
+                onAcceptRequest={() => {}}
+                onDeclineRequest={() => {}}
+                onSendRequest={() => {}}
+                onUnfriend={() => handleUnfriend(friend.name)}
+              />
             ))}
           </div>
         </div>
+        
 
         {/* column 3: general users (search for new friends) */}
         <div className="friends-column right">
@@ -170,14 +204,17 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
             onChange={(e) => setSearchTermUsers(e.target.value)}
           />
           <div className="user-cards-container">
-          {filteredUsers.map((user, index) => (
+            {users.map((user, index) => (
               <FriendCard 
-              key={index} 
-              {...user} 
-              onProfileClick={() => handleFriendProfileClick(user.name)}/>
+                key={index} 
+                {...user} 
+                onAcceptRequest={() => {}}
+                onDeclineRequest={() => {}}
+                onSendRequest={() => handleSendRequest(user.name)}
+                onUnfriend={() => {}}
+              />
             ))}
           </div>
-
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import "../styles/FriendCard.css";
 
 type FriendCardProps = {
@@ -6,7 +7,13 @@ type FriendCardProps = {
   profilePictureUrl: string;
   initialIsFollowing?: boolean; // optional, since will default to false
   friendCount: number;
-  onProfileClick: () => void;
+  // onProfileClick: () => void;
+  requestStatus: 'incoming' | 'friend' | 'none'; // incoming, friend, or user (for request sent state)
+  onAcceptRequest: () => void;
+  onDeclineRequest: () => void;
+  onSendRequest: () => void;
+  onUnfriend: () => void;
+  handleNameClick: () => void;
 };
 
 /**
@@ -14,11 +21,37 @@ type FriendCardProps = {
  * 
  * @returns - the JSX FriendCard component.
  */
-function FriendCard({name, profilePictureUrl, initialIsFollowing = false, friendCount, onProfileClick }: FriendCardProps) {
-  const [isFollowing, setIsFollowing] = useState(initialIsFollowing); // react hook to keep track of whether or not the displayed user is friended
+function FriendCard({
+  name,
+  profilePictureUrl,
+  initialIsFollowing = false,
+  friendCount,
+  requestStatus,
+  onAcceptRequest,
+  onDeclineRequest,
+  onSendRequest,
+  onUnfriend,
+  handleNameClick,
+}: FriendCardProps){
+  // const [isFollowing, setIsFollowing] = useState(initialIsFollowing); // react hook to keep track of whether or not the displayed user is friended
+  // const navigate = useNavigate();
 
-  const toggleFollow = () => { // for button click to set the new state for isFollowing
-    setIsFollowing((prev) => !prev);
+  // const handleNameClick = () => {
+  //   navigate(`/profile/${name}`); 
+  // };
+
+  // const toggleFollow = () => { // for button click to set the new state for isFollowing
+  //   setIsFollowing((prev) => !prev);
+  // };
+
+  const handleButtonClick = () => {
+    if (requestStatus === 'incoming') {
+      onAcceptRequest(); // accept request
+    } else if (requestStatus === 'friend') {
+      onUnfriend(); // unfriend a friend in second col
+    } else if (requestStatus === 'none') {
+      onSendRequest(); // send friend invite!!
+    }
   };
 
   return (
@@ -30,7 +63,7 @@ function FriendCard({name, profilePictureUrl, initialIsFollowing = false, friend
 
         <h2 
           className="friend-name" 
-          onClick={onProfileClick} 
+          onClick={handleNameClick} 
           style={{ cursor: 'pointer' }} // pointer hover so user knows to click
         >
           {name}
@@ -40,8 +73,11 @@ function FriendCard({name, profilePictureUrl, initialIsFollowing = false, friend
           {friendCount} friend{friendCount !== 1 ? 's' : ''} 
         </p>
 
-        <button onClick={toggleFollow} className="friend-button">
-          {isFollowing ? 'Unfriend' : 'Friend'}
+        <button 
+          onClick={handleButtonClick} 
+          className={`friend-button ${requestStatus}`} 
+        >
+          {requestStatus === 'incoming' ? 'Accept Request' : requestStatus === 'friend' ? 'Unfriend' : 'Send Request'}
         </button>
 
       </div>

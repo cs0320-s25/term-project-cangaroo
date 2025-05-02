@@ -24,8 +24,6 @@ const events = [
     imageUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg" },
 ];
 
-
-
 export default function ProfilePage() {
   const { user } = useUser();
   const { name } = useParams<{ name: string }>();
@@ -40,18 +38,8 @@ export default function ProfilePage() {
     }
   }, [user, navigate]);
 
-
   return (   
     <SignedIn>      
-      <div>
-        {isModalOpen && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <FriendsList isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
-            </div>
-          </div>
-        )}
-      </div>
       
     <div className="profile-overlay">
       <div className="profile-content">
@@ -113,6 +101,16 @@ export default function ProfilePage() {
 
       </div>
     </div>
+
+    <div>
+        {isModalOpen && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <FriendsList isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+            </div>
+          </div>
+        )}
+      </div>
 
     </SignedIn>
 
