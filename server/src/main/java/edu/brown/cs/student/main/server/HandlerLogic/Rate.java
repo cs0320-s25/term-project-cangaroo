@@ -37,10 +37,14 @@ public class Rate {
       }
 
       if (profileFavOrganizers != null && !profileFavOrganizers.isEmpty()) {
-        profileFavOrganizers.add(eventOrganizer);
-      } else {
+
+        if (!profileFavOrganizers.contains(eventOrganizer)) {
+          profileFavOrganizers.add(eventOrganizer);
+        }
+      }
+      else {
         profileFavOrganizers = new ArrayList<>();
-        profileFavOrganizers.add(eventOrganizer);
+          profileFavOrganizers.add(eventOrganizer);
       }
 
       storageHandler.editProfile(profileID, tagList, profileFavOrganizers);
