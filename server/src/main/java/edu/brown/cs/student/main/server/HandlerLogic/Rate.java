@@ -39,10 +39,9 @@ public class Rate {
         if (!profileFavOrganizers.contains(eventOrganizer)) {
           profileFavOrganizers.add(eventOrganizer);
         }
-      }
-      else {
+      } else {
         profileFavOrganizers = new ArrayList<>();
-          profileFavOrganizers.add(eventOrganizer);
+        profileFavOrganizers.add(eventOrganizer);
       }
 
       storageHandler.editProfile(profileID, tagsList, profileFavOrganizers);

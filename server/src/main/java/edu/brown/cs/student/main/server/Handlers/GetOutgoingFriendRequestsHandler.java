@@ -8,10 +8,10 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class GetOutgoingFriendRequests implements Route {
+public class GetOutgoingFriendRequestsHandler implements Route {
   public StorageInterface storageHandler;
 
-  public GetOutgoingFriendRequests(StorageInterface storageHandler) {
+  public GetOutgoingFriendRequestsHandler(StorageInterface storageHandler) {
     this.storageHandler = storageHandler;
   }
 

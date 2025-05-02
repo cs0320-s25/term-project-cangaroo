@@ -50,6 +50,8 @@ public interface StorageInterface {
 
   List<Event> getAllEvents() throws ExecutionException, InterruptedException;
 
+  List<Map<String, Object>> getAllEventsMap() throws ExecutionException, InterruptedException;
+
   void updateAttending(String uid, int eventID, boolean isAttending)
       throws ExecutionException,
           InterruptedException,
