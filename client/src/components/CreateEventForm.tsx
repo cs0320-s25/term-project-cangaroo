@@ -22,11 +22,10 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
       
         <div className="form-grid">
         <button className="modal-close" onClick={onClose}>✕</button>
-
           {/* Left Column */}
           <div className="form-section">
             <h2>New Event</h2>
-            <input placeholder="your event name" />
+            <input placeholder="Your Event Name Here..." />
 
             <label>Date</label>
             <input type="date" />
@@ -39,7 +38,7 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
                 onChange={(e) => setStartTime(e.target.value)}
               />
               
-              <span>-</span>
+              <span id="dash">-</span>
               <input 
                 type="time" 
                 value={endTime}
@@ -66,7 +65,7 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
 
           {/* Right Column */}
           <div className="form-section">
-            <label>Description</label>
+            <h3>Description</h3>
             <textarea placeholder="Your Event Description Here..." />
 
             <label>Event Tags</label>

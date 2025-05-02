@@ -1,9 +1,8 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import edu.brown.cs.student.main.server.HandlerLogic.MatchEvents;
-
 import edu.brown.cs.student.main.server.Events.Event;
+import edu.brown.cs.student.main.server.HandlerLogic.MatchEvents;
 import edu.brown.cs.student.main.server.HandlerLogic.RandomMatch;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 public class MatchTest {
 
   //tests that when you randomly generate events, you get no more than 10
+
   @Test
   public void testRandomSelectionSizeLimit() {
     List<Event> events = TestEventFactory.generateDummyEvents(25);
@@ -53,11 +53,13 @@ public class MatchTest {
         List.of("food", "hobby"),
         2, null);
 
+
     // This simulates a profile with interest tags like "run" (should match e1)
     List<String> profileTags = List.of("run");
 
     MatchEvents matcher = new MatchEvents();
     List<Event> results = matcher.getMatchedEvents(profileTags, null, List.of(e1, e2));
+
 
     // Assert only one event matched and it was e1
     assertEquals(1, results.size());
@@ -109,6 +111,7 @@ public class MatchTest {
     MatchEvents matcher = new MatchEvents();
     List<Event> results = matcher.getMatchedEvents(profileTags, null, List.of(e1, e2, e3, e4));
 
+
     // Assert only one event matched and it was e1
     assertEquals(2, results.size());
     assertTrue(results.contains(e1));
@@ -117,7 +120,4 @@ public class MatchTest {
     assertFalse(results.contains(e4));
 
   }
-
-
-
 }

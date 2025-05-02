@@ -20,15 +20,14 @@ public class ViewEventHandler implements Route {
   public Object handle(Request request, Response response) throws Exception {
     Map<String, Object> responseMap = new HashMap<>();
     try {
-      String uid = request.queryParams("uid");
       String eventID = request.queryParams("eventID");
-      if ((uid == null) || (eventID == null)) {
+      if (eventID == null) {
         responseMap.put("result", "failure");
         responseMap.put("error_message", "Missing required parameters.");
         return Utils.toMoshiJson(responseMap);
       }
 
-      Map<String, Object> data = this.storageHandler.getEvent(uid, eventID);
+      Map<String, Object> data = this.storageHandler.getEvent(eventID);
       System.out.println(data);
       responseMap.put("result", "success");
       responseMap.put("data", data);

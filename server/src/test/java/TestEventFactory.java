@@ -1,6 +1,7 @@
 
 import edu.brown.cs.student.main.server.Events.Event;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class TestEventFactory {
           List.of("tag" + i),
           1, null
       ));
+
     }
     return events;
   }

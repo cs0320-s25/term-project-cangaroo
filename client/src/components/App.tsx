@@ -6,8 +6,7 @@ import {
   SignedIn,
   SignedOut,
   SignInButton,
-  SignOutButton,
-  UserButton} from "@clerk/clerk-react";
+  SignOutButton} from "@clerk/clerk-react";
 
 import { useState } from "react";
 import ProfilePage from "./ProfilePage";
@@ -16,15 +15,12 @@ import ProfilePage from "./ProfilePage";
 import CreateEventForm from "./CreateEventForm";
 import EventCardGridSearch from "./EventGridSearch";
 import Navbar from "./Navbar";
-
-
-// misc
+import EventPage from "./EventPage";
 
 
 /**
  * Firebase configuration keys
  */
-
 
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
@@ -50,7 +46,7 @@ function Home() {
 
         <div className="heading-group">
           <h1>CanGo</h1>
-          <h4>your go-to application for finding events on campus :)</h4>
+          <h4>your go-to application for finding events on campus :&#41;</h4>
           <div className="sign-in-wrapper">
             <SignInButton aria-label="Sign In" />
           </div>
@@ -66,20 +62,6 @@ function Home() {
 
         <CreateEventForm isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
           
-
-
-        {/* <FriendCard 
-        name="Christina Paxson" 
-        profilePictureUrl="http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg"
-        friendCount={1}/>
-
-        <FriendCard 
-        name="Christina Paxson" 
-        profilePictureUrl="http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg"
-        friendCount={5}/> */}
-          
-        {/* <SignOutButton aria-label="Sign Out"/>
-        <UserButton /> */}
       </SignedIn>
       
       
@@ -93,6 +75,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/event" element={<EventPage />} />
       </Routes>
     </Router>
   );
