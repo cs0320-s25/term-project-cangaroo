@@ -571,6 +571,7 @@ public class FirebaseUtilities implements StorageInterface {
     }
   }
 
+  // helper function to remove a collection by recursively removing its sub-documents
   private void clearCollection(CollectionReference collection) {
     for (DocumentReference docRef : collection.listDocuments()) {
       for (CollectionReference collectionRef : docRef.listCollections()) {
