@@ -39,7 +39,9 @@ public class EventCreationHandler implements Route {
         || (tagsString == null)
         || (eventOrganizer == null)) {
       responseMap.put("result", "failure");
-      responseMap.put("error_message", "Missing required parameters: uid, name, description, date, startTime, endTime, tags, eventOrganizer");
+      responseMap.put(
+          "error_message",
+          "Missing required parameters: uid, name, description, date, startTime, endTime, tags, eventOrganizer");
       return Utils.toMoshiJson(responseMap);
     }
 

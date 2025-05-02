@@ -40,6 +40,5 @@ public class ViewEventHandler implements Route {
     // use storage handler to get the event data (as one map object)
     // then, json string it? and then put in responseMap
     return Utils.toMoshiJson(responseMap);
-
   }
 }
