@@ -55,9 +55,7 @@ function Home() {
         {/* <Navbar onPlusClick={() => setModalOpen(true)}/> */}
         
         <EventCardGridSearch onPlusClick={() => setModalOpen(true)}/>
-
-        <SignOutButton aria-label="Sign Out"/>
-
+          
         <CreateEventForm isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
           
       </SignedIn>
