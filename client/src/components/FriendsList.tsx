@@ -8,7 +8,7 @@ interface FriendsListProps {
   onClose: () => void;
 }
 
-// defining relevant types
+// defining relevant interfaces w/ props
 interface User {
   name: string;
   profilePictureUrl: string;
@@ -88,15 +88,15 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   const [searchTermUsers, setSearchTermUsers] = useState("");
 
   // TODO: add in later
-  // const filteredFriends = friends
-  //   .filter(friend => friend.requestStatus == "friend") 
-  //   .filter(friend => friend.name.toLowerCase().includes(searchTermFriends.toLowerCase()) // filter
-  // );
+  const filteredFriends = friends
+    .filter(friend => friend.requestStatus == "friend") 
+    .filter(friend => friend.name.toLowerCase().includes(searchTermFriends.toLowerCase()) // filter
+  );
 
-  // const filteredUsers = users
-  //   .filter(user => user.requestStatus=="none" || "incoming") 
-  //   .filter(user => user.name.toLowerCase().includes(searchTermUsers.toLowerCase()) // filter
-  // );
+  const filteredUsers = users
+    .filter(user => user.requestStatus=="none" || "incoming") 
+    .filter(user => user.name.toLowerCase().includes(searchTermUsers.toLowerCase()) // filter
+  );
 
   // handling actions (various button clicks)
   const handleAcceptRequest = (name: string) => {
@@ -179,7 +179,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           />
 
           <div className="friend-cards-container">
-            {friends.map((friend, index) => (
+            {filteredFriends.map((friend, index) => (
               <FriendCard 
                 key={index} 
                 {...friend} 
@@ -187,6 +187,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
                 onDeclineRequest={() => {}}
                 onSendRequest={() => {}}
                 onUnfriend={() => handleUnfriend(friend.name)}
+                handleNameClick={() => handleFriendCardNameClick(user.name)}
               />
             ))}
           </div>
@@ -204,7 +205,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
             onChange={(e) => setSearchTermUsers(e.target.value)}
           />
           <div className="user-cards-container">
-            {users.map((user, index) => (
+            {filteredUsers.map((user, index) => (
               <FriendCard 
                 key={index} 
                 {...user} 
@@ -212,6 +213,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
                 onDeclineRequest={() => {}}
                 onSendRequest={() => handleSendRequest(user.name)}
                 onUnfriend={() => {}}
+                handleNameClick={() => handleFriendCardNameClick(user.name)}
               />
             ))}
           </div>
