@@ -4,7 +4,6 @@ import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
 import edu.brown.cs.student.main.server.Storage.StorageInterface;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -25,16 +24,15 @@ public class Rate {
 
     if (likedEvent) {
       String eventOrganizer = (String) storageHandler.getEvent(eventID).get("eventOrganizer");
-      List<String> profileFavOrganizers = (List<String>) storageHandler.getProfile(profileID).get("interestedOrganizations");
-      String tags = (String) storageHandler.getEvent(eventID).get("tags");
+      List<String> profileFavOrganizers =
+          (List<String>) storageHandler.getProfile(profileID).get("interestedOrganizations");
+      List<String> tagsList = (List<String>) storageHandler.getEvent(eventID).get("tags");
 
-      List<String> tagList;
-
-      if (tags != null && !tags.isEmpty()) {
-        tagList = Arrays.asList(tags.split(","));
-      } else {
-        tagList = new ArrayList<>();
-      }
+      //      if (tags != null && !tags.isEmpty()) {
+      //        tagList = Arrays.asList(tags.split(","));
+      //      } else {
+      //        tagList = new ArrayList<>();
+      //      }
 
       if (profileFavOrganizers != null && !profileFavOrganizers.isEmpty()) {
         profileFavOrganizers.add(eventOrganizer);
@@ -43,7 +41,7 @@ public class Rate {
         profileFavOrganizers.add(eventOrganizer);
       }
 
-      storageHandler.editProfile(profileID, tagList, profileFavOrganizers);
+      storageHandler.editProfile(profileID, tagsList, profileFavOrganizers);
     }
   }
 }

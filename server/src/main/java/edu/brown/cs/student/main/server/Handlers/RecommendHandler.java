@@ -54,7 +54,8 @@ public class RecommendHandler implements Route {
   public Object handle(Request request, Response response) throws Exception {
     this.responseMap = new HashMap<>();
     MatchEvents matchEvents = new MatchEvents();
-    List<Integer> results = matchEvents.getMatchedEvents(this.mockedTags, null, List.of(e1, e2, e3));
+    List<Integer> results =
+        matchEvents.getMatchedEvents(this.mockedTags, null, List.of(e1, e2, e3));
 
     // no events matched
     if (results == null || results.isEmpty()) {
