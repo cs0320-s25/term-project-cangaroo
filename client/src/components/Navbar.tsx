@@ -1,6 +1,6 @@
+import { useState } from "react";
 import "../styles/Navbar.css";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "@clerk/clerk-react";
 
 // not rlly sure if interface is the way to go here?
 interface NavbarProps {
@@ -16,12 +16,16 @@ interface NavbarProps {
  */
 function Navbar({onPlusClick, minimal = false}: NavbarProps) {
   const navigate = useNavigate();
-  const { user } = useUser();
-  const userName = user?.username || user?.fullName || "Anon.";
 
   const handleProfileClick = () => {
-    navigate(`/profile/${userName}`);
+    navigate("/profile");
   };
+
+  const [sortMenuOpen, setSortMenuOpen] = useState(false);
+  const toggleSortMenu = () => setSortMenuOpen(!sortMenuOpen);
+
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
 
   return (
     <nav className="navbar">
@@ -34,7 +38,32 @@ function Navbar({onPlusClick, minimal = false}: NavbarProps) {
       <div className="navbar-buttons">
         {!minimal && (
           <>
-            <button className="nav-button">Sort By</button>
+          <div className="sort-wrapper">
+            <button className="nav-button" onClick={toggleSortMenu}>Sort By</button>
+            {sortMenuOpen && (
+              <div className="sort-dropdown">
+                <button>Duration</button>
+                <button>Date and Time</button>
+                <button>Number of Attendees</button>
+                <button>Number of Friends Attending</button>
+
+                <div className="sort-toggle">
+                  <label className="toggle-switch">
+                    <input
+                      type="checkbox"
+                      checked={sortDirection === "asc"}
+                      onChange={() => setSortDirection(sortDirection === "asc" ? "desc" : "asc")}
+                    />
+                    <span className="slider" />
+                  </label>
+                  <span className="sort-label">
+                    {sortDirection === "asc" ? "Low to High" : "High to Low"}
+                  </span>
+                </div>
+
+              </div>
+            )}
+          </div>
             <button className="nav-button">Filter</button>
             <button className="plus-button" onClick={onPlusClick}>+</button>
             <button className="nav-button">Recommend</button>
