@@ -24,8 +24,12 @@ public class ProfileCreationHandler implements Route {
     String interestedTags = request.queryParams("interestedTags");
     String favEventOrganizerString = request.queryParams("favEventOrganizer");
 
+
     String username = request.queryParams("username");
-    if ((uid == null) || (interestedTags == null) || (username == null)) {
+    if ((uid == null)
+        || (interestedTags == null)
+        || (username == null)
+        || (favEventOrganizersString == null)) {
 
       responseMap.put("result", "failure");
       responseMap.put("error_message", "Missing required parameters: uid, interestedTags");

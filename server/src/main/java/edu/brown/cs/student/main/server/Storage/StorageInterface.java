@@ -1,6 +1,7 @@
 package edu.brown.cs.student.main.server.Storage;
 
 import edu.brown.cs.student.main.server.Events.Event;
+import edu.brown.cs.student.main.server.Exceptions.EventAlreadyAttendingException;
 import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
 import edu.brown.cs.student.main.server.Exceptions.NoExistingFriendRequestException;
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
@@ -49,11 +50,12 @@ public interface StorageInterface {
 
   List<Event> getAllEvents() throws ExecutionException, InterruptedException;
 
-  void updateAttending(String uid, String eventID, boolean isAttending)
+  void updateAttending(String uid, int eventID, boolean isAttending)
       throws ExecutionException,
           InterruptedException,
           NoProfileFoundException,
-          NoEventFoundException;
+          NoEventFoundException,
+          EventAlreadyAttendingException;
 
   void addEvent(String user, int id, Map<String, Object> data)
       throws IllegalArgumentException,

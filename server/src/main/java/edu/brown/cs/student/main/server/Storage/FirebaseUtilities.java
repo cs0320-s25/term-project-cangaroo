@@ -13,6 +13,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import edu.brown.cs.student.main.server.Events.Event;
+import edu.brown.cs.student.main.server.Exceptions.EventAlreadyAttendingException;
 import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
 import edu.brown.cs.student.main.server.Exceptions.NoExistingFriendRequestException;
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
@@ -212,8 +213,8 @@ public class FirebaseUtilities implements StorageInterface {
       throws ExecutionException, InterruptedException, NoProfileFoundException {
 
     Firestore db = FirestoreClient.getFirestore();
-    DocumentReference docRef =
-        db.collection("users").document(uid).collection("profile").document("profileProperties");
+
+    DocumentReference docRef = db.collection("users").document(uid);
 
     if (docRef.get().get().exists()) {
       DocumentSnapshot snapshot = docRef.get().get();
@@ -229,13 +230,13 @@ public class FirebaseUtilities implements StorageInterface {
       }
 
       if (favEventOrganizers != null) {
-        List<String> existingOrgs = (List<String>) snapshot.get("favoriteOrganizers");
+        List<String> existingOrgs = (List<String>) snapshot.get("interestedOrganizations");
         if (existingOrgs == null) existingOrgs = new ArrayList<>();
         List<String> cleanedOrgs =
             favEventOrganizers.stream().map(String::trim).filter(o -> !o.isEmpty()).toList();
         Set<String> mergedOrgs = new HashSet<>(existingOrgs);
         mergedOrgs.addAll(cleanedOrgs);
-        docRef.update("favoriteOrganizers", new ArrayList<>(mergedOrgs));
+        docRef.update("interestedOrganizations", new ArrayList<>(mergedOrgs));
       }
 
     } else {
@@ -274,11 +275,12 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
-  public void updateAttending(String uid, String eventID, boolean isAttending)
+  public void updateAttending(String uid, int eventID, boolean isAttending)
       throws ExecutionException,
           InterruptedException,
           NoProfileFoundException,
-          NoEventFoundException {
+          NoEventFoundException,
+          EventAlreadyAttendingException {
     Firestore db = FirestoreClient.getFirestore();
     DocumentReference profileRef = db.collection("users").document(uid);
     DocumentReference eventRef = db.collection("events").document("event-" + eventID);
@@ -292,9 +294,8 @@ public class FirebaseUtilities implements StorageInterface {
 
     if (profileSnapshot.exists()) {
       if (eventSnapshot.exists()) {
-        @SuppressWarnings("unchecked")
-        List<Map<String, Object>> oldAttending =
-            (List<Map<String, Object>>) profileSnapshot.get("eventsAttending");
+        List<Integer> oldAttending = (List<Integer>) profileSnapshot.get("eventsAttending");
+        assert oldAttending != null;
         assert oldAttending != null;
         String eventCreatorUID = Objects.requireNonNull(eventSnapshot.get("uid")).toString();
         @SuppressWarnings("unchecked")
@@ -302,10 +303,12 @@ public class FirebaseUtilities implements StorageInterface {
 
         assert oldEventAttendingList != null;
         List<String> oldEventModifiable = new ArrayList<>(oldEventAttendingList);
-        if (isAttending) {
+        if (isAttending && !oldEventAttendingList.contains((long) eventID)) {
           oldEventModifiable.add(uid);
-        } else {
+        } else if (!isAttending) {
           oldEventModifiable.remove(uid);
+        } else {
+          throw new EventAlreadyAttendingException("Event already attending");
         }
         eventRef.update("usersAttending", oldEventModifiable);
         DocumentReference eventProfileRef =
@@ -316,17 +319,16 @@ public class FirebaseUtilities implements StorageInterface {
         eventProfileRef.update("usersAttending", oldEventModifiable);
         // update profile
 
-        Map<String, Object> event = eventSnapshot.getData();
-        assert event != null;
+        //        assert event != null;
 
         if (isAttending) {
-          event.put("usersAttending", oldEventModifiable);
-          oldAttending.add(event);
+          //          event.put("usersAttending", oldEventModifiable);
+          oldAttending.add(eventID);
         } else {
-          oldAttending.remove(event);
+          oldAttending.remove(eventID);
         }
 
-        System.out.println(event);
+        //        System.out.println(event);
         profileRef.update("eventsAttending", oldAttending);
         // update event (get uid)
 

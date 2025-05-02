@@ -48,6 +48,7 @@ public class Rate {
       }
 
       storageHandler.editProfile(profileID, tagList, profileFavOrganizersList);
+
     }
   }
 }
