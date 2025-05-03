@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
 
+.profile-page-all {
+  margin-top: 80px;
+}
 
 .modal-overlay {
   background: #fbfbfb00;

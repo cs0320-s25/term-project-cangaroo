@@ -7,8 +7,7 @@ type FriendCardProps = {
   profilePictureUrl: string;
   initialIsFollowing?: boolean; // optional, since will default to false
   friendCount: number;
-  // onProfileClick: () => void;
-  requestStatus: 'incoming' | 'friend' | 'none'; // incoming, friend, or user (for request sent state)
+  requestStatus: 'incoming' | 'friend' | 'none'; // incoming, friend, or user (for request sent state, each is a column)
   onAcceptRequest: () => void;
   onDeclineRequest: () => void;
   onSendRequest: () => void;
@@ -17,7 +16,7 @@ type FriendCardProps = {
 };
 
 /**
- * Method to render an friend card component. 
+ * Method to render an friend card component. Contains various interactions with other users (friend, unfriend, accept, reject, send invite, click profile)
  * 
  * @returns - the JSX FriendCard component.
  */
@@ -33,16 +32,6 @@ function FriendCard({
   onUnfriend,
   handleNameClick,
 }: FriendCardProps){
-  // const [isFollowing, setIsFollowing] = useState(initialIsFollowing); // react hook to keep track of whether or not the displayed user is friended
-  // const navigate = useNavigate();
-
-  // const handleNameClick = () => {
-  //   navigate(`/profile/${name}`); 
-  // };
-
-  // const toggleFollow = () => { // for button click to set the new state for isFollowing
-  //   setIsFollowing((prev) => !prev);
-  // };
 
   const handleButtonClick = () => {
     if (requestStatus === 'incoming') {
