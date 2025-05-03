@@ -87,7 +87,6 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   const [searchTermFriends, setSearchTermFriends] = useState("");
   const [searchTermUsers, setSearchTermUsers] = useState("");
 
-  // TODO: add in later
   const filteredFriends = friends
     .filter(friend => friend.requestStatus == "friend") 
     .filter(friend => friend.name.toLowerCase().includes(searchTermFriends.toLowerCase()) // filter
@@ -116,15 +115,15 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   };
 
   const handleDeclineRequest = (name: string) => {
-    setIncoming(prevState => prevState.filter(friend => friend.name !== name));
+    setIncoming(prevState => prevState.filter(friend => friend.name !== name)); // Set the incoming list to remove the declined invites
   };
 
   const handleSendRequest = (name: string) => {
-    setUsers(prevState => prevState.map(user => user.name === name ? { ...user, status: 'user' } : user));
+    setUsers(prevState => prevState.map(user => user.name === name ? { ...user, status: 'user' } : user)); 
   };
 
   const handleUnfriend = (name: string) => {
-    setFriends(prevState => prevState.filter(friend => friend.name !== name));
+    setFriends(prevState => prevState.filter(friend => friend.name !== name)); // Filter out the unfriended user from the middle col
   };
 
 

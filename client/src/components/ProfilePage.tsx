@@ -42,6 +42,7 @@ export default function ProfilePage() {
   }, [user, navigate]);
 
   return (   
+    <div className="profile-page-all">
     <SignedIn> 
     <div className="profile-page-wrapper">
     <Navbar minimal onPlusClick={() => {}} />
@@ -123,6 +124,7 @@ export default function ProfilePage() {
       </div>
 
     </SignedIn>
+    </div>
 
   );
 };
