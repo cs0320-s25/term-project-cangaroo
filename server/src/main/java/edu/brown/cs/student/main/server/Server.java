@@ -2,6 +2,7 @@ package edu.brown.cs.student.main.server;
 
 import static spark.Spark.after;
 
+import edu.brown.cs.student.main.server.Handlers.AddEventHistoryHandler;
 import edu.brown.cs.student.main.server.Handlers.ChangeAttendanceHandler;
 import edu.brown.cs.student.main.server.Handlers.DeleteAllHandler;
 import edu.brown.cs.student.main.server.Handlers.DeleteEventHandler;
@@ -71,6 +72,7 @@ public class Server {
       Spark.get("view-friends", new ViewFriendsHandler(storageHandler));
       Spark.get("get-received-friend-requests", new GetReceivedFriendRequests(storageHandler));
       Spark.get("get-outgoing-friend-requests", new GetOutgoingFriendRequests(storageHandler));
+      Spark.get("add-event-history", new AddEventHistoryHandler(storageHandler));
 
       Spark.get("delete-all", new DeleteAllHandler(storageHandler));
 

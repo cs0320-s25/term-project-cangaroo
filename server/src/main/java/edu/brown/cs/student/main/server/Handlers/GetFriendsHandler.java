@@ -17,7 +17,6 @@ public class GetFriendsHandler implements Route {
   @Override
   public Object handle(Request request, Response response) throws Exception {
     Map<String, Object> responseMap = new HashMap<>();
-
     return null;
   }
 }

@@ -85,4 +85,10 @@ public interface StorageInterface {
 
   Map<String, String> getFriendRequests(String uid, boolean isOutgoing)
       throws NoProfileFoundException, ExecutionException, InterruptedException;
+
+  void addEventHistory(String uid, String eventID)
+      throws NoProfileFoundException,
+          NoEventFoundException,
+          ExecutionException,
+          InterruptedException;
 }

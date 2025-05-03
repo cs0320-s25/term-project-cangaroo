@@ -508,6 +508,25 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
+  public void addEventHistory(String uid, String eventID)
+      throws NoProfileFoundException,
+          NoEventFoundException,
+          ExecutionException,
+          InterruptedException {
+    Firestore db = FirestoreClient.getFirestore();
+    DocumentReference userRef = db.collection("users").document(uid);
+    if (!userRef.get().get().exists()) {
+      throw new NoProfileFoundException("Profile not found.");
+    }
+    DocumentReference eventRef = db.collection("events").document("event-" + eventID);
+    if (!eventRef.get().get().exists()) {
+      throw new NoEventFoundException("Event not found.");
+    }
+
+    userRef.update("eventHistory", FieldValue.arrayUnion(eventID));
+  }
+
+  @Override
   public Map<String, Object> getEvent(String eventID)
       throws ExecutionException, InterruptedException, NoEventFoundException {
     Firestore db = FirestoreClient.getFirestore();
