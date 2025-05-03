@@ -275,6 +275,32 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
+  public List<Map<String, Object>> getAllEventsMap()
+      throws ExecutionException, InterruptedException {
+    Firestore db = FirestoreClient.getFirestore();
+    CollectionReference usersCollection = db.collection("users");
+
+    List<Map<String, Object>> allEventData = new ArrayList<>();
+
+    for (DocumentReference userDocRef : usersCollection.listDocuments()) {
+      CollectionReference eventsCollection = userDocRef.collection("events");
+
+      for (DocumentReference eventRef : eventsCollection.listDocuments()) {
+        DocumentSnapshot eventSnapshot = eventRef.get().get();
+
+        if (eventSnapshot.exists()) {
+          Map<String, Object> eventData = eventSnapshot.getData();
+          if (eventData != null) {
+            allEventData.add(eventData);
+          }
+        }
+      }
+    }
+
+    return allEventData;
+  }
+
+  @Override
   public void updateAttending(String uid, int eventID, boolean isAttending)
       throws ExecutionException,
           InterruptedException,
@@ -505,6 +531,25 @@ public class FirebaseUtilities implements StorageInterface {
       idToName.put(docRef.getId(), this.getNameFromID(docRef.getId()));
     }
     return idToName;
+  }
+
+  @Override
+  public void addEventHistory(String uid, String eventID)
+      throws NoProfileFoundException,
+          NoEventFoundException,
+          ExecutionException,
+          InterruptedException {
+    Firestore db = FirestoreClient.getFirestore();
+    DocumentReference userRef = db.collection("users").document(uid);
+    if (!userRef.get().get().exists()) {
+      throw new NoProfileFoundException("Profile not found.");
+    }
+    DocumentReference eventRef = db.collection("events").document("event-" + eventID);
+    if (!eventRef.get().get().exists()) {
+      throw new NoEventFoundException("Event not found.");
+    }
+
+    userRef.update("eventHistory", FieldValue.arrayUnion(eventID));
   }
 
   @Override

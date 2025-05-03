@@ -50,6 +50,8 @@ public interface StorageInterface {
 
   List<Event> getAllEvents() throws ExecutionException, InterruptedException;
 
+  List<Map<String, Object>> getAllEventsMap() throws ExecutionException, InterruptedException;
+
   void updateAttending(String uid, int eventID, boolean isAttending)
       throws ExecutionException,
           InterruptedException,
@@ -85,4 +87,10 @@ public interface StorageInterface {
 
   Map<String, String> getFriendRequests(String uid, boolean isOutgoing)
       throws NoProfileFoundException, ExecutionException, InterruptedException;
+
+  void addEventHistory(String uid, String eventID)
+      throws NoProfileFoundException,
+          NoEventFoundException,
+          ExecutionException,
+          InterruptedException;
 }

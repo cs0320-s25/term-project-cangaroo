@@ -9,8 +9,9 @@ import edu.brown.cs.student.main.server.Handlers.EditEventHandler;
 import edu.brown.cs.student.main.server.Handlers.EditProfileHandler;
 import edu.brown.cs.student.main.server.Handlers.EventCreationHandler;
 import edu.brown.cs.student.main.server.Handlers.GetFriendsHandler;
-import edu.brown.cs.student.main.server.Handlers.GetOutgoingFriendRequests;
-import edu.brown.cs.student.main.server.Handlers.GetReceivedFriendRequests;
+import edu.brown.cs.student.main.server.Handlers.GetOutgoingFriendRequestsHandler;
+import edu.brown.cs.student.main.server.Handlers.GetReceivedFriendRequestsHandler;
+import edu.brown.cs.student.main.server.Handlers.MostAttendedEventsFriendHandler;
 import edu.brown.cs.student.main.server.Handlers.ProfileCreationHandler;
 import edu.brown.cs.student.main.server.Handlers.RSVPHandler;
 import edu.brown.cs.student.main.server.Handlers.RandomRecommendHandler;
@@ -69,8 +70,11 @@ public class Server {
       Spark.get("respond-to-friend-request", new RespondToFriendRequestHandler(storageHandler));
       Spark.get("unfriend", new UnfriendHandler(storageHandler));
       Spark.get("view-friends", new ViewFriendsHandler(storageHandler));
-      Spark.get("get-received-friend-requests", new GetReceivedFriendRequests(storageHandler));
-      Spark.get("get-outgoing-friend-requests", new GetOutgoingFriendRequests(storageHandler));
+      Spark.get(
+          "get-received-friend-requests", new GetReceivedFriendRequestsHandler(storageHandler));
+      Spark.get(
+          "get-outgoing-friend-requests", new GetOutgoingFriendRequestsHandler(storageHandler));
+      Spark.get("rank-events-by-friend", new MostAttendedEventsFriendHandler(storageHandler));
 
       Spark.get("delete-all", new DeleteAllHandler(storageHandler));
 
