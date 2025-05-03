@@ -275,6 +275,32 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
+  public List<Map<String, Object>> getAllEventsMap()
+      throws ExecutionException, InterruptedException {
+    Firestore db = FirestoreClient.getFirestore();
+    CollectionReference usersCollection = db.collection("users");
+
+    List<Map<String, Object>> allEventData = new ArrayList<>();
+
+    for (DocumentReference userDocRef : usersCollection.listDocuments()) {
+      CollectionReference eventsCollection = userDocRef.collection("events");
+
+      for (DocumentReference eventRef : eventsCollection.listDocuments()) {
+        DocumentSnapshot eventSnapshot = eventRef.get().get();
+
+        if (eventSnapshot.exists()) {
+          Map<String, Object> eventData = eventSnapshot.getData();
+          if (eventData != null) {
+            allEventData.add(eventData);
+          }
+        }
+      }
+    }
+
+    return allEventData;
+  }
+
+  @Override
   public void updateAttending(String uid, int eventID, boolean isAttending)
       throws ExecutionException,
           InterruptedException,

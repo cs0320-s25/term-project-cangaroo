@@ -35,7 +35,10 @@ public class Rate {
       //      }
 
       if (profileFavOrganizers != null && !profileFavOrganizers.isEmpty()) {
-        profileFavOrganizers.add(eventOrganizer);
+
+        if (!profileFavOrganizers.contains(eventOrganizer)) {
+          profileFavOrganizers.add(eventOrganizer);
+        }
       } else {
         profileFavOrganizers = new ArrayList<>();
         profileFavOrganizers.add(eventOrganizer);
