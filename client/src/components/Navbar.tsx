@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import {SignOutButton} from "@clerk/clerk-react";
 import { useUser } from "@clerk/clerk-react";
 
-// not rlly sure if interface is the way to go here?
+// props for Navbar
 interface NavbarProps {
   onPlusClick: () => void;
-  minimal?: boolean;
+  minimal?: boolean; // hides recommend and event creation button
 }
 
 /**
@@ -25,33 +25,31 @@ function Navbar({onPlusClick, minimal = false}: NavbarProps) {
     navigate(`/profile/${userName}`);
   };
 
+  // sorting logic
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
   const toggleSortMenu = () => setSortMenuOpen(!sortMenuOpen);
-
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-
 
   return (
     <nav className="navbar">
+
       <div className="navbar-left">
         <div className="logo" onClick={() => navigate("/")}>CanGo</div>
-        {/* {!minimal && (
-          <input type="text" placeholder="search for an event" className="searchbar" />
-        )} */}
       </div>
+
       <div className="navbar-buttons">
         {!minimal && (
           <>
             <button className="plus-button" onClick={onPlusClick}>+</button>
             <button className="nav-button">Recommend</button>
-            
           </>
         )}
         <button className="profile-button" onClick={handleProfileClick}>Profile</button>
         <SignOutButton>
-            <button className="nav-button">Sign Out</button>
-            </SignOutButton>
+          <button className="nav-button">Sign Out</button>
+        </SignOutButton>
       </div>
+
     </nav>
   );
 }

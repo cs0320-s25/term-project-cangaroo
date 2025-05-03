@@ -78,10 +78,12 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   // routing
   const navigate = useNavigate();
 
+
   // basic usestates to keep track of other users in each column 
   const [friends, setFriends] = useState<User[]>(existingFriends);
   const [incoming, setIncoming] = useState<User[]>(incomingRequests);
   const [users, setUsers] = useState<User[]>(allUsers);
+
 
   // search bar functionality
   const [searchTermFriends, setSearchTermFriends] = useState("");
@@ -97,25 +99,24 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
     .filter(user => user.name.toLowerCase().includes(searchTermUsers.toLowerCase()) // filter
   );
 
+
   // handling actions (various button clicks)
   const handleAcceptRequest = (name: string) => {
-    // Filter out the user from incoming requests
+    // filter out user from pending requests (col 1) and add to the friends list (col 2)
     setIncoming(prevState => prevState.filter(friend => friend.name !== name));
     
-    // Find the user from incoming requests
     const acceptedFriend = incoming.find(friend => friend.name === name);
   
     if (acceptedFriend) {
-      // Add the user to the friends list with the updated status
       setFriends(prevState => [
         ...prevState,
-        { ...acceptedFriend, status: 'friend' } // Make sure to spread the original object and add the status
+        { ...acceptedFriend, status: 'friend' } 
       ]);
     }
   };
 
   const handleDeclineRequest = (name: string) => {
-    setIncoming(prevState => prevState.filter(friend => friend.name !== name)); // Set the incoming list to remove the declined invites
+    setIncoming(prevState => prevState.filter(friend => friend.name !== name)); // set the incoming list to remove the declined invites
   };
 
   const handleSendRequest = (name: string) => {
@@ -123,13 +124,13 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   };
 
   const handleUnfriend = (name: string) => {
-    setFriends(prevState => prevState.filter(friend => friend.name !== name)); // Filter out the unfriended user from the middle col
+    setFriends(prevState => prevState.filter(friend => friend.name !== name)); // filter out the unfriended user from the middle col
   };
 
 
   // navigate to new profile
   const handleFriendCardNameClick= (name: string) => {
-    // close modal, go back to profile pg
+    // close modal friendslist, go back to profile pg
     onClose();
     navigate(`/profile/${name}`);
   };
@@ -147,7 +148,6 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
       <div className="friends-list-grid">
         {/* column 1: incoming requests */}
         <div className="friends-column left">
-
           <h3>Incoming Friend Requests</h3>
 
           <div className="friend-cards-container">
@@ -163,8 +163,9 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
             />
           ))}
           </div>
-
         </div>
+        {/* column 1: incoming requests */}
+
 
         {/* column 2: current friends */}
         <div className="friends-column middle">
@@ -191,6 +192,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
             ))}
           </div>
         </div>
+        {/* column 2: current friends */}
         
 
         {/* column 3: general users (search for new friends) */}
@@ -217,6 +219,9 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
             ))}
           </div>
         </div>
+        {/* column 3: general users (search for new friends) */}
+
+        
       </div>
     </div>
   );

@@ -14,11 +14,10 @@ import ProfilePage from "./ProfilePage";
 // components
 import CreateEventForm from "./CreateEventForm";
 import EventCardGridSearch from "./EventGridSearch";
+import Navbar from "./Navbar";
 
 
-/**
- * Firebase configuration keys
- */
+// Firebase configuration keys
 
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
@@ -52,14 +51,10 @@ function Home() {
       </SignedOut>
 
       <SignedIn>
-        {/* <Navbar onPlusClick={() => setModalOpen(true)}/> */}
-        
+        <Navbar onPlusClick={() => setModalOpen(true)}/>
         <EventCardGridSearch onPlusClick={() => setModalOpen(true)}/>
-          
         <CreateEventForm isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
-          
       </SignedIn>
-      
       
     </div>
   );
@@ -70,7 +65,6 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/profile" element={<ProfilePage />} /> */}
         <Route path="/profile/:name" element={<ProfilePage />} />
       </Routes>
     </Router>

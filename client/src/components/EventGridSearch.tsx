@@ -54,14 +54,14 @@ const events = [
 ];
 
 function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
+  // event popup functionality modal
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-
   useEffect(() => {
     document.body.style.overflow = selectedEvent ? 'hidden' : 'auto';
   }, [selectedEvent]);
 
   // search functionality
+  const [searchTerm, setSearchTerm] = useState("");
   const filteredEvents = events
     .filter(event => (event.title.toLowerCase().includes(searchTerm.toLowerCase()) || event.description.toLowerCase().includes(searchTerm.toLowerCase())) // filter
   );
@@ -75,58 +75,56 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
   return (
     <div>
 
-      <Navbar onPlusClick={onPlusClick} />
-
       <div className="search">
-        
         <div className="event-search">
 
           <input
-                className="event-search-bar"
-                type="text"
-                placeholder="Search events..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+            className="event-search-bar"
+            type="text"
+            placeholder="Search events..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
           
           <div className="search-buttons">
-            {(
-              <>
-              <div className="sort-wrapper">
-                <button className="search-button" onClick={toggleSortMenu}>Sort By</button>
-                {sortMenuOpen && (
-                  <div className="sort-dropdown">
-                    <button>Duration</button>
-                    <button>Date and Time</button>
-                    <button>Number of Attendees</button>
-                    <button>Number of Friends Attending</button>
-
-                    <div className="sort-toggle">
-                      <label className="toggle-switch">
-                        <input
-                          type="checkbox"
-                          checked={sortDirection === "asc"}
-                          onChange={() => setSortDirection(sortDirection === "asc" ? "desc" : "asc")}
-                        />
-                        <span className="slider" />
-                      </label>
-                      <span className="sort-label">
-                        {sortDirection === "asc" ? "Low to High" : "High to Low"}
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-              </div>
-                <button className="search-button">Filter</button>
-              </>
-
-            )}
             
+            <div className="sort-wrapper">
+              <button className="search-button" onClick={toggleSortMenu}>Sort By</button>
+              {sortMenuOpen && (
+                <div className="sort-dropdown">
+
+                  <button>Duration</button>
+                  <button>Date and Time</button>
+                  <button>Number of Attendees</button>
+                  <button>Number of Friends Attending</button>
+
+                  <div className="sort-toggle">
+                    <label className="toggle-switch">
+                      <input
+                        type="checkbox"
+                        checked={sortDirection === "asc"}
+                        onChange={() => setSortDirection(sortDirection === "asc" ? "desc" : "asc")}
+                      />
+                      <span className="slider" />
+                    </label>
+
+                    <span className="sort-label">
+                      {sortDirection === "asc" ? "Low to High" : "High to Low"}
+                    </span>
+
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <button className="search-button">Filter</button>
+
           </div>
+
         </div>
       </div>
     
+
       <div className="event-grid-page">
 
         <div className="scrollable-grid">
@@ -148,6 +146,7 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
         {selectedEvent && (
           <EventPage event={selectedEvent} onClose={() => setSelectedEvent(null)} />
         )}
+
       </div>
   
     </div>
