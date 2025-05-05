@@ -30,6 +30,7 @@ public class EditEventHandler implements Route {
     String tagsString = request.queryParams("tags");
     String eventID = request.queryParams("eventID");
     String eventOrganizer = request.queryParams("eventOrganizer");
+    String thumbnailUrl = request.queryParams("thumbnailUrl");
     List<String> tags = Arrays.asList(tagsString.trim().split(","));
 
     if ((uid == null)
@@ -40,7 +41,8 @@ public class EditEventHandler implements Route {
         || (endTime == null)
         || (tags.isEmpty())
         || (eventID == null)
-        || (eventOrganizer == null)) {
+        || (eventOrganizer == null)
+        || (thumbnailUrl == null)) {
 
       responseMap.put("status", "failure");
       responseMap.put("error_message", "Missing parameters");
@@ -48,7 +50,16 @@ public class EditEventHandler implements Route {
     }
     try {
       this.storageHandler.editEvent(
-          uid, eventID, name, description, date, startTime, endTime, tags, eventOrganizer);
+          uid,
+          eventID,
+          name,
+          description,
+          date,
+          startTime,
+          endTime,
+          tags,
+          eventOrganizer,
+          thumbnailUrl);
       responseMap.put("result", "success");
       responseMap.put("eventID", eventID);
     } catch (NoEventFoundException e) {

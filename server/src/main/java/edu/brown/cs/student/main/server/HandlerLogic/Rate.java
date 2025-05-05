@@ -27,7 +27,6 @@ public class Rate {
       List<String> profileFavOrganizers =
           (List<String>) storageHandler.getProfile(profileID).get("interestedOrganizations");
       List<String> tagsList = (List<String>) storageHandler.getEvent(eventID).get("tags");
-
       //      if (tags != null && !tags.isEmpty()) {
       //        tagList = Arrays.asList(tags.split(","));
       //      } else {
@@ -44,7 +43,7 @@ public class Rate {
         profileFavOrganizers.add(eventOrganizer);
       }
 
-      storageHandler.editProfile(profileID, tagsList, profileFavOrganizers);
+      storageHandler.editProfile(profileID, tagsList, profileFavOrganizers, null);
     }
   }
 }

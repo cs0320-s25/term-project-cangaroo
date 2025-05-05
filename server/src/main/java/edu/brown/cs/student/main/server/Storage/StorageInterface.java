@@ -39,10 +39,12 @@ public interface StorageInterface {
       String startTime,
       String endTime,
       List<String> tags,
-      String eventOrganizer)
+      String eventOrganizer,
+      String thumbnailUrl)
       throws ExecutionException, InterruptedException, NoEventFoundException;
 
-  void editProfile(String uid, List<String> tags, List<String> favEventOrganizers)
+  void editProfile(
+      String uid, List<String> tags, List<String> favEventOrganizers, String profilePicUrl)
       throws ExecutionException, InterruptedException, NoProfileFoundException;
 
   Map<String, Object> getProfile(String uid)

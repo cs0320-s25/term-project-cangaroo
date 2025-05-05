@@ -20,6 +20,7 @@
 
     <!-- Spotless -->
     <spotless.version>2.43.0</spotless.version>
+
   </properties>
 
   <dependencies>
