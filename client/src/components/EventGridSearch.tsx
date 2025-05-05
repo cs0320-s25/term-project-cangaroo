@@ -71,6 +71,7 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
   const toggleSortMenu = () => setSortMenuOpen(!sortMenuOpen);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
+  
 
   return (
     <div>

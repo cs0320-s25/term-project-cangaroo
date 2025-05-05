@@ -3,6 +3,7 @@ import "../styles/EventPage.css";
 import { useUser } from "@clerk/clerk-react";
 import { useState, useEffect } from "react";
 import EventCardGridSearch from "./EventGridSearch";
+import { viewEvent } from "../utils/api";
 
 interface EventPageProps {
   event: {
@@ -22,6 +23,22 @@ export default function EventPage({ event, onClose }: EventPageProps) {
   const [endTime, setEndTime] = useState("00:00");
   const [date, setDate] = useState("1st January 2025");
 
+  // get events from backend
+  useEffect(() => {
+    const getEventInfo = async () => {
+      console.log("Fetching event info from Firebase...");
+      const eventInfo = await viewEvent("1");
+      if (eventInfo !== null) {
+        console.log("Fetched event info from Firebase:", eventInfo);
+        console.log(eventInfo)
+      }
+    };
+  
+    getEventInfo();
+  }, []);
+
+  
+  
   return (   
     <div className="event-overlay">
       <div className="event-content">

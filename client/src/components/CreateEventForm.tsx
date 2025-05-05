@@ -36,8 +36,8 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
         console.log(date as string)
         console.log(tags.join(","))
 
-        await addEvent(user.id, user.fullName, user.fullName, description as string, date as string, startTime, endTime, tags.join(","));
-        console.log("Event added!");
+        const newEvent = await addEvent(user.id, user.fullName, user.fullName, description as string, date as string, startTime, endTime, tags.join(","));
+        console.log("Event added! " + newEvent.eventID);
   
       } catch (err) {
         console.error("Error adding event:", err);
