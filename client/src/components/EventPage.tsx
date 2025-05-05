@@ -18,27 +18,35 @@ export default function EventPage({ event, onClose }: EventPageProps) {
   const [organizer, setOrganizer] = useState("Organizer");
   const [rsvp, setRSVP] = useState(false);
   const [attendeeCount, setAttendeeCount] = useState(0);
+  const [tags, setTags] = useState([]);
   const [attendees, setAttendees] = useState([]);
   const [startTime, setStartTime] = useState("00:00");
   const [endTime, setEndTime] = useState("00:00");
   const [date, setDate] = useState("1st January 2025");
+  const [description, setDescription] = useState("Event Description Here");
 
   // get events from backend
   useEffect(() => {
     const getEventInfo = async () => {
       console.log("Fetching event info from Firebase...");
-      const eventInfo = await viewEvent("1");
+      const eventInfo = await viewEvent("0"); // replace later with other num
       if (eventInfo !== null) {
-        console.log("Fetched event info from Firebase:", eventInfo);
-        console.log(eventInfo)
+        console.log("Fetched event info from Firebase:", eventInfo.data.tags);
+        setStartTime(eventInfo.data.startTime)
+        setEndTime(eventInfo.data.endTime)
+        setAttendees(eventInfo.data.usersAttending)
+        setAttendeeCount(eventInfo.data.usersAttending.length)
+        setOrganizer(eventInfo.data.eventOrganizer)
+        setDate(eventInfo.data.date)
+        setDescription(eventInfo.data.description)
+        setTags(eventInfo.data.tags)
       }
     };
   
     getEventInfo();
+    console.log(tags)
   }, []);
 
-  
-  
   return (   
     <div className="event-overlay">
       <div className="event-content">
@@ -64,28 +72,21 @@ export default function EventPage({ event, onClose }: EventPageProps) {
 
             <h2>Description</h2>
             <p>
-            I wish I could fly. I'd pick you up and we'd go back in time. I'd 
-            write this in the sky: I miss you like the very first night. 
-            And so it goes, every weekend the same party. I never go alone, 
-            but I don't seem broken hearted. My friends all say they know 
-            everything I'm going through. 
+            {description}
             </p>
 
             <h2>Event Tags</h2>
-            <div className="tag-container">            
-                <span>Arts and Crafts</span>
-                <span>Movies</span>
-                <span>Reading</span>
-                <span>Taylor Swift</span>
-                <span>Good Food</span>
-                <span>Karaoke</span>
+            <div className="tag-container">
+              {tags.map((tag, idx) => (
+                <span> {tag} </span>
+              ))}
             </div>
 
             <h2>Atendees <span id="attendee-count">&middot; {attendeeCount}</span></h2>
             <div className="atendee-container">
-                <button>Jojo Siwa</button>
-                <button>Ravyn Lenae</button>
-                {/** map every attendee from the array of attendees here! */}
+              {attendees.map((attendee, idx) => (
+                <span> {attendee} </span>
+              ))}
             </div>
           </div>
 
