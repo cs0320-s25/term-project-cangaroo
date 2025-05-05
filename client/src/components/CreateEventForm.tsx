@@ -9,8 +9,6 @@ interface CreateEventFormProps {
   onClose: () => void;
 }
 
-
-
 export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProps) {
   if (!isOpen) return null; // should not show up 
   const { user } = useUser();
@@ -19,13 +17,39 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
 
+  // MOCK
+  const tags = ["Arts and Crafts", "Movies", "Reading", "Chickens", "Geese"]
 
+  /**
+   * Add the event to the backend by connecting to create-event endpoint 
+   */
+  async function onPostClick(e: React.ChangeEvent<any>) {
+    
+    if (user && user.fullName) {
+      try {
+        // Add event to Firebase
+        e.preventDefault()
+        const formData = new FormData(e.currentTarget)
+        const description = formData.get("description")
+        const date = formData.get("date")
+        console.log(description as string)
+        console.log(date as string)
+        console.log(tags.join(","))
+
+        await addEvent(user.id, user.fullName, user.fullName, description as string, date as string, startTime, endTime, tags.join(","));
+        console.log("Event added!");
+  
+      } catch (err) {
+        console.error("Error adding event:", err);
+      }
+    }
+  }
 
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <form>
+        <form onSubmit={onPostClick}>
 
         
         <div className="form-grid">
@@ -36,7 +60,7 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
             <input placeholder="Your Event Name Here..." />
 
             <label>Date</label>
-            <input type="date" />
+            <input type="date" name="date"/>
 
             <label>Time</label>
             <div className="time-inputs">
@@ -78,17 +102,13 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
 
             <label>Event Tags</label>
             <div className="tags">
-              <span>Arts and Crafts</span>
-              <span>Movies</span>
-              <span>Reading</span>
-              <span>Taylor Swift</span>
-              <span>Good Food</span>
-              <button className="tag-add">+</button>
+              {tags.map((tag, idx) => (
+                <span> {tag} </span>
+              ))}
             </div>
             
-
-            <button type="reset">Reset form</button>
-            <button className="post-btn" type="submit" onClick={onPostClick(e)}>Post</button>
+            <button type="reset" className="reset-btn">Reset form</button>
+            <button className="post-btn" type="submit">Post</button>
 
           </div>
         </div>

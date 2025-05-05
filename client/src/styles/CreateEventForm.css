@@ -142,7 +142,7 @@ label, h3 {
   color: #4A0B2F;
 }
 
-.upload-btn, .post-btn {
+.upload-btn, .post-btn, .reset-btn {
   background: #DD1155;
   color: white;
   border: none;
