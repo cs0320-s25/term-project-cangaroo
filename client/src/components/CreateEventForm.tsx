@@ -110,6 +110,7 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
             <button type="reset" className="reset-btn">Reset form</button>
             <button className="post-btn" type="submit">Post</button>
 
+
           </div>
         </div>
 

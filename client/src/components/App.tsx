@@ -9,6 +9,10 @@ import {
   SignOutButton} from "@clerk/clerk-react";
 
 import { useState } from "react";
+;
+import { createProfile } from "../utils/api";
+import useCreateProfileOnFirstSignIn from "../hooks/useCreateProfileOnFirstSignIn"
+
 import ProfilePage from "./ProfilePage";
 
 // components
@@ -32,6 +36,7 @@ initializeApp(firebaseConfig);
 
 function Home() {
   const [isModalOpen, setModalOpen] = useState(false);
+  useCreateProfileOnFirstSignIn(); // profile creation
 
   return (
     <div className="App">
