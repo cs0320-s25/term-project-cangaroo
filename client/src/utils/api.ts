@@ -53,6 +53,39 @@ export async function addEvent(uid: string, name: string, eventOrganizer: string
 }
 
 /**
+ * Method that queries the backend using the create-profile endpoint
+ * @param uid - a string that refers to the event creator’s ID
+ * @param username - a string that refers to the user’s username (probably just their real name?)
+ * @param interestedTags - a comma-separated string that lists the user’s interested tags (e.g. “cooking, running, eating+food” [without the quotes])
+ * @param favEventOrganizers - a comma-separated string that lists the user’s favorite event organizers 
+ * @returns - standard success/error message
+ */
+
+export async function createProfile(
+  uid: string,
+  username: string,
+  interestedTags: string,
+  favEventOrganizers: string
+) {
+  return await queryAPI("create-profile", {
+    uid,
+    username,
+    interestedTags,
+    favEventOrganizers,
+  });
+}
+
+/**
+ * Method that queries the backend using the view-profile endpoint
+ * @param uid - a string that refers to the event creator’s ID (should be something like email or Clerk ID)
+ * @returns - user profile and all their data viewable on the profile page (tags, followers, etc.)
+ */
+export async function viewProfile(uid: string) {
+  return await queryAPI("view-profile", { uid });
+}
+
+
+/**
  * Method that connects the frontend to the backend by querying the server at the "get-pin" endpoint
  */
 export async function getPin() {
@@ -119,5 +152,7 @@ export async function clearUser(uid: string) {
   return await queryAPI("clear-user", {
     uid: uid,
   });
+
+
 }
 

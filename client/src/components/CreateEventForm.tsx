@@ -88,7 +88,9 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
             
 
             <button type="reset">Reset form</button>
-            <button className="post-btn" type="submit" onClick={onPostClick(e)}>Post</button>
+            <button className="post-btn" type="submit" onClick={onPostClick(e)}>
+              Post
+              </button>
 
           </div>
         </div>
