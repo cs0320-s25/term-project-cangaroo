@@ -53,6 +53,17 @@ export async function addEvent(uid: string, name: string, eventOrganizer: string
 }
 
 /**
+ * Method that queries the backend using the view-event endpoint
+ * @param eventID a string that refers to the event ID of the event that you want to view
+ * @returns 
+ */
+export async function viewEvent(eventID: string) {
+  return await queryAPI("view-event", {
+    eventID
+  });
+}
+
+/**
  * Method that queries the backend using the create-profile endpoint
  * @param uid - a string that refers to the event creator’s ID
  * @param username - a string that refers to the user’s username (probably just their real name?)
@@ -86,6 +97,7 @@ export async function viewProfile(uid: string) {
 
 
 /**
+
  * Method that connects the frontend to the backend by querying the server at the "get-pin" endpoint
  */
 export async function getPin() {
