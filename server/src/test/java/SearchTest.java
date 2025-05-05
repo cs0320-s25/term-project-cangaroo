@@ -2,6 +2,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import edu.brown.cs.student.main.server.Events.Event;
 import edu.brown.cs.student.main.server.HandlerLogic.Search;
+import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ public class SearchTest {
 
   // checks to make sure that the search algorithm searches for all versions of run in event name
   @Test
-  public void testStemmedNameMatch() {
+  public void testStemmedNameMatch() throws IOException {
     Event e1 =
         new Event(
             List.of("Running", "Club"),
@@ -42,7 +43,7 @@ public class SearchTest {
   // checks to make sure that the search algorithm searches for all versions of jump in event
   // description
   @Test
-  public void testStemmedDescriptionMatch() {
+  public void testStemmedDescriptionMatch() throws IOException {
     Event e1 =
         new Event(
             List.of("Morning", "Stretch"),
@@ -73,7 +74,7 @@ public class SearchTest {
 
   // checks to make sure that the search algorithm searches for all versions of kick in event tag
   @Test
-  public void testStemmedTagMatch() {
+  public void testStemmedTagMatch() throws IOException {
     Event e1 =
         new Event(
             List.of("Football", "Game"),
@@ -104,7 +105,7 @@ public class SearchTest {
 
   // checks to make sure that the search algorithm handles no matches correctly
   @Test
-  public void testNoMatch() {
+  public void testNoMatch() throws IOException {
     Event e1 =
         new Event(
             List.of("Chess", "Tournament"),
@@ -134,7 +135,7 @@ public class SearchTest {
 
   // checks to make sure that when an event matches multiple input words, it's prioritized
   @Test
-  public void testMultipleInputWords() {
+  public void testMultipleInputWords() throws IOException {
     Event e1 =
         new Event(
             List.of("Track", "Practice"),
@@ -166,7 +167,7 @@ public class SearchTest {
 
   // checks to make sure that all synonyms of an input are found
   @Test
-  public void testSynonymMatchingSport() {
+  public void testSynonymMatchingSport() throws IOException {
     Event e1 =
         new Event(
             List.of("Morning", "Run"),
@@ -208,7 +209,7 @@ public class SearchTest {
 
   // checks to make sure that all synonyms of an input are found
   @Test
-  public void testSynonymMatchingCooking() {
+  public void testSynonymMatchingCooking() throws IOException {
     Event e1 =
         new Event(
             List.of("Make", "Dinner"),
@@ -250,7 +251,7 @@ public class SearchTest {
   }
 
   @Test
-  public void testNullSearch() {
+  public void testNullSearch() throws IOException {
 
     Search search = new Search();
     List<Integer> results = search.getSearchedEvents(List.of("cooking"), List.of());

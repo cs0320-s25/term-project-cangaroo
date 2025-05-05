@@ -62,7 +62,7 @@ public class Server {
       Spark.get("recommend", new RecommendHandler());
       Spark.get("delete-event", new DeleteEventHandler(storageHandler));
       Spark.get("rsvp", new RSVPHandler());
-      Spark.get("search", new SearchHandler());
+      Spark.get("search", new SearchHandler(storageHandler));
       Spark.get("create-profile", new ProfileCreationHandler(storageHandler));
       Spark.get("view-event", new ViewEventHandler(storageHandler));
       Spark.get("view-profile", new ViewProfileHandler(storageHandler));
