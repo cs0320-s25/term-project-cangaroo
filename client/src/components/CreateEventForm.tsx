@@ -2,11 +2,14 @@ import React from "react";
 import "../styles/CreateEventForm.css";
 import { useUser } from "@clerk/clerk-react";
 import { useState } from "react";
+import { addEvent } from "../utils/api";
 
 interface CreateEventFormProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+
 
 export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProps) {
   if (!isOpen) return null; // should not show up 
@@ -16,10 +19,15 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
 
+
+
+
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-      
+        <form>
+
+        
         <div className="form-grid">
         <button className="modal-close" onClick={onClose}>✕</button>
           {/* Left Column */}
@@ -66,7 +74,7 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
           {/* Right Column */}
           <div className="form-section">
             <h3>Description</h3>
-            <textarea placeholder="Your Event Description Here..." />
+            <textarea name="description" placeholder="Your Event Description Here..." />
 
             <label>Event Tags</label>
             <div className="tags">
@@ -77,10 +85,17 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
               <span>Good Food</span>
               <button className="tag-add">+</button>
             </div>
+            
 
-            <button className="post-btn">Post</button>
+            <button type="reset">Reset form</button>
+            <button className="post-btn" type="submit" onClick={onPostClick(e)}>Post</button>
+
           </div>
         </div>
+
+        </form>
+
+
       </div>
     </div>
   );
