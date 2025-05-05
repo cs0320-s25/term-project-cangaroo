@@ -23,12 +23,14 @@ public class ProfileCreationHandler implements Route {
     String uid = request.queryParams("uid");
     String interestedTags = request.queryParams("interestedTags");
     String favEventOrganizerString = request.queryParams("favEventOrganizers");
+    String profilePicUrl = request.queryParams("profilePicUrl");
 
     String username = request.queryParams("username");
     if ((uid == null)
         || (interestedTags == null)
         || (username == null)
-        || (favEventOrganizerString == null)) {
+        || (favEventOrganizerString == null)
+        || (profilePicUrl == null)) {
 
       responseMap.put("result", "failure");
       responseMap.put("error_message", "Missing required parameters: uid, interestedTags");
@@ -44,6 +46,7 @@ public class ProfileCreationHandler implements Route {
     data.put("eventsAttending", new ArrayList<>());
     data.put("interestedOrganizations", favEventOrganizers);
     data.put("eventHistory", new ArrayList<>());
+    data.put("profilePicUrl", profilePicUrl);
 
     //    this.storageHandler.addDocument(uid, "profile", "profileProperties", data);
     this.storageHandler.addProfile(uid, data);

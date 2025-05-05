@@ -20,6 +20,7 @@ import edu.brown.cs.student.main.server.Handlers.RecommendHandler;
 import edu.brown.cs.student.main.server.Handlers.RespondToFriendRequestHandler;
 import edu.brown.cs.student.main.server.Handlers.SearchHandler;
 import edu.brown.cs.student.main.server.Handlers.SendFriendRequestHandler;
+import edu.brown.cs.student.main.server.Handlers.SyncWithGCalHandler;
 import edu.brown.cs.student.main.server.Handlers.UnfriendHandler;
 import edu.brown.cs.student.main.server.Handlers.UnsendFriendRequestHandler;
 import edu.brown.cs.student.main.server.Handlers.ViewEventHandler;
@@ -77,6 +78,7 @@ public class Server {
       Spark.get("rank-events-by-friend", new MostAttendedEventsFriendHandler(storageHandler));
 
       Spark.get("delete-all", new DeleteAllHandler(storageHandler));
+      Spark.get("sync-with-gcal", new SyncWithGCalHandler(storageHandler));
 
       Spark.notFound(
           (request, response) -> {

@@ -30,6 +30,7 @@ public class EventCreationHandler implements Route {
     String endTime = request.queryParams("endTime");
     String tagsString = request.queryParams("tags");
     String eventOrganizer = request.queryParams("eventOrganizer");
+    String thumbnailUrl = request.queryParams("thumbnailUrl");
 
     if ((uid == null)
         || (name == null)
@@ -38,7 +39,8 @@ public class EventCreationHandler implements Route {
         || (startTime == null)
         || (endTime == null)
         || (tagsString == null)
-        || (eventOrganizer == null)) {
+        || (eventOrganizer == null)
+        || (thumbnailUrl == null)) {
       responseMap.put("result", "failure");
       responseMap.put(
           "error_message",
@@ -61,6 +63,7 @@ public class EventCreationHandler implements Route {
     data.put("ID", eventID);
     data.put("eventOrganizer", eventOrganizer);
     data.put("usersAttending", new ArrayList<>());
+    data.put("thumbnailUrl", thumbnailUrl);
 
     try {
       this.storageHandler.addEvent(uid, eventID, data);
