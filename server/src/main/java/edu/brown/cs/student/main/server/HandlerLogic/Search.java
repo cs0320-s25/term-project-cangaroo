@@ -13,12 +13,6 @@ public class Search {
     Set<String> expandedInputStems = new HashSet<>();
 
     try {
-      for (Event event : allEvents) {
-        System.out.println(event.eventID());
-      }
-
-      System.out.println(inputWords);
-
       // Stem original input words
       List<String> stemmedInput = Stemmer.stemSentence(inputWords);
       expandedInputStems.addAll(stemmedInput);
@@ -44,8 +38,6 @@ public class Search {
       try {
         List<String> nameStems = Stemmer.stemSentence(event.name());
         for (String inputStem : expandedInputStems) {
-          System.out.println("input name: " + inputStem);
-          System.out.println("event name: " + nameStems);
           if (nameStems.contains(inputStem)) {
             score += 5;
           }
@@ -57,7 +49,6 @@ public class Search {
       try {
         List<String> descStems = Stemmer.stemSentence(event.description());
         for (String inputStem : expandedInputStems) {
-          System.out.println("event desc: " + descStems);
           if (descStems.contains(inputStem)) {
             score += 3;
           }

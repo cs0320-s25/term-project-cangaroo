@@ -57,9 +57,9 @@ public class Server {
       Spark.get("edit-profile", new EditProfileHandler(storageHandler));
       Spark.get("create-event", new EventCreationHandler(storageHandler));
       Spark.get("get-friends", new GetFriendsHandler(storageHandler));
-      Spark.get("random-recommend", new RandomRecommendHandler());
+      Spark.get("random-recommend", new RandomRecommendHandler(storageHandler));
       Spark.get("rate", new RateHandler(storageHandler));
-      Spark.get("recommend", new RecommendHandler());
+      Spark.get("recommend", new RecommendHandler(storageHandler));
       Spark.get("delete-event", new DeleteEventHandler(storageHandler));
       Spark.get("rsvp", new RSVPHandler());
       Spark.get("search", new SearchHandler(storageHandler));

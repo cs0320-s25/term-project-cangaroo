@@ -2,6 +2,7 @@ package edu.brown.cs.student.main.server.Handlers;
 
 import edu.brown.cs.student.main.server.Events.Event;
 import edu.brown.cs.student.main.server.HandlerLogic.RandomMatch;
+import edu.brown.cs.student.main.server.Storage.StorageInterface;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,14 +46,17 @@ public class RandomRecommendHandler implements Route {
           null);
 
   private Map<String, Object> responseMap;
+  public StorageInterface storageHandler;
 
-  public RandomRecommendHandler() {}
+  public RandomRecommendHandler(StorageInterface storageHandler) {
+    this.storageHandler = storageHandler;
+  }
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
     this.responseMap = new HashMap<>();
     RandomMatch randomMatch = new RandomMatch();
-    List<Integer> results = randomMatch.getRandomEvent(List.of(e1, e2, e3));
+    List<Integer> results = randomMatch.getRandomEvent(this.storageHandler.getAllEvents());
 
     // no events matched
     if (results == null || results.isEmpty()) {
