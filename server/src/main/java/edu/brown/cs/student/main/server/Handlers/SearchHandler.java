@@ -2,6 +2,7 @@ package edu.brown.cs.student.main.server.Handlers;
 
 import edu.brown.cs.student.main.server.Events.Event;
 import edu.brown.cs.student.main.server.HandlerLogic.Search;
+import edu.brown.cs.student.main.server.Storage.StorageInterface;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -47,9 +48,12 @@ public class SearchHandler implements Route {
           3,
           null);
 
+  public StorageInterface storageHandler;
   private Map<String, Object> responseMap;
 
-  public SearchHandler() {}
+  public SearchHandler(StorageInterface storageHandler) {
+    this.storageHandler = storageHandler;
+  }
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
@@ -68,19 +72,29 @@ public class SearchHandler implements Route {
 
     List<String> words = Arrays.asList(input.split("\\s+"));
     Search search = new Search();
-    List<Integer> results = search.getSearchedEvents(words, List.of(e1, e2, e3));
+
+    List<Integer> results;
+
+    try {
+      results = search.getSearchedEvents(words, this.storageHandler.getAllEvents());
+    } catch (Exception e) {
+      this.responseMap.put("result", "Error");
+      this.responseMap.put("error_message", e.getMessage());
+      this.responseMap.put("events", new ArrayList<>());
+      return this.responseMap;
+    }
 
     // no events matched
     if (results == null || results.isEmpty()) {
       this.responseMap.put("result", "Success");
       this.responseMap.put("error_message", "No events found. Try searching something else.");
-      this.responseMap.put("events", results);
+      this.responseMap.put("event ids", results);
       return this.responseMap;
     }
 
     // successful result
     this.responseMap.put("result", "Success");
-    this.responseMap.put("events", results);
+    this.responseMap.put("event ids", results);
     return this.responseMap;
   }
 }

@@ -257,18 +257,37 @@ public class FirebaseUtilities implements StorageInterface {
         ApiFuture<DocumentSnapshot> future = eventRef.get();
         DocumentSnapshot document = future.get();
 
-        List<String> name = Arrays.asList(document.get("name").toString().split(" "));
-        List<String> description = Arrays.asList(document.get("description").toString().split(" "));
-        String date = document.get("date").toString();
-        String startTime = document.get("startTime").toString();
-        String endTime = document.get("endTime").toString();
-        int eventID = Integer.parseInt(document.get("eventID").toString());
-        String eventOrganizer = document.get("eventOrganizer").toString();
+        // Get name, description, and tags as List<String> directly
+        String name = (String) document.get("name");
+        String description = (String) document.get("description");
+        List<String> tags = (List<String>) document.get("tags");
 
-        List<String> tags = Arrays.asList(document.get("tags").toString().split(" "));
+        List<String> listOfNames = Arrays.asList(name.trim().split("\\s+"));
+        List<String> listOfDescriptions = Arrays.asList(description.trim().split("\\s+"));
+
+        String date = document.getString("date") != null ? document.getString("date") : "";
+        String startTime =
+            document.getString("startTime") != null ? document.getString("startTime") : "";
+        String endTime = document.getString("endTime") != null ? document.getString("endTime") : "";
+
+        Long eventIDLong = document.getLong("ID");
+        int eventID = eventIDLong != null ? eventIDLong.intValue() : -1;
+
+        String eventOrganizer =
+            document.getString("eventOrganizer") != null
+                ? document.getString("eventOrganizer")
+                : "";
 
         events.add(
-            new Event(name, description, date, startTime, endTime, tags, eventID, eventOrganizer));
+            new Event(
+                listOfNames,
+                listOfDescriptions,
+                date,
+                startTime,
+                endTime,
+                tags,
+                eventID,
+                eventOrganizer));
       }
     }
     return events;

@@ -8,7 +8,8 @@ public class Search {
 
   public Search() {}
 
-  public List<Integer> getSearchedEvents(List<String> inputWords, List<Event> allEvents) {
+  public List<Integer> getSearchedEvents(List<String> inputWords, List<Event> allEvents)
+      throws IOException {
     Set<String> expandedInputStems = new HashSet<>();
 
     try {

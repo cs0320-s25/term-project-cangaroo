@@ -2,6 +2,8 @@ package edu.brown.cs.student.main.server.Handlers;
 
 import edu.brown.cs.student.main.server.Events.Event;
 import edu.brown.cs.student.main.server.HandlerLogic.MatchEvents;
+import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,22 +48,38 @@ public class RecommendHandler implements Route {
 
   List<String> mockedTags = List.of("cooking");
 
+  public StorageInterface storageHandler;
   private Map<String, Object> responseMap;
 
-  public RecommendHandler() {}
+  public RecommendHandler(StorageInterface storageHandler) {
+    this.storageHandler = storageHandler;
+  }
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
+
+    String input = request.queryParams("input");
+
+    // null input
+    if (input == null || input.isEmpty()) {
+      this.responseMap.put("result", "Error: No input given.");
+      this.responseMap.put("error_message", "No matches due to error");
+      this.responseMap.put("events", new ArrayList<>());
+      return this.responseMap;
+    }
+
     this.responseMap = new HashMap<>();
     MatchEvents matchEvents = new MatchEvents();
+    List<String> tags = (List<String>) this.storageHandler.getProfile(input).get("interestedTags");
+    List<String> interestedOrgs =
+        (List<String>) this.storageHandler.getProfile(input).get("interestedOrganizations");
     List<Integer> results =
-        matchEvents.getMatchedEvents(this.mockedTags, null, List.of(e1, e2, e3));
+        matchEvents.getMatchedEvents(tags, interestedOrgs, this.storageHandler.getAllEvents());
 
     // no events matched
     if (results == null || results.isEmpty()) {
       this.responseMap.put("result", "Success");
-      this.responseMap.put(
-          "error_message", "No events found. There are no events in the database.");
+      this.responseMap.put("error_message", "No events matched. There are no events to recommend.");
       this.responseMap.put("events", results);
       return this.responseMap;
     }

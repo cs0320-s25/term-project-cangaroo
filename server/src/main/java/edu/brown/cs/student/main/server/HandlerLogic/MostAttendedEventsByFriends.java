@@ -30,7 +30,8 @@ public class MostAttendedEventsByFriends {
 
     for (Map<String, Object> event : allEvents) {
       List<String> attendees = (List<String>) event.get("usersAttending");
-      Integer eventID = (Integer) event.get("eventID");
+      Long eventIDLong = (Long) event.get("ID");
+      int eventID = eventIDLong != null ? eventIDLong.intValue() : -1;
 
       int count = 0;
       for (String friend : profileFriends) {
