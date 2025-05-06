@@ -63,13 +63,13 @@ public class RandomRecommendHandler implements Route {
       this.responseMap.put("result", "Success");
       this.responseMap.put(
           "error_message", "No events found. There are no events in the database.");
-      this.responseMap.put("events", results);
+      this.responseMap.put("event_ids", results);
       return this.responseMap;
     }
 
     // successful result
     this.responseMap.put("result", "Success");
-    this.responseMap.put("events", results);
+    this.responseMap.put("event_ids", results);
     return this.responseMap;
   }
 }

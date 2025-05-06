@@ -66,7 +66,7 @@ public class SearchHandler implements Route {
     if (input == null || input.isEmpty()) {
       this.responseMap.put("result", "Error: No input given.");
       this.responseMap.put("error_message", "No matches due to error");
-      this.responseMap.put("events", new ArrayList<>());
+      this.responseMap.put("event_ids", new ArrayList<>());
       return this.responseMap;
     }
 
@@ -80,7 +80,7 @@ public class SearchHandler implements Route {
     } catch (Exception e) {
       this.responseMap.put("result", "Error");
       this.responseMap.put("error_message", e.getMessage());
-      this.responseMap.put("events", new ArrayList<>());
+      this.responseMap.put("event_ids", new ArrayList<>());
       return this.responseMap;
     }
 
@@ -88,13 +88,13 @@ public class SearchHandler implements Route {
     if (results == null || results.isEmpty()) {
       this.responseMap.put("result", "Success");
       this.responseMap.put("error_message", "No events found. Try searching something else.");
-      this.responseMap.put("event ids", results);
+      this.responseMap.put("event_ids", results);
       return this.responseMap;
     }
 
     // successful result
     this.responseMap.put("result", "Success");
-    this.responseMap.put("event ids", results);
+    this.responseMap.put("event_ids", results);
     return this.responseMap;
   }
 }

@@ -39,7 +39,7 @@ public class MostAttendedEventsFriendHandler implements Route {
     }
 
     this.responseMap.put("result", "Success");
-    this.responseMap.put("results", results);
+    this.responseMap.put("event_ids", results);
     return this.responseMap;
   }
 }

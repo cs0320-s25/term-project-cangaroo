@@ -58,13 +58,13 @@ public class RecommendHandler implements Route {
   @Override
   public Object handle(Request request, Response response) throws Exception {
 
-    String input = request.queryParams("input");
+    String input = request.queryParams("profileID");
 
     // null input
     if (input == null || input.isEmpty()) {
       this.responseMap.put("result", "Error: No input given.");
       this.responseMap.put("error_message", "No matches due to error");
-      this.responseMap.put("events", new ArrayList<>());
+      this.responseMap.put("event_ids", new ArrayList<>());
       return this.responseMap;
     }
 
@@ -80,13 +80,13 @@ public class RecommendHandler implements Route {
     if (results == null || results.isEmpty()) {
       this.responseMap.put("result", "Success");
       this.responseMap.put("error_message", "No events matched. There are no events to recommend.");
-      this.responseMap.put("events", results);
+      this.responseMap.put("event_ids", results);
       return this.responseMap;
     }
 
     // successful result
     this.responseMap.put("result", "Success");
-    this.responseMap.put("events", results);
+    this.responseMap.put("event_ids", results);
     return this.responseMap;
   }
 }
