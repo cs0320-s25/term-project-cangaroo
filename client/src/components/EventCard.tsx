@@ -17,7 +17,7 @@ interface EventCardProps {
  * @returns - the JSX EventCard component.
  */
 
-const EventCard = ({ title, description, imageUrl, onClick }: EventCardProps) => {
+function EventCard ({ title, description, imageUrl, onClick }: EventCardProps) {
   return (
     <div className="card" onClick={onClick} style={{ backgroundImage: `url(${imageUrl})` }}>
       <div className="overlay">

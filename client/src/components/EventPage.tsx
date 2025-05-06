@@ -29,9 +29,9 @@ export default function EventPage({ event, onClose }: EventPageProps) {
   useEffect(() => {
     const getEventInfo = async () => {
       console.log("Fetching event info from Firebase...");
-      const eventInfo = await viewEvent("0"); // replace later with other num
+      const eventInfo = await viewEvent("3"); // replace later with other num
       if (eventInfo !== null) {
-        console.log("Fetched event info from Firebase:", eventInfo.data.tags);
+        console.log("Fetched event info from Firebase:", eventInfo.data);
         setStartTime(eventInfo.data.startTime)
         setEndTime(eventInfo.data.endTime)
         setAttendees(eventInfo.data.usersAttending)
@@ -44,7 +44,6 @@ export default function EventPage({ event, onClose }: EventPageProps) {
     };
   
     getEventInfo();
-    console.log(tags)
   }, []);
 
   return (   

@@ -3,6 +3,7 @@ import "../styles/EventGridSearch.css";
 import Navbar from "./Navbar";
 import { useEffect, useState } from "react";
 import EventPage from "./EventPage";
+import { randomRecommend } from "../utils/api";
 
 interface EventCardGridSearchProps {
   onPlusClick: () => void;
@@ -53,6 +54,8 @@ const events = [
     
 ];
 
+
+// note to self: handle getting IDs here, and then pass in ID as prop to eventcard and eventpage, and viewevent there. may require some reorganizing in EventCard
 function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
   // event popup functionality modal
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
@@ -72,6 +75,23 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   
+
+  // get events from backend
+  const [eventIDs, setEventIDs] = useState<string[]>([])
+
+  
+  useEffect(() => {
+    const getEventInfo = async () => {
+      console.log("Fetching event info from Firebase...");
+      const eventInfo = await randomRecommend(); // replace later with other num
+      if (eventInfo !== null) {
+        setEventIDs(eventInfo.event_ids)
+        console.log("Fetched event info from Firebase:", eventInfo.event_ids);
+      }
+    };
+  
+    getEventInfo();
+  }, []);
 
   return (
     <div>

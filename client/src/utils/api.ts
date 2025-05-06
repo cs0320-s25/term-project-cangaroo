@@ -64,6 +64,14 @@ export async function viewEvent(eventID: string) {
 }
 
 /**
+ * Method that queries the backend using the random-recommend endpoint
+ * @returns 
+ */
+export async function randomRecommend() {
+  return await queryAPI("random-recommend", {});
+}
+
+/**
  * Method that queries the backend using the create-profile endpoint
  * @param uid - a string that refers to the event creator’s ID
  * @param username - a string that refers to the user’s username (probably just their real name?)
