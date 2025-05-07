@@ -81,7 +81,7 @@ export default function EventPage({ eventID, onClose }: EventPageProps) {
             <h2>Atendees <span id="attendee-count">&middot; {attendeeCount}</span></h2>
             <div className="atendee-container">
               {attendees.map((attendee, idx) => (
-                <span> {attendee} </span>
+                <span key={idx}> {attendee} </span>
               ))}
             </div>
           </div>

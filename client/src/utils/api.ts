@@ -76,8 +76,8 @@ export async function randomRecommend() {
  * Method that queries the backend using the search endpoint
  * @returns 
  */
-export async function search(search: string) {
-  return await queryAPI("search", {search});
+export async function search(input: string) {
+  return await queryAPI("search", {input});
 }
 
 /**
