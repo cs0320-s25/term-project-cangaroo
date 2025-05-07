@@ -72,6 +72,14 @@ export async function randomRecommend() {
 }
 
 /**
+ * Method that queries the backend using the search endpoint
+ * @returns 
+ */
+export async function search(search: string) {
+  return await queryAPI("search", {search});
+}
+
+/**
  * Method that queries the backend using the create-profile endpoint
  * @param uid - a string that refers to the event creator’s ID
  * @param username - a string that refers to the user’s username (probably just their real name?)
