@@ -39,7 +39,7 @@ async function queryAPI(
  * @param tags  a string of comma-separated tags for the event (e.g. “awesome, cool, very+cool” [without the quotes])
  * @returns 
  */
-export async function addEvent(uid: string, name: string, eventOrganizer: string, description: string, date: string, startTime: string, endTime: string, tags: string) {
+export async function addEvent(uid: string, name: string, eventOrganizer: string, description: string, date: string, startTime: string, endTime: string, tags: string, thumbnailUrl: string) {
   return await queryAPI("create-event", {
     uid,
     name,
@@ -48,7 +48,8 @@ export async function addEvent(uid: string, name: string, eventOrganizer: string
     date,
     startTime,
     endTime,
-    tags
+    tags,
+    thumbnailUrl,
   });
 }
 

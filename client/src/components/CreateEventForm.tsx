@@ -23,7 +23,7 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
   /**
    * Add the event to the backend by connecting to create-event endpoint 
    */
-  async function onPostClick(e: React.ChangeEvent<any>) {
+  async function onPostClick(e: React.FormEvent<HTMLFormElement>) {
     
     if (user && user.fullName) {
       try {
@@ -32,12 +32,14 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
         const formData = new FormData(e.currentTarget)
         const description = formData.get("description")
         const date = formData.get("date")
+        const title = formData.get("title")
+        const url = formData.get("url")
         console.log(description as string)
         console.log(date as string)
         console.log(tags.join(","))
 
-        const newEvent = await addEvent(user.id, user.fullName, user.fullName, description as string, date as string, startTime, endTime, tags.join(","));
-        console.log("Event added! " + newEvent.eventID);
+        const newEvent = await addEvent(user.id, title as string, user.fullName, description as string, date as string, startTime, endTime, tags.join(","), url as string);
+        console.log("Event added! " + newEvent);
   
       } catch (err) {
         console.error("Error adding event:", err);
@@ -57,7 +59,7 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
           {/* Left Column */}
           <div className="form-section">
             <h2>New Event</h2>
-            <input placeholder="Your Event Name Here..." />
+            <input name="title" placeholder="Your Event Name Here..." />
 
             <label>Date</label>
             <input type="date" name="date"/>
@@ -92,6 +94,7 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
             </div>
 
             <label>Thumbnail</label>
+            <input type="text" name="url"></input>
             <button className="upload-btn">Upload</button>
           </div>
 
