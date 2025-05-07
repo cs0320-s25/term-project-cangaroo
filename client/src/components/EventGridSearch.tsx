@@ -57,7 +57,7 @@ const events = [
 
 // note to self: handle getting IDs here, and then pass in ID as prop to eventcard and eventpage, and viewevent there. may require some reorganizing in EventCard
 function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
-  // event popup functionality modal
+  // event popup functionality modal --> selectedEvent is the ID of the selected event
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
   useEffect(() => {
     document.body.style.overflow = selectedEvent ? 'hidden' : 'auto';
@@ -74,16 +74,14 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
   const toggleSortMenu = () => setSortMenuOpen(!sortMenuOpen);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
-  
 
   // get events from backend
   const [eventIDs, setEventIDs] = useState<string[]>([])
-
   
   useEffect(() => {
     const getEventInfo = async () => {
       console.log("Fetching event info from Firebase...");
-      const eventInfo = await randomRecommend(); // replace later with other num
+      const eventInfo = await randomRecommend(); 
       if (eventInfo !== null) {
         setEventIDs(eventInfo.event_ids)
         console.log("Fetched event info from Firebase:", eventInfo.event_ids);
@@ -92,6 +90,7 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
   
     getEventInfo();
   }, []);
+
 
   return (
     <div>
@@ -153,11 +152,10 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
             {filteredEvents.length === 0 ? (
               <h2>No Events Found</h2>
             ) : (
-              filteredEvents.map((event, idx) => (
+              eventIDs.map((eventID, idx) => (
                 <EventCard
-                  key={idx}
-                  {...event}
-                  onClick={() => setSelectedEvent(event)}
+                  eventID={eventID}
+                  onClick={() => setSelectedEvent(eventID)}
                 />
               ))
             )}
@@ -165,7 +163,7 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
         </div>
 
         {selectedEvent && (
-          <EventPage event={selectedEvent} onClose={() => setSelectedEvent(null)} />
+          <EventPage eventID={selectedEvent} onClose={() => setSelectedEvent(null)} />
         )}
 
       </div>

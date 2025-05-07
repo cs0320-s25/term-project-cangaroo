@@ -6,15 +6,11 @@ import EventCardGridSearch from "./EventGridSearch";
 import { viewEvent } from "../utils/api";
 
 interface EventPageProps {
-  event: {
-    title: string;
-    description: string;
-    imageUrl: string;
-  };
+  eventID: string;
   onClose: () => void;
 }
 
-export default function EventPage({ event, onClose }: EventPageProps) {
+export default function EventPage({ eventID, onClose }: EventPageProps) {
   const [organizer, setOrganizer] = useState("Organizer");
   const [rsvp, setRSVP] = useState(false);
   const [attendeeCount, setAttendeeCount] = useState(0);
@@ -29,7 +25,8 @@ export default function EventPage({ event, onClose }: EventPageProps) {
   useEffect(() => {
     const getEventInfo = async () => {
       console.log("Fetching event info from Firebase...");
-      const eventInfo = await viewEvent("3"); // replace later with other num
+      console.log("input id ", eventID, " displayed id: ", )
+      const eventInfo = await viewEvent(eventID); // replace later with other num
       if (eventInfo !== null) {
         console.log("Fetched event info from Firebase:", eventInfo.data);
         setStartTime(eventInfo.data.startTime)
