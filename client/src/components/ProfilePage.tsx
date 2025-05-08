@@ -151,7 +151,7 @@ export default function ProfilePage() {
                             {tag}
                         </button>
                         ))}
-                        <input
+                        {selfProfile && (<input
                           id="add-tag"
                           placeholder="Add more..."
                           onKeyDown={async (e) => {
@@ -177,7 +177,7 @@ export default function ProfilePage() {
                               }
                             }
                           }}
-                        />
+                        />)}
                     </div>
 
                     <h2>My Favorite <span id="can-go">CanGo</span> Organizers</h2>
@@ -207,7 +207,7 @@ export default function ProfilePage() {
                             {org}
                         </button>
                         ))}
-                        <input
+                        {selfProfile && (<input
                           id="add-org"
                           placeholder="Add more..."
                           onKeyDown={async (e) => {
@@ -232,8 +232,7 @@ export default function ProfilePage() {
                               }
                             }
                           }}
-                        />
-
+                        />)}
 
                     </div>
                   </div>
