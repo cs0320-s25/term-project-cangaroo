@@ -9,16 +9,16 @@ public class RandomMatch {
 
   public RandomMatch() {}
 
-  public List<Integer> getRandomEvent(List<Event> allEvents) {
+  public List<String> getRandomEvent(List<Event> allEvents) {
     int numberOfEvents = Math.min(allEvents.size(), 10);
 
     List<Event> copy = new ArrayList<>(allEvents); // Don't mutate original list
     Collections.shuffle(copy);
     List<Event> randomEvents = copy.subList(0, numberOfEvents);
 
-    List<Integer> eventIDs = new ArrayList<>();
+    List<String> eventIDs = new ArrayList<>();
     for (Event event : randomEvents) {
-      eventIDs.add(event.eventID());
+      eventIDs.add(Integer.toString(event.eventID()));
     }
     return eventIDs;
   }

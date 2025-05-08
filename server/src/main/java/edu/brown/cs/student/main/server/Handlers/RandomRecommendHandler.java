@@ -56,7 +56,7 @@ public class RandomRecommendHandler implements Route {
   public Object handle(Request request, Response response) throws Exception {
     this.responseMap = new HashMap<>();
     RandomMatch randomMatch = new RandomMatch();
-    List<Integer> results = randomMatch.getRandomEvent(this.storageHandler.getAllEvents());
+    List<String> results = randomMatch.getRandomEvent(this.storageHandler.getAllEvents());
 
     // no events matched
     if (results == null || results.isEmpty()) {
@@ -64,12 +64,12 @@ public class RandomRecommendHandler implements Route {
       this.responseMap.put(
           "error_message", "No events found. There are no events in the database.");
       this.responseMap.put("event_ids", results);
-      return this.responseMap;
+      return Utils.toMoshiJson(this.responseMap);
     }
 
     // successful result
     this.responseMap.put("result", "Success");
     this.responseMap.put("event_ids", results);
-    return this.responseMap;
+    return Utils.toMoshiJson(this.responseMap);
   }
 }

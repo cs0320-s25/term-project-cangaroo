@@ -44,7 +44,7 @@ public class EventCreationHandler implements Route {
       responseMap.put("result", "failure");
       responseMap.put(
           "error_message",
-          "Missing required parameters: uid, name, description, date, startTime, endTime, tags, eventOrganizer");
+          "Missing required parameters: uid, name, description, date, startTime, endTime, tags, eventOrganizer, thumbnailUrl");
       return Utils.toMoshiJson(responseMap);
     }
 
