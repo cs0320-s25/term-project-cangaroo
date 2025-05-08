@@ -8,7 +8,7 @@ import Navbar from "./Navbar";
 // components
 import EventCardSmall from "./EventCardSmall";
 import FriendsList from "./FriendsList";
-import { viewProfile } from "../utils/api";
+import { editProfile, viewProfile } from "../utils/api";
 
 // later can import the recommended events from elsewhere
 const events = [
@@ -123,17 +123,118 @@ export default function ProfilePage() {
                     <h2>My Interests</h2>
                     <div className="tag-container">            
                         {tags.map((tag, idx) => (
-                          <button key={idx}>{tag}</button>
+                          <button
+                            key={idx}
+                            className={`tag-button ${selfProfile ? "deletable" : ""}`}
+                            onClick={async () => {
+                              if (!selfProfile || !user?.id) return;
+                        
+                              const updatedTags = tags.filter((t) => t !== tag);
+                              setTags(updatedTags);
+                        
+                              try {
+                                const res = await editProfile(
+                                  user.id,
+                                  updatedTags.join(","),
+                                  orgs.join(","),
+                                  user.imageUrl || ""
+                                );
+                                console.log("editProfile response (delete):", res);
+                                const result = await viewProfile(user.id);
+                                console.log("profile after edit:", result.data.interestedTags);
+
+                              } catch (err) {
+                                console.error("Failed to remove tag:", err);
+                              }
+                            }}
+                          >
+                            {tag}
+                        </button>
                         ))}
-                        <input id="add-tag" placeholder="Add more..." />
+                        <input
+                          id="add-tag"
+                          placeholder="Add more..."
+                          onKeyDown={async (e) => {
+                            if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
+                              const newTag = e.currentTarget.value.trim();
+                              const updatedTags = [...tags, newTag];
+                              setTags(updatedTags);
+                              e.currentTarget.value = "";
+
+                              // Save to backend
+                              if (selfProfile && user?.id) {
+                                try {
+                                  const res = await editProfile(
+                                    user.id,
+                                    updatedTags.join(","),
+                                    orgs.join(","),
+                                    user.imageUrl || ""
+                                  );
+                                  console.log("editProfile response:", res);
+                                } catch (err) {
+                                  console.error("Failed to update profile tags:", err);
+                                }
+                              }
+                            }
+                          }}
+                        />
                     </div>
 
                     <h2>My Favorite <span id="can-go">CanGo</span> Organizers</h2>
                     <div className="organizer-container">
                         {orgs.map((org, idx) => (
-                          <button key={idx}>{org}</button>
+                          <button
+                            key={idx}
+                            className={`org-button ${selfProfile ? "deletable" : ""}`}
+                            onClick={async () => {
+                              if (!selfProfile || !user?.id) return;
+                        
+                              const updatedOrgs = orgs.filter((o) => o !== org);
+                              setOrgs(updatedOrgs);
+                        
+                              try {
+                                await editProfile(
+                                  user.id,
+                                  tags.join(","),
+                                  updatedOrgs.join(","),
+                                  user.imageUrl || ""
+                                );
+                              } catch (err) {
+                                console.error("Failed to remove org:", err);
+                              }
+                            }}
+                          >
+                            {org}
+                        </button>
                         ))}
-                        <input id="add-org" placeholder="Add more..." />
+                        <input
+                          id="add-org"
+                          placeholder="Add more..."
+                          onKeyDown={async (e) => {
+                            if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
+                              const newOrg = e.currentTarget.value.trim();
+                              const updatedOrgs = [...orgs, newOrg];
+                              setOrgs(updatedOrgs);
+                              e.currentTarget.value = "";
+
+                              // Save to backend
+                              if (selfProfile && user?.id) {
+                                try {
+                                  await editProfile(
+                                    user.id,
+                                    tags.join(","),
+                                    updatedOrgs.join(","),
+                                    user.imageUrl || ""
+                                  );
+                                } catch (err) {
+                                  console.error("Failed to update profile orgs:", err);
+                                }
+                              }
+                            }
+                          }}
+                        />
+
+
                     </div>
                   </div>
                   {/* left column */}

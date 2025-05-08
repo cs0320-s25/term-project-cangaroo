@@ -209,3 +209,11 @@
   overflow-y: auto;
 }
 
+.tag-button, .org-button {
+  transition: text-decoration 0.2s ease;
+}
+
+.tag-button.deletable:hover, .org-button.deletable:hover{
+  text-decoration: line-through;
+  cursor: pointer;
+}

@@ -95,6 +95,26 @@ export async function viewProfile(uid: string) {
   return await queryAPI("view-profile", { uid });
 }
 
+/**
+ * Method that queries the backend using the edit-profile endpoint
+ * @param uid - user's Clerk ID
+ * @param interestedTags - comma-separated string of interests
+ * @param favEventOrganizers - comma-separated string of favorite organizers
+ * @param profilePicUrl - string URL to profile picture
+ */
+export async function editProfile(
+  uid: string,
+  interestedTags: string,
+  eventOrganizer: string,
+  profilePicUrl: string
+) {
+  return await queryAPI("edit-profile", {
+    uid,
+    interestedTags,
+    eventOrganizer,
+    profilePicUrl,
+  });
+}
 
 /**
 
