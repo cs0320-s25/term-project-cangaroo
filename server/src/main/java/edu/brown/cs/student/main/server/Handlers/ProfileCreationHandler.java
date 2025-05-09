@@ -33,7 +33,9 @@ public class ProfileCreationHandler implements Route {
         || (profilePicUrl == null)) {
 
       responseMap.put("result", "failure");
-      responseMap.put("error_message", "Missing required parameters: uid, interestedTags, favEventOrganizers, profilePicUrl, username");
+      responseMap.put(
+          "error_message",
+          "Missing required parameters: uid, interestedTags, favEventOrganizers, profilePicUrl, username");
       return Utils.toMoshiJson(responseMap);
     }
     List<String> tags = Arrays.asList(interestedTags.trim().split(","));
