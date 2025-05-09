@@ -38,6 +38,7 @@ function EventCard ({ eventID, onClick }: EventCardProps) {
   const [date, setDate] = useState("1st January 2025");
   const [title, setTitle] = useState("Event Name");
   const [description, setDescription] = useState("Event Description Here");
+  const [thumbnail, setThumbnail] = useState("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg")
 
   // get events from backend
   useEffect(() => {
@@ -54,6 +55,7 @@ function EventCard ({ eventID, onClick }: EventCardProps) {
         setDate(eventInfo.data.date)
         setDescription(eventInfo.data.description)
         setTitle(eventInfo.data.name)
+        setThumbnail(eventInfo.data.thumbnailUrl)
       }
     };
   
@@ -65,9 +67,12 @@ function EventCard ({ eventID, onClick }: EventCardProps) {
     document.body.style.overflow = selectedEvent ? 'hidden' : 'auto';
   }, [selectedEvent]);
 
+  if (!thumbnail) {
+    setThumbnail("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg");
+  }
 
   return (
-    <div className="card" onClick={onClick} style={{ backgroundImage: `url("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg")` }}>
+    <div className="card" onClick={onClick} style={{ backgroundImage: `url(${thumbnail})`}}>
       <div className="overlay">
         <h2 className="title">{title}</h2>
         <p className="date">Date: {date} Time: {startTime} - {endTime}</p>

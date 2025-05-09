@@ -18,7 +18,8 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
   const [endTime, setEndTime] = useState("");
 
   // MOCK
-  const tags = ["Arts and Crafts", "Movies", "Reading", "Chickens", "Geese"]
+  // const tags = ["Arts and Crafts", "Movies", "Reading", "Chickens", "Geese"]
+  const [tags, setTags] = useState<string[]>([]);
 
   /**
    * Add the event to the backend by connecting to create-event endpoint 
@@ -105,9 +106,31 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
 
             <label>Event Tags</label>
             <div className="tags">
+              
               {tags.map((tag, idx) => (
-                <span> {tag} </span>
+                <button
+                  key={idx}
+                  className={`event-tag`}
+                  onClick={async () => {
+                    const updatedTags = tags.filter((t) => t !== tag); // click on tag to delete
+                    setTags(updatedTags);
+                  }}
+                >
+                  {tag}
+              </button>
               ))}
+              <input
+                id="add-tag"
+                placeholder="Add more..."
+                onKeyDown={async (e) => {
+                  if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
+                    e.preventDefault(); // disable default key inputs for form component to prevent auto-submitting on enter
+                    const newTag = e.currentTarget.value.trim(); // remove whitespace
+                    setTags([...tags, newTag]);
+                    e.currentTarget.value = "";
+                  }
+                }}
+              />           
             </div>
             
             <button type="reset" className="reset-btn">Reset form</button>

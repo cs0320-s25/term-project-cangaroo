@@ -161,13 +161,14 @@ label, h3 {
   gap: 0.5rem;
 }
 
-.tags span {
+.event-tag {
     background: #EFEFEF;
     padding: 0.5rem 1.5rem;
     border-radius: 999px;
     font-size: 18px;
     font-family: "Inter", sans-serif;
     color: #8D99AE;
+    border: 1.5px solid #8D99AE;
   }
 
 .tag-add {
