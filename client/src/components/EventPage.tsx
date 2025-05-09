@@ -18,6 +18,8 @@ export default function EventPage({ eventID, onClose }: EventPageProps) {
   const [date, setDate] = useState("2025-01-01");
   const [description, setDescription] = useState("Event Description Here");
 
+
+
   // get events from backend
   useEffect(() => {
     const getEventInfo = async () => {

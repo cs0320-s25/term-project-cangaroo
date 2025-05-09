@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { gapi } from 'gapi-script'
 
 
-
 const params = new URLSearchParams({
-    // change redirect_rui
+
   redirect_uri: "http://localhost:8000/oauth/callback",
   prompt: "consent",
   response_type: "token",
+  // client_id: "623447229459-rkrhj45mu5gl7noag70jcr00kd4pnjge.apps.googleusercontent.com",
   client_id: process.env.CLIENT_ID?.toString() || ""   ,
   scope: [
     "https://www.googleapis.com/auth/calendar",
@@ -75,7 +75,7 @@ const OAuthCallback = () => {
 
 export function createGcalEvent(event: { summary: string; description: string; start: { dateTime: string; }; end: { dateTime: string; }; }) {
     localStorage.setItem("event", JSON.stringify(event));
-    const oauthUrl = `"https://accounts.google.com/o/oauth2/v2/auth"?${params.toString()}`; 
-    window.location.href = oauthUrl; // Redirect to Google login 
+    const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`; 
+    window.location.href = oauthUrl; 
 }
 export default OAuthCallback;

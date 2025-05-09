@@ -23,9 +23,11 @@ import EventPage from "./EventPage";
 
 
 // Firebase configuration keys
-
+console.log(process.env.CLIENT_ID)
+console.log(process.env.API_KEY)
+console.log(process.env.AUTH_DOMAIN)
+console.log(process.env.PROJECT_ID)
 const firebaseConfig = {
-  something: process.env.CLIENT_ID,
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
   projectId: process.env.PROJECT_ID,
@@ -33,6 +35,8 @@ const firebaseConfig = {
   messagingSenderId: process.env.MESSAGING_SENDER_ID,
   appId: process.env.APP_ID,
 };
+
+
 
 initializeApp(firebaseConfig);
 
@@ -73,6 +77,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile/:userId" element={<ProfilePage />} />
+        <Route path="/oauth/callback" element={<OAuthCallback />} />
       </Routes>
     </Router>
   );
