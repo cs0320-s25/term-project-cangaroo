@@ -9,16 +9,12 @@ interface EventCardGridSearchProps {
   onPlusClick: () => void;
 }
 
-
-
-// note to self: handle getting IDs here, and then pass in ID as prop to eventcard and eventpage, and viewevent there. may require some reorganizing in EventCard
 function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
   // event popup functionality modal --> selectedEvent is the ID of the selected event
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
   useEffect(() => {
     document.body.style.overflow = selectedEvent ? 'hidden' : 'auto';
   }, [selectedEvent]);
-
 
 
   // sort functionality
@@ -49,16 +45,16 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
 
   // search functionality
   useEffect(() => {
-    const getEventInfo = async () => {
+    const getSearchResults = async () => {
       console.log("Searching...");
-      const eventInfo = await search(searchTerm); 
-      if (eventInfo !== null) {
-        setEventIDs(eventInfo.event_ids)
-        console.log("Search matches: ", eventInfo.event_ids);
+      const searchResults = await search(searchTerm); 
+      if (searchResults !== null) {
+        setEventIDs(searchResults.event_ids)
+        console.log("Search matches: ", searchResults.event_ids);
       }
     };
   
-    getEventInfo();
+    getSearchResults();
   }, [searchTerm]);
 
   function temp(eventID: string) {
