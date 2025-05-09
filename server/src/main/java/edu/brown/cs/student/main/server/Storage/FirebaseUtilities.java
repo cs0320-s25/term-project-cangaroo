@@ -237,8 +237,8 @@ public class FirebaseUtilities implements StorageInterface {
 
     DocumentReference docRef = db.collection("users").document(uid);
     if (docRef.get().get().exists()) {
-      docRef.update("interestedTags", tags);
-      docRef.update("interestedOrganizations", favEventOrganizers);
+      docRef.update("tags", tags);
+      docRef.update("favEventOrganizers", favEventOrganizers);
       docRef.update("profilePicUrl", profilePicUrl);
     } else {
       throw new NoProfileFoundException("No such profile.");
@@ -585,22 +585,36 @@ public class FirebaseUtilities implements StorageInterface {
     userRef.update("eventHistory", FieldValue.arrayUnion(eventID));
   }
 
-  //
   @Override
   public Map<String, Object> getEvent(String eventID)
       throws ExecutionException, InterruptedException, NoEventFoundException {
+
     Firestore db = FirestoreClient.getFirestore();
     DocumentReference docRef = db.collection("events").document("event-" + eventID);
 
     ApiFuture<DocumentSnapshot> future = docRef.get();
     DocumentSnapshot snapshot = future.get();
 
-    if (snapshot.exists()) {
-      return snapshot.getData();
-    } else {
+    if (!snapshot.exists()) {
       throw new NoEventFoundException("Event does not exist.");
     }
+
+    Map<String, Object> data = snapshot.getData();
+
+    // Ensure data isn't null
+    if (data == null) {
+      data = new HashMap<>();
+    }
+
+    // Explicitly add the UID if it's in the snapshot
+    String uid = snapshot.getString("uid");
+    if (uid != null) {
+      data.put("uid", uid);
+    }
+
+    return data;
   }
+
 
   //
   public Event getEventRecord(String eventID)
