@@ -3,6 +3,7 @@ import "../styles/EventGridSearch.css";
 import Navbar from "./Navbar";
 import { useEffect, useState } from "react";
 import EventPage from "./EventPage";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 interface EventCardGridSearchProps {
   onPlusClick: () => void;
@@ -144,8 +145,15 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
           </div>
         </div>
 
+        
         {selectedEvent && (
-          <EventPage event={selectedEvent} onClose={() => setSelectedEvent(null)} />
+          
+              <EventPage
+                {...selectedEvent}
+                onClose={() => setSelectedEvent(null)}
+              />
+      
+          
         )}
 
       </div>

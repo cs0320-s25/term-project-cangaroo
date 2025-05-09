@@ -9,7 +9,7 @@ import {
   SignOutButton} from "@clerk/clerk-react";
 
 import { useState } from "react";
-;
+import OAuthCallback from "./OAuthCallback";
 import { createProfile } from "../utils/api";
 import useCreateProfileOnFirstSignIn from "../hooks/useCreateProfileOnFirstSignIn"
 
@@ -19,11 +19,13 @@ import ProfilePage from "./ProfilePage";
 import CreateEventForm from "./CreateEventForm";
 import EventCardGridSearch from "./EventGridSearch";
 import Navbar from "./Navbar";
+import EventPage from "./EventPage";
 
 
 // Firebase configuration keys
 
 const firebaseConfig = {
+  something: process.env.CLIENT_ID,
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
   projectId: process.env.PROJECT_ID,
@@ -71,6 +73,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile/:name" element={<ProfilePage />} />
+        <Route path="/oauth/callback" element={<OAuthCallback />} />
       </Routes>
     </Router>
   );
