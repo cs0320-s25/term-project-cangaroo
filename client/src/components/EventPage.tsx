@@ -3,15 +3,11 @@ import { useState, useEffect } from "react";
 import { viewEvent } from "../utils/api";
 import { createGcalEvent } from "./OAuthCallback";
 interface EventPageProps {
-  event: {
-    title: string;
-    description: string;
-    imageUrl: string;
-  };
+  eventID: string;
   onClose: () => void;
 }
 
-export default function EventPage({ event, onClose }: EventPageProps) {
+export default function EventPage({ eventID, onClose }: EventPageProps) {
   const [organizer, setOrganizer] = useState("Organizer");
   const [rsvp, setRSVP] = useState(false);
   const [attendeeCount, setAttendeeCount] = useState(0);
@@ -26,9 +22,10 @@ export default function EventPage({ event, onClose }: EventPageProps) {
   useEffect(() => {
     const getEventInfo = async () => {
       console.log("Fetching event info from Firebase...");
-      const eventInfo = await viewEvent("0"); // replace later with other num
+      console.log("input id ", eventID, " displayed id: ", )
+      const eventInfo = await viewEvent(eventID); // replace later with other num
       if (eventInfo !== null) {
-        console.log("Fetched event info from Firebase:", eventInfo.data.tags);
+        console.log("Fetched event info from Firebase:", eventInfo.data);
         setStartTime(eventInfo.data.startTime)
         setEndTime(eventInfo.data.endTime)
         setAttendees(eventInfo.data.usersAttending)
@@ -41,7 +38,6 @@ export default function EventPage({ event, onClose }: EventPageProps) {
     };
   
     getEventInfo();
-    console.log(tags)
   }, []);
 
   const event2 = {
@@ -104,7 +100,7 @@ export default function EventPage({ event, onClose }: EventPageProps) {
             <h2>Atendees <span id="attendee-count">&middot; {attendeeCount}</span></h2>
             <div className="atendee-container">
               {attendees.map((attendee, idx) => (
-                <span> {attendee} </span>
+                <span key={idx}> {attendee} </span>
               ))}
             </div>
           </div>

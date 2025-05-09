@@ -19,10 +19,12 @@ interface NavbarProps {
 function Navbar({onPlusClick, minimal = false}: NavbarProps) {
   const navigate = useNavigate();
   const { user } = useUser();
-  const userName = user?.username || user?.fullName || "Anon.";
 
   const handleProfileClick = () => {
-    navigate(`/profile/${userName}`);
+    if (user?.id) {
+      navigate(`/profile/${user.id}`);
+    }
+    
   };
 
   // sorting logic

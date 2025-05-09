@@ -67,7 +67,7 @@ public class SearchHandler implements Route {
       this.responseMap.put("result", "Error: No input given.");
       this.responseMap.put("error_message", "No matches due to error");
       this.responseMap.put("event_ids", new ArrayList<>());
-      return this.responseMap;
+      return Utils.toMoshiJson(this.responseMap);
     }
 
     List<String> words = Arrays.asList(input.split("\\s+"));
@@ -81,7 +81,7 @@ public class SearchHandler implements Route {
       this.responseMap.put("result", "Error");
       this.responseMap.put("error_message", e.getMessage());
       this.responseMap.put("event_ids", new ArrayList<>());
-      return this.responseMap;
+      return Utils.toMoshiJson(this.responseMap);
     }
 
     // no events matched
@@ -89,12 +89,12 @@ public class SearchHandler implements Route {
       this.responseMap.put("result", "Success");
       this.responseMap.put("error_message", "No events found. Try searching something else.");
       this.responseMap.put("event_ids", results);
-      return this.responseMap;
+      return Utils.toMoshiJson(this.responseMap);
     }
 
     // successful result
     this.responseMap.put("result", "Success");
     this.responseMap.put("event_ids", results);
-    return this.responseMap;
+    return Utils.toMoshiJson(this.responseMap);
   }
 }

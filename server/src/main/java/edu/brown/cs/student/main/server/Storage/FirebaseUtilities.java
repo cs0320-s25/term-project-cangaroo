@@ -26,11 +26,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 public class FirebaseUtilities implements StorageInterface {
@@ -238,33 +236,10 @@ public class FirebaseUtilities implements StorageInterface {
     Firestore db = FirestoreClient.getFirestore();
 
     DocumentReference docRef = db.collection("users").document(uid);
-
     if (docRef.get().get().exists()) {
-      DocumentSnapshot snapshot = docRef.get().get();
-
-      if (tags != null) {
-        List<String> existingTags = (List<String>) snapshot.get("interestedTags");
-        if (existingTags == null) existingTags = new ArrayList<>();
-        List<String> cleanedTags =
-            tags.stream().map(String::trim).filter(t -> !t.isEmpty()).toList();
-        Set<String> mergedTags = new HashSet<>(existingTags);
-        mergedTags.addAll(cleanedTags);
-        docRef.update("interestedTags", new ArrayList<>(mergedTags));
-      }
-
-      if (favEventOrganizers != null) {
-        List<String> existingOrgs = (List<String>) snapshot.get("interestedOrganizations");
-        if (existingOrgs == null) existingOrgs = new ArrayList<>();
-        List<String> cleanedOrgs =
-            favEventOrganizers.stream().map(String::trim).filter(o -> !o.isEmpty()).toList();
-        Set<String> mergedOrgs = new HashSet<>(existingOrgs);
-        mergedOrgs.addAll(cleanedOrgs);
-        docRef.update("interestedOrganizations", new ArrayList<>(mergedOrgs));
-      }
-      if (profilePicUrl != null) {
-        docRef.update("profilePicUrl", profilePicUrl);
-      }
-
+      docRef.update("tags", tags);
+      docRef.update("favEventOrganizers", favEventOrganizers);
+      docRef.update("profilePicUrl", profilePicUrl);
     } else {
       throw new NoProfileFoundException("No such profile.");
     }
