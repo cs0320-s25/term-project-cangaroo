@@ -23,7 +23,7 @@ export default function useCreateProfileOnFirstSignIn() {
             user.fullName || user.username || "Anonymous",
             "Using CanGo!, Going to events!", // default tags
             "Brown Events", // default orgs
-            "https://en.wikipedia.org/wiki/File:Common_clownfish.jpg" // default pfp
+            user.imageUrl || "", // default pfp
           );
 
           if (response.result === "success") {
