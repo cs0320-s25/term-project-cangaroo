@@ -5,8 +5,9 @@ import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutg
          unfriend, viewFriends, viewProfile
  } from "../utils/api";
 
-type FriendCardProps = {
-  uid: string,
+interface FriendCardProps {
+  uid: string;
+  handleNameClick: () => void;
 };
 
 /**
@@ -16,8 +17,8 @@ type FriendCardProps = {
  */
 function FriendCard({
   uid,
+  handleNameClick,
 }: FriendCardProps){
-
   // const handleButtonClick = () => {
   //   if (requestStatus === 'incoming') {
   //     onAcceptRequest(); // accept request
@@ -29,38 +30,36 @@ function FriendCard({
   // };
   const [name, setName] = useState("")
   const [numFriends, setNumFriends] = useState(0)
+  const navigate = useNavigate();
   // const [profilePic, setProfilePic] = useState("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg")
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const result = await viewProfile(uid);
+        console.log(uid)
         if (result.result !== "success") {
           console.error(result.error_message);
-          return (
-            <h2>
-              Profile Not Found.
-            </h2>
-          )
+          // navigate("/");
+          return;
         }
-
         const data = result.data;
         setName(data.username);
         setNumFriends(data.friendsList?.length || 0);
         // setProfilePic(data.) doesn't exist yet
-
       } catch (err) {
         console.error("Failed to load profile:", err);
         // navigate("/");
-        return (
-          <h2>
-            Failed to load profile.
-          </h2>
-        )
+        return;
       }
     };
 
     fetchProfile();
   }, [])
+
+  const onNameClick = (() => {
+    handleNameClick()
+    navigate(`/profile/${uid}`);
+  })
 
   return (
     <div className="friend-card">
@@ -71,7 +70,7 @@ function FriendCard({
 
         <h2 
           className="friend-name" 
-          // onClick={handleNameClick} 
+          onClick={onNameClick} 
           style={{ cursor: 'pointer' }} // pointer hover so user knows to click
         >
           {name}

@@ -93,10 +93,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   const [searchTermFriends, setSearchTermFriends] = useState("");
   const [searchTermUsers, setSearchTermUsers] = useState("");
 
-  const filteredFriends = friends
-    .filter(friend => friend.requestStatus == "friend") 
-    .filter(friend => friend.name.toLowerCase().includes(searchTermFriends.toLowerCase()) // filter
-  );
+  
 
   const filteredUsers = users
     .filter(user => user.requestStatus=="none" || "incoming") 
@@ -106,6 +103,9 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
 
   // get current friends from backend
   const [currentFriends, setCurrentFriends] = useState<string[]>([]);
+  const filteredCurrentFriends = currentFriends
+    .filter(currentFriend => currentFriend.toLowerCase().includes(searchTermFriends.toLowerCase()) // filter
+  );
   useEffect(() => {
     const getCurrentFriends = async () => {
       console.log("Fetching current friends from Firebase...");
@@ -152,10 +152,10 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
 
 
   // navigate to new profile
-  const handleFriendCardNameClick= (name: string) => {
+  const handleFriendCardNameClick= (uid: string) => {
     // close modal friendslist, go back to profile pg
     onClose();
-    navigate(`/profile/${name}`);
+    navigate(`/profile/${uid}`);
   };
 
   // only show if component is open
@@ -202,10 +202,11 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           />
 
           <div className="friend-cards-container">
-            {currentFriends.map((friend, index) => (
+            {filteredCurrentFriends.map((frienduid, index) => (
               <FriendCard 
                 key={index} 
-                uid={friend}
+                uid={frienduid}
+                handleNameClick={(onClose)}
                 // onAcceptRequest={() => {}}
                 // onDeclineRequest={() => {}}
                 // onSendRequest={() => {}}
