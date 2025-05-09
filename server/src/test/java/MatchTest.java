@@ -16,7 +16,7 @@ public class MatchTest {
   public void testRandomSelectionSizeLimit() {
     List<Event> events = TestEventFactory.generateDummyEvents(25);
     RandomMatch randomMatch = new RandomMatch();
-    List<Integer> selected = randomMatch.getRandomEvent(events);
+    List<String> selected = randomMatch.getRandomEvent(events);
 
     assertEquals(10, selected.size(), "Should return 10 events at most");
   }
@@ -26,7 +26,7 @@ public class MatchTest {
   public void testRandomReturnsAllIfLessThanTen() {
     List<Event> events = TestEventFactory.generateDummyEvents(5);
     RandomMatch randomMatch = new RandomMatch();
-    List<Integer> selected = randomMatch.getRandomEvent(events);
+    List<String> selected = randomMatch.getRandomEvent(events);
 
     assertEquals(5, selected.size(), "Should return all available events if fewer than 10");
   }
