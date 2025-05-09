@@ -1,18 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import "../styles/FriendCard.css";
+import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutgoingFriendRequests, getReceivedFriendRequests,
+         unfriend, viewFriends, viewProfile
+ } from "../utils/api";
 
 type FriendCardProps = {
-  name: string;
-  profilePictureUrl: string;
-  initialIsFollowing?: boolean; // optional, since will default to false
-  friendCount: number;
-  requestStatus: 'incoming' | 'friend' | 'none'; // incoming, friend, or user (for request sent state, each is a column)
-  onAcceptRequest: () => void;
-  onDeclineRequest: () => void;
-  onSendRequest: () => void;
-  onUnfriend: () => void;
-  handleNameClick: () => void;
+  uid: string,
 };
 
 /**
@@ -21,53 +15,78 @@ type FriendCardProps = {
  * @returns - the JSX FriendCard component.
  */
 function FriendCard({
-  name,
-  profilePictureUrl,
-  initialIsFollowing = false,
-  friendCount,
-  requestStatus,
-  onAcceptRequest,
-  onDeclineRequest,
-  onSendRequest,
-  onUnfriend,
-  handleNameClick,
+  uid,
 }: FriendCardProps){
 
-  const handleButtonClick = () => {
-    if (requestStatus === 'incoming') {
-      onAcceptRequest(); // accept request
-    } else if (requestStatus === 'friend') {
-      onUnfriend(); // unfriend a friend in second col
-    } else if (requestStatus === 'none') {
-      onSendRequest(); // send friend invite!!
-    }
-  };
+  // const handleButtonClick = () => {
+  //   if (requestStatus === 'incoming') {
+  //     onAcceptRequest(); // accept request
+  //   } else if (requestStatus === 'friend') {
+  //     onUnfriend(); // unfriend a friend in second col
+  //   } else if (requestStatus === 'none') {
+  //     onSendRequest(); // send friend invite!!
+  //   }
+  // };
+  const [name, setName] = useState("")
+  const [numFriends, setNumFriends] = useState(0)
+  // const [profilePic, setProfilePic] = useState("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg")
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const result = await viewProfile(uid);
+        if (result.result !== "success") {
+          console.error(result.error_message);
+          return (
+            <h2>
+              Profile Not Found.
+            </h2>
+          )
+        }
+
+        const data = result.data;
+        setName(data.username);
+        setNumFriends(data.friendsList?.length || 0);
+        // setProfilePic(data.) doesn't exist yet
+
+      } catch (err) {
+        console.error("Failed to load profile:", err);
+        // navigate("/");
+        return (
+          <h2>
+            Failed to load profile.
+          </h2>
+        )
+      }
+    };
+
+    fetchProfile();
+  }, [])
 
   return (
     <div className="friend-card">
 
-      <img src={profilePictureUrl} className="friend-image" />
+      {/* <img src={profilePictureUrl} className="friend-image" /> */}
 
       <div className="friend-info">
 
         <h2 
           className="friend-name" 
-          onClick={handleNameClick} 
+          // onClick={handleNameClick} 
           style={{ cursor: 'pointer' }} // pointer hover so user knows to click
         >
           {name}
         </h2>
 
         <p className="friend-count">
-          {friendCount} friend{friendCount !== 1 ? 's' : ''} 
+          {numFriends} friend{numFriends !== 1 ? 's' : ''} 
         </p>
 
-        <button 
+        {/* <button 
           onClick={handleButtonClick} 
           className={`friend-button ${requestStatus}`} 
         >
           {requestStatus === 'incoming' ? 'Accept Request' : requestStatus === 'friend' ? 'Unfriend' : 'Send Request'}
-        </button>
+        </button> */}
 
       </div>
 

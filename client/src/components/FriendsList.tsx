@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import FriendCard from "./FriendCard";
 import { useNavigate } from "react-router-dom";
 import "../styles/FriendsList.css"; 
+import { viewFriends } from "../utils/api";
+import { useParams } from "react-router"
 
 interface FriendsListProps {
   isOpen: boolean;
@@ -78,6 +80,8 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   // routing
   const navigate = useNavigate();
 
+  // get current user
+  const { userId } = useParams<{ userId: string }>();
 
   // basic usestates to keep track of other users in each column 
   const [friends, setFriends] = useState<User[]>(existingFriends);
@@ -85,7 +89,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   const [users, setUsers] = useState<User[]>(allUsers);
 
 
-  // search bar functionality
+  // basic search bar functionality
   const [searchTermFriends, setSearchTermFriends] = useState("");
   const [searchTermUsers, setSearchTermUsers] = useState("");
 
@@ -98,6 +102,25 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
     .filter(user => user.requestStatus=="none" || "incoming") 
     .filter(user => user.name.toLowerCase().includes(searchTermUsers.toLowerCase()) // filter
   );
+
+
+  // get current friends from backend
+  const [currentFriends, setCurrentFriends] = useState<string[]>([]);
+  useEffect(() => {
+    const getCurrentFriends = async () => {
+      console.log("Fetching current friends from Firebase...");
+      if (userId) {
+        const viewFriendsResponse = await viewFriends(userId); 
+        if (viewFriendsResponse.friends !== null) {
+          console.log("Fetched event info from Firebase:", viewFriendsResponse.friends);
+          const friendsList = Object.keys(viewFriendsResponse.friends);
+          setCurrentFriends(friendsList)
+        }
+      }
+    };
+  
+    getCurrentFriends();
+  }, []);
 
 
   // handling actions (various button clicks)
@@ -179,15 +202,15 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           />
 
           <div className="friend-cards-container">
-            {filteredFriends.map((friend, index) => (
+            {currentFriends.map((friend, index) => (
               <FriendCard 
                 key={index} 
-                {...friend} 
-                onAcceptRequest={() => {}}
-                onDeclineRequest={() => {}}
-                onSendRequest={() => {}}
-                onUnfriend={() => handleUnfriend(friend.name)}
-                handleNameClick={() => handleFriendCardNameClick(friend.name)}
+                uid={friend}
+                // onAcceptRequest={() => {}}
+                // onDeclineRequest={() => {}}
+                // onSendRequest={() => {}}
+                // onUnfriend={() => handleUnfriend(friend.name)}
+                // handleNameClick={() => handleFriendCardNameClick(friend.name)}
               />
             ))}
           </div>

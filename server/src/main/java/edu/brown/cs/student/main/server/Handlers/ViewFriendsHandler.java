@@ -33,6 +33,10 @@ public class ViewFriendsHandler implements Route {
     } catch (NoProfileFoundException e) {
       responseMap.put("result", "failure");
       responseMap.put("error_message", "Profile does not exist.");
+    } catch (Exception e) {
+      responseMap.put("result", "failure");
+      responseMap.put("error_message", "Internal server error: " + e.getMessage());
+      e.printStackTrace();
     }
     return Utils.toMoshiJson(responseMap);
   }
