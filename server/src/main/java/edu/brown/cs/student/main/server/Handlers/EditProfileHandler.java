@@ -32,7 +32,7 @@ public class EditProfileHandler implements Route {
         || (profilePicUrl == null)) {
       responseMap.put("result", "failure");
       responseMap.put(
-          "error_message", "Missing required parameters: uid, interestedTags, eventOrganizer");
+          "error_message", "Missing required parameters: uid, interestedTags, eventOrganizer, profilePicUrl");
       return Utils.toMoshiJson(responseMap);
     }
     List<String> tags = Arrays.asList(tagsString.trim().split(","));
