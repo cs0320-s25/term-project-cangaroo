@@ -19,7 +19,7 @@ function FriendCard({
   uid,
   handleNameClick,
 }: FriendCardProps){
-  const { currentUseruid } = useParams<{ userId: string }>();
+  // const { currentUseruid } = useParams<{ userId: string }>();
 
   const handleUnfriendClick = () => {
     // if (requestStatus === 'incoming') {
@@ -29,7 +29,7 @@ function FriendCard({
     // } else if (requestStatus === 'none') {
     //   onSendRequest(); // send friend invite!!
     // }
-    const 
+    
     const unfriendClick = async () => {
       try {
         const result = await unfriend(uid, currentUseruid);

@@ -146,18 +146,15 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
             // navigate("/");
             return;
           }
-          const data = result.data;
-          setName(data.username);
-          setNumFriends(data.friendsList?.length || 0);
-          // setProfilePic(data.) doesn't exist yet
-        } catch (err) {
-          console.error("Failed to load profile:", err);
-          // navigate("/");
-          return;
+
+          console.error("UNFRIENDED.");
         }
-      
-      }
-        
+      } catch (err) {
+        console.error("Failed to load profile:", err);
+        // navigate("/");
+        return;
+      }  
+    }  
   };
 
 
@@ -215,17 +212,13 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           <h3>Incoming Friend Requests</h3>
 
           <div className="friend-cards-container">
-          {incoming.map((user, index) => (
-            <FriendCard
-              key={index}
-              {...user}
-              onAcceptRequest={() => handleAcceptRequest(user.name)}
-              onDeclineRequest={() => handleDeclineRequest(user.name)}
-              onSendRequest={() => {}}
-              onUnfriend={() => {}}
-              handleNameClick={() => handleFriendCardNameClick(user.name)}
-            />
-          ))}
+          {filteredCurrentFriends.map((frienduid, index) => (
+              <FriendCard 
+                key={index} 
+                uid={frienduid}
+                handleNameClick={(onClose)}
+              />
+            ))}
           </div>
         </div>
         {/* column 1: incoming requests */}
@@ -248,11 +241,6 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
                 key={index} 
                 uid={frienduid}
                 handleNameClick={(onClose)}
-                // onAcceptRequest={() => {}}
-                // onDeclineRequest={() => {}}
-                // onSendRequest={() => {}}
-                // onUnfriend={() => handleUnfriend(friend.name)}
-                // handleNameClick={() => handleFriendCardNameClick(friend.name)}
               />
             ))}
           </div>
