@@ -17,6 +17,8 @@ dist/
 test-results/
 playwright-report/
 playwright/.cache/
+firebase_config.json
 
 # mac
 .DS_Store
+server/src/main/resources/firebase_config.json
