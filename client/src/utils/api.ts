@@ -81,6 +81,22 @@ export async function search(input: string) {
 }
 
 /**
+ * Method that queries the backend using the search endpoint
+ * @returns 
+ */
+export async function recommend(profileID: string) {
+  return await queryAPI("recommend", {profileID});
+}
+
+/**
+ * Method that queries the backend using the search endpoint
+ * @returns 
+ */
+export async function rankEventsByFriends(profileID: string) {
+  return await queryAPI("rank-events-by-friend", {profileID});
+}
+
+/**
  * Method that queries the backend using the create-profile endpoint
  * @param uid - a string that refers to the event creator’s ID
  * @param username - a string that refers to the user’s username (probably just their real name?)

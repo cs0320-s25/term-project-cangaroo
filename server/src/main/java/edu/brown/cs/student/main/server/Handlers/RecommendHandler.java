@@ -65,7 +65,7 @@ public class RecommendHandler implements Route {
       this.responseMap.put("result", "Error: No input given.");
       this.responseMap.put("error_message", "No matches due to error");
       this.responseMap.put("event_ids", new ArrayList<>());
-      return this.responseMap;
+      return Utils.toMoshiJson(this.responseMap);
     }
 
     this.responseMap = new HashMap<>();
@@ -81,12 +81,12 @@ public class RecommendHandler implements Route {
       this.responseMap.put("result", "Success");
       this.responseMap.put("error_message", "No events matched. There are no events to recommend.");
       this.responseMap.put("event_ids", results);
-      return this.responseMap;
+      return Utils.toMoshiJson(this.responseMap);
     }
 
     // successful result
     this.responseMap.put("result", "Success");
     this.responseMap.put("event_ids", results);
-    return this.responseMap;
+    return Utils.toMoshiJson(this.responseMap);
   }
 }
