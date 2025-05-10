@@ -10,7 +10,6 @@ import {
 
 import { useState, useEffect } from "react";
 import OAuthCallback from "./OAuthCallback";
-import OAuthCallback2 from "./OAuthCallback";
 import useCreateProfileOnFirstSignIn from "../hooks/useCreateProfileOnFirstSignIn"
 
 import ProfilePage from "./ProfilePage";
@@ -75,7 +74,6 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/profile/:userId" element={<ProfilePage />} />
         <Route path="/oauth/callback" element={<OAuthCallback />} />
-        <Route path="/oauth/callback2" element={<OAuthCallback2 />} />
       </Routes>
     </Router>
   );

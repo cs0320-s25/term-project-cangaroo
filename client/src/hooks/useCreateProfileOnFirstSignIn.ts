@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { createProfile, viewProfile } from "../utils/api";
-import { handleGCalAuthWithoutCreating } from "../components/OAuthCallback";
+
 
 
 export default function useCreateProfileOnFirstSignIn() {
@@ -44,15 +44,6 @@ export default function useCreateProfileOnFirstSignIn() {
       }
     };
 
-    // sessionStorage.removeItem("google_access_token"); // Clear the token for testing
-    
-    // localStorage.removeItem("google_access_token");
-
-    const storage = sessionStorage.getItem("google_access_token");
-    if (!storage) {
-      handleGCalAuthWithoutCreating();
-    }
-    
     ensureProfileExists();
   }, [user, checked]);
 }
