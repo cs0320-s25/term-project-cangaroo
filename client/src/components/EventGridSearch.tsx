@@ -1,73 +1,105 @@
-import EventCard from "./EventCard";
-import "../styles/EventGridSearch.css";
-import Navbar from "./Navbar";
 import { useEffect, useState } from "react";
+import EventCard from "./EventCard";
 import EventPage from "./EventPage";
-import { randomRecommend, search } from "../utils/api";
+import Navbar from "./Navbar";
+import "../styles/EventGridSearch.css";
+import { randomRecommend, search, rankEventsByFriends, recommend } from "../utils/api";
+import { useUser } from "@clerk/clerk-react";
 
 interface EventCardGridSearchProps {
   onPlusClick: () => void;
 }
 
 function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
-  // event popup functionality modal --> selectedEvent is the ID of the selected event
-  const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
+  const { user } = useUser();
+
+  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
   useEffect(() => {
-    document.body.style.overflow = selectedEvent ? 'hidden' : 'auto';
+    document.body.style.overflow = selectedEvent ? "hidden" : "auto";
   }, [selectedEvent]);
 
-
-  // sort functionality
-  const [sortMenuOpen, setSortMenuOpen] = useState(false);
-  const toggleSortMenu = () => setSortMenuOpen(!sortMenuOpen);
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-
-
-  // get events from backend
   const [searchTerm, setSearchTerm] = useState("");
-  const [eventIDs, setEventIDs] = useState<string[]>([])
-  
+  const [eventIDs, setEventIDs] = useState<string[]>([]);
+  const [searchSource, setSearchSource] = useState<"default" | "search" | "recommend" | "friends">("default");
+
+  // Fetch random events when searchSource is "default"
   useEffect(() => {
-    const getEventInfo = async () => {
-      if (searchTerm === "") {
-        console.log("Fetching event info from Firebase...");
-        const eventInfo = await randomRecommend(); 
-        if (eventInfo !== null) {
-          setEventIDs(eventInfo.event_ids)
-          console.log("Fetched event info from Firebase:", eventInfo.event_ids);
+    const getDefaultEvents = async () => {
+      if (searchSource === "default") {
+        const result = await randomRecommend();
+        if (result?.event_ids) {
+          setEventIDs(result.event_ids);
+          console.log("Default random events:", result.event_ids);
         }
       }
-      
     };
-  
-    getEventInfo();
-  }, [searchTerm]);
+    getDefaultEvents();
+  }, [searchSource]);
 
-  // search functionality
+  // Search effect
   useEffect(() => {
     const getSearchResults = async () => {
-      console.log("Searching...");
-      const searchResults = await search(searchTerm); 
-      if (searchResults !== null) {
-        setEventIDs(searchResults.event_ids)
-        console.log("Search matches: ", searchResults.event_ids);
+      if (searchTerm !== "") {
+        setSearchSource("search");
+        const searchResults = await search(searchTerm);
+        if (searchResults?.event_ids) {
+          setEventIDs(searchResults.event_ids);
+          console.log("Search matches:", searchResults.event_ids);
+        }
+      } else {
+        setSearchSource("default");
       }
     };
-  
     getSearchResults();
   }, [searchTerm]);
 
-  function temp(eventID: string) {
-    setSelectedEvent(eventID);
-    console.log(eventID);
-  }
+  // Recommend button
+  const handleRecommendClick = async () => {
+    if (!user?.id) return;
+    setSearchSource("recommend");
+    const result = await recommend(user.id);
+    if (result?.event_ids?.length > 0) {
+      setEventIDs(result.event_ids);
+      setSelectedEvent(null);
+      console.log("Recommended:", result.event_ids);
+    } else {
+      alert("No personalized recommendations found.");
+    }
+  };
+
+  // See My Friends button
+  const handleSeeMyFriendsClick = async () => {
+    if (!user?.id) return;
+    console.log("Calling rankEventsByFriends with:", user.id);
+    setSearchSource("friends");
+    const friendResults = await rankEventsByFriends(user.id);
+    console.log("Friend results:", friendResults);
+    if (friendResults?.event_ids?.length > 0) {
+      setEventIDs(friendResults.event_ids);
+      setSelectedEvent(null);
+      console.log("Ranked by friends:", friendResults.event_ids);
+    } else {
+      alert("No events your friends are attending.");
+    }
+  };
+
+  // Logo click reset
+  const handleLogoClick = () => {
+    setSearchTerm("");
+    setSelectedEvent(null);
+    setSearchSource("default");
+  };
 
   return (
     <div>
+      <Navbar
+        onPlusClick={onPlusClick}
+        onRecommendClick={handleRecommendClick}
+        onLogoClick={handleLogoClick}
+      />
 
       <div className="search">
         <div className="event-search">
-
           <input
             className="event-search-bar"
             type="text"
@@ -75,58 +107,30 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          
+
           <div className="search-buttons">
-            
             <div className="sort-wrapper">
-              <button className="search-button" onClick={toggleSortMenu}>Sort By</button>
-              {sortMenuOpen && (
-                <div className="sort-dropdown">
-
-                  <button>Duration</button>
-                  <button>Date and Time</button>
-                  <button>Number of Attendees</button>
-                  <button>Number of Friends Attending</button>
-
-                  <div className="sort-toggle">
-                    <label className="toggle-switch">
-                      <input
-                        type="checkbox"
-                        checked={sortDirection === "asc"}
-                        onChange={() => setSortDirection(sortDirection === "asc" ? "desc" : "asc")}
-                      />
-                      <span className="slider" />
-                    </label>
-
-                    <span className="sort-label">
-                      {sortDirection === "asc" ? "Low to High" : "High to Low"}
-                    </span>
-
-                  </div>
-                </div>
-              )}
+              <button className="search-button" onClick={handleSeeMyFriendsClick}>
+                See My Friends
+              </button>
             </div>
 
             <button className="search-button">Filter</button>
-
           </div>
-
         </div>
       </div>
-    
 
       <div className="event-grid-page">
-
         <div className="scrollable-grid">
           <div className="card-grid">
             {eventIDs.length === 0 ? (
               <h2>No Events Found</h2>
             ) : (
-              eventIDs.map((eventID, idx) => (
+              eventIDs.map((eventID) => (
                 <EventCard
                   key={eventID}
                   eventID={eventID}
-                  onClick={() => temp(eventID)}
+                  onClick={() => setSelectedEvent(eventID)}
                 />
               ))
             )}
@@ -134,11 +138,12 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
         </div>
 
         {selectedEvent && (
-          <EventPage eventID={selectedEvent} onClose={() => setSelectedEvent(null)} />
+          <EventPage
+            eventID={selectedEvent}
+            onClose={() => setSelectedEvent(null)}
+          />
         )}
-
       </div>
-  
     </div>
   );
 }

@@ -24,7 +24,7 @@ public class MostAttendedEventsFriendHandler implements Route {
 
     if (profileID == null || profileID.isEmpty()) {
       this.responseMap.put("result", "Error: No profileID given.");
-      return this.responseMap;
+      return Utils.toMoshiJson(this.responseMap);
     }
 
     MostAttendedEventsByFriends myRanker = new MostAttendedEventsByFriends();
@@ -35,11 +35,11 @@ public class MostAttendedEventsFriendHandler implements Route {
     } catch (Exception e) {
       this.responseMap.put("result", "Error");
       this.responseMap.put("message", e.getMessage());
-      return this.responseMap;
+      return Utils.toMoshiJson(this.responseMap);
     }
 
     this.responseMap.put("result", "Success");
     this.responseMap.put("event_ids", results);
-    return this.responseMap;
+    return Utils.toMoshiJson(this.responseMap);
   }
 }
