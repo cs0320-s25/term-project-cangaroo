@@ -2,8 +2,12 @@ import { useState, useEffect} from "react";
 import FriendCard from "./FriendCard";
 import { useNavigate } from "react-router-dom";
 import "../styles/FriendsList.css"; 
-import { viewFriends } from "../utils/api";
+// import { viewFriends } from "../utils/api";
 import { useParams } from "react-router"
+
+import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutgoingFriendRequests, getReceivedFriendRequests,
+  unfriend, viewFriends, viewProfile
+} from "../utils/api";
 
 interface FriendsListProps {
   isOpen: boolean;
@@ -123,6 +127,40 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   }, []);
 
 
+  // handling unfriending
+
+  const handleUnfriendClick = () => {
+    // if (requestStatus === 'incoming') {
+    //   onAcceptRequest(); // accept request
+    // } else if (requestStatus === 'friend') {
+    //   onUnfriend(); // unfriend a friend in second col
+    // } else if (requestStatus === 'none') {
+    //   onSendRequest(); // send friend invite!!
+    // }
+    const unfriendClick = async (frienduid: string) => {
+      try {
+        if (userId) {
+          const result = await unfriend(userId, frienduid);
+          if (result.result !== "success") {
+            console.error(result.error_message);
+            // navigate("/");
+            return;
+          }
+          const data = result.data;
+          setName(data.username);
+          setNumFriends(data.friendsList?.length || 0);
+          // setProfilePic(data.) doesn't exist yet
+        } catch (err) {
+          console.error("Failed to load profile:", err);
+          // navigate("/");
+          return;
+        }
+      
+      }
+        
+  };
+
+
   // handling actions (various button clicks)
   const handleAcceptRequest = (name: string) => {
     // filter out user from pending requests (col 1) and add to the friends list (col 2)
@@ -160,6 +198,9 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
 
   // only show if component is open
   if (!isOpen) return null;
+
+
+
 
   return (
     <div className="friends-list-modal">
