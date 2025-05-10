@@ -8,25 +8,19 @@ import {
   SignInButton,
   SignOutButton} from "@clerk/clerk-react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import OAuthCallback from "./OAuthCallback";
-import { createProfile } from "../utils/api";
+import OAuthCallback2 from "./OAuthCallback";
 import useCreateProfileOnFirstSignIn from "../hooks/useCreateProfileOnFirstSignIn"
 
 import ProfilePage from "./ProfilePage";
-
 // components
 import CreateEventForm from "./CreateEventForm";
 import EventCardGridSearch from "./EventGridSearch";
 import Navbar from "./Navbar";
-import EventPage from "./EventPage";
-
 
 // Firebase configuration keys
-console.log(process.env.CLIENT_ID)
-console.log(process.env.API_KEY)
-console.log(process.env.AUTH_DOMAIN)
-console.log(process.env.PROJECT_ID)
+
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
@@ -39,6 +33,7 @@ const firebaseConfig = {
 
 
 initializeApp(firebaseConfig);
+
 
 function Home() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -62,9 +57,11 @@ function Home() {
       </SignedOut>
 
       <SignedIn>
+
         <Navbar onPlusClick={() => setModalOpen(true)}/>
         <EventCardGridSearch onPlusClick={() => setModalOpen(true)}/>
         <CreateEventForm isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+        
       </SignedIn>
       
     </div>
@@ -78,6 +75,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/profile/:userId" element={<ProfilePage />} />
         <Route path="/oauth/callback" element={<OAuthCallback />} />
+        <Route path="/oauth/callback2" element={<OAuthCallback2 />} />
       </Routes>
     </Router>
   );
