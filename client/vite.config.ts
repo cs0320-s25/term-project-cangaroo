@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
       "process.env.MESSAGING_SENDER_ID": JSON.stringify(
         env.MESSAGING_SENDER_ID
       ),
+      "process.env.CLIENT_ID": JSON.stringify(env.CLIENT_ID),
       "process.env.APP_ID": JSON.stringify(env.APP_ID),
       "process.env.MEASUREMENT_ID": JSON.stringify(env.MEASUREMENT_ID),
       "process.env.MAPBOX_TOKEN": JSON.stringify(env.MAPBOX_TOKEN),

@@ -1,10 +1,7 @@
-import React from "react";
 import "../styles/EventPage.css";
-import { useUser } from "@clerk/clerk-react";
 import { useState, useEffect } from "react";
-import EventCardGridSearch from "./EventGridSearch";
 import { viewEvent } from "../utils/api";
-
+import { createGcalEvent } from "./OAuthCallback";
 interface EventPageProps {
   eventID: string;
   onClose: () => void;
@@ -17,9 +14,11 @@ export default function EventPage({ eventID, onClose }: EventPageProps) {
   const [tags, setTags] = useState([]);
   const [attendees, setAttendees] = useState([]);
   const [startTime, setStartTime] = useState("00:00");
-  const [endTime, setEndTime] = useState("00:00");
-  const [date, setDate] = useState("1st January 2025");
+  const [endTime, setEndTime] = useState("12:00");
+  const [date, setDate] = useState("2025-01-01");
   const [description, setDescription] = useState("Event Description Here");
+
+
 
   // get events from backend
   useEffect(() => {
@@ -43,7 +42,19 @@ export default function EventPage({ eventID, onClose }: EventPageProps) {
     getEventInfo();
   }, []);
 
+  const event2 = {
+    summary: "Test",
+    description: "awesome and cool",
+    start: {
+      dateTime: "2025-05-09T13:00:00-05:00",
+    },
+    end: {
+      dateTime: "2025-05-09T15:00:00-05:00",
+    },
+  }
+
   return (   
+
     <div className="event-overlay">
       <div className="event-content">
       <button className="return-home-button" onClick={onClose}>
@@ -57,7 +68,17 @@ export default function EventPage({ eventID, onClose }: EventPageProps) {
             <h1>Event Name</h1>
             <div className="event-header">
                 <button id="org">{organizer}</button>
-                <button>Add to GCal</button>
+                <button onClick={() => createGcalEvent({
+                  summary: organizer,
+                  description: description,
+                  start: {
+                    dateTime: date + "T" + startTime + ":00-05:00",
+                  },
+                  end: {
+                    dateTime: date + "T" + endTime + ":00-05:00",
+                  },
+                }
+                )}>Add to GCal</button>
                 <button 
                 className={rsvp ? "rsvp-button rsvped" : "rsvp-button"}
                 onClick={() => setRSVP(!rsvp)}>

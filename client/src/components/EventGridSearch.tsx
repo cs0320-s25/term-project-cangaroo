@@ -133,6 +133,7 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
           </div>
         </div>
 
+        
         {selectedEvent && (
           <EventPage eventID={selectedEvent} onClose={() => setSelectedEvent(null)} />
         )}
