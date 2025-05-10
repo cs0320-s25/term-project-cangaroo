@@ -26,7 +26,8 @@ export default function useCreateProfileOnFirstSignIn() {
             user.id,
             user.fullName || user.username || "Anonymous",
             "Using CanGo!, Going to events!", // default tags
-            "Brown Events" // default orgs
+            "Brown Events", // default orgs
+            user.imageUrl || "", // default pfp
           );
         
           if (response.result === "success") {

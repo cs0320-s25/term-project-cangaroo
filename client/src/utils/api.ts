@@ -93,13 +93,15 @@ export async function createProfile(
   uid: string,
   username: string,
   interestedTags: string,
-  favEventOrganizers: string
+  favEventOrganizers: string,
+  profilePicUrl: string
 ) {
   return await queryAPI("create-profile", {
     uid,
     username,
     interestedTags,
     favEventOrganizers,
+    profilePicUrl
   });
 }
 
