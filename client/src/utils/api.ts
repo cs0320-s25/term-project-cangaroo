@@ -81,6 +81,102 @@ export async function search(input: string) {
 }
 
 /**
+ * Method that queries the backend using the unfriend endpoint
+ * @returns 
+ */
+export async function unfriend(
+  user1: string,
+  user2: string
+) {
+  return await queryAPI("unfriend", {
+    user1,
+    user2
+  });
+}
+
+/**
+ * Method that queries the backend using the send-friend-request endpoint
+ * @returns 
+ */
+export async function sendFriendRequest(
+  senderID: string,
+  receiverID: string
+) {
+  return await queryAPI("send-friend-request", {
+    senderID,
+    receiverID
+  });
+}
+
+/**
+ * Method that queries the backend using the unsend-friend-request endpoint
+ * @returns 
+ */
+export async function unsendFriendRequest(
+  senderID: string,
+  receiverID: string
+) {
+  return await queryAPI("unsend-friend-request", {
+    senderID,
+    receiverID
+  });
+}
+
+/**
+ * Method that queries the backend using the respond-to-friend-request endpoint
+ * @returns 
+ */
+export async function respondToFriendRequest(
+  senderID: string,
+  receiverID: string,
+  isAccepted: boolean,
+) {
+  return await queryAPI("respond-to-friend-request", {
+    senderID,
+    receiverID,
+    isAccepted: isAccepted.toString() // b/c of the way the record is set up in queryAPI
+  });
+}
+
+
+/**
+ * Method that queries the backend using the view-friends endpoint
+ * @returns 
+ */
+export async function viewFriends(
+  uid: string
+) {
+  return await queryAPI("view-friends", {
+    uid
+  });
+}
+
+/**
+ * Method that queries the backend using the get-outgoing-friend-requests endpoint
+ * @returns 
+ */
+export async function getOutgoingFriendRequests(
+  uid: string
+) {
+  return await queryAPI("get-outgoing-friend-requests", {
+    uid
+  });
+}
+
+/**
+ * Method that queries the backend using the get-received-friend-requests endpoint
+ * @returns 
+ */
+export async function getReceivedFriendRequests(
+  uid: string
+) {
+  return await queryAPI("get-received-friend-requests", {
+    uid
+  });
+}
+
+
+/**
  * Method that queries the backend using the search endpoint
  * @returns 
  */
