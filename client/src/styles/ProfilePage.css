@@ -217,3 +217,11 @@
   text-decoration: line-through;
   cursor: pointer;
 }
+
+.profile-image {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 1.5px solid #8D99AE;
+  object-fit: cover;
+}

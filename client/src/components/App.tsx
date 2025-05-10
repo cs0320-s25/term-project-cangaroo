@@ -8,18 +8,15 @@ import {
   SignInButton,
   SignOutButton} from "@clerk/clerk-react";
 
-import { useState } from "react";
-;
-import { createProfile } from "../utils/api";
+import { useState, useEffect } from "react";
+import OAuthCallback from "./OAuthCallback";
 import useCreateProfileOnFirstSignIn from "../hooks/useCreateProfileOnFirstSignIn"
 
 import ProfilePage from "./ProfilePage";
-
 // components
 import CreateEventForm from "./CreateEventForm";
 import EventCardGridSearch from "./EventGridSearch";
 import Navbar from "./Navbar";
-
 
 // Firebase configuration keys
 
@@ -32,7 +29,10 @@ const firebaseConfig = {
   appId: process.env.APP_ID,
 };
 
+
+
 initializeApp(firebaseConfig);
+
 
 function Home() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -56,9 +56,11 @@ function Home() {
       </SignedOut>
 
       <SignedIn>
+
         <Navbar onPlusClick={() => setModalOpen(true)}/>
         <EventCardGridSearch onPlusClick={() => setModalOpen(true)}/>
         <CreateEventForm isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+        
       </SignedIn>
       
     </div>
@@ -71,6 +73,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile/:userId" element={<ProfilePage />} />
+        <Route path="/oauth/callback" element={<OAuthCallback />} />
       </Routes>
     </Router>
   );

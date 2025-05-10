@@ -38,6 +38,8 @@ export default function ProfilePage() {
   const [connections, setConnections] = useState(0);
   const [tags, setTags] = useState<string[]>([]);
   const [orgs, setOrgs] = useState<string[]>([]);
+  const [profilePicUrl, setProfilePicUrl] = useState<string | null>(null);
+
 
   useEffect(() => {
     if (user?.id === userId) {
@@ -76,6 +78,8 @@ export default function ProfilePage() {
         setConnections(data.friendsList?.length || 0);
         setTags(data.interestedTags);
         setOrgs(data.interestedOrganizations);
+        setProfilePicUrl(data.profilePicUrl || null);
+
 
       } catch (err) {
         console.error("Failed to load profile:", err);
@@ -111,7 +115,19 @@ export default function ProfilePage() {
                   <div className="profile-section">
                     <div className="profile-header">
                         <div className="profile-header-section">
-                            <div className="profile-icon"><h2>{profileUserName.charAt(0)}</h2></div>
+                          <div className="profile-header-section">
+                            {profilePicUrl ? (
+                              <img
+                                src={profilePicUrl}
+                                alt="Profile"
+                                className="profile-image"
+                              />
+                            ) : (
+                              <div className="profile-icon">
+                                <h2>{profileUserName.charAt(0)}</h2>
+                              </div>
+                            )}
+                          </div>
                         </div>
                         <div className="profile-header-section">
                             <h2>{profileUserName}</h2>

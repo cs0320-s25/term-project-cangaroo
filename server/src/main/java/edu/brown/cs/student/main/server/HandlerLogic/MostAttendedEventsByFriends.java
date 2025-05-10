@@ -40,7 +40,10 @@ public class MostAttendedEventsByFriends {
         }
       }
 
-      eventFriendCounts.put(eventID, count);
+      // ✅ Only include events that have at least one friend attending
+      if (count > 0) {
+        eventFriendCounts.put(eventID, count);
+      }
     }
 
     return eventFriendCounts.entrySet().stream()
