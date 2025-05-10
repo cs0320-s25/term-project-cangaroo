@@ -79,7 +79,7 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
       setSelectedEvent(null);
       console.log("Ranked by friends:", friendResults.event_ids);
     } else {
-      alert("No events your friends are attending.");
+      alert("Your friends are not attending any events.");
     }
   };
 
