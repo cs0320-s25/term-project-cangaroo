@@ -65,6 +65,17 @@ export async function viewEvent(eventID: string) {
 }
 
 /**
+ * Method that queries the backend using the delete-event endpoint
+ * @param uid - the id of the user who created the event
+ * @param eventID - the event id
+ * @returns 
+ */
+
+export async function deleteEvent(uid: string, eventID: string) {
+  return await queryAPI("delete-event", { uid, eventID });
+}
+
+/**
  * Method that queries the backend using the random-recommend endpoint
  * @returns 
  */
@@ -132,6 +143,64 @@ export async function editProfile(
     interestedTags,
     eventOrganizer,
     profilePicUrl,
+  });
+}
+
+/**
+ * Method that queries the backend using the change-attendance endpoint
+ * @param uid - string referring to the user’s ID (e.g., Clerk ID)
+ * @param eventID - string referring to the event’s ID
+ * @param isAttending - boolean: true = attending, false = not attending
+ * @returns - standard success/error message
+ */
+export async function changeAttendance(
+  uid: string,
+  eventID: string,
+  isAttending: boolean
+) {
+  return await queryAPI("change-attendance", {
+    uid,
+    eventID,
+    isAttending: isAttending.toString(), // convert boolean to string for query param
+  });
+}
+
+/**
+ * Method that queries the backend using the edit-event endpoint
+ * @param uid a string that refers to the event creator’s ID
+ * @param eventID the ID of the event to edit
+ * @param name name of the event
+ * @param eventOrganizer name of the event organizer
+ * @param description description of the event
+ * @param date event date
+ * @param startTime event start time
+ * @param endTime event end time
+ * @param tags comma-separated string of tags
+ * @param thumbnailUrl URL to the thumbnail image
+ */
+export async function editEvent(
+  uid: string,
+  eventID: string,
+  name: string,
+  eventOrganizer: string,
+  description: string,
+  date: string,
+  startTime: string,
+  endTime: string,
+  tags: string,
+  thumbnailUrl: string
+) {
+  return await queryAPI("edit-event", {
+    uid,
+    eventID,
+    name,
+    eventOrganizer,
+    description,
+    date,
+    startTime,
+    endTime,
+    tags,
+    thumbnailUrl
   });
 }
 

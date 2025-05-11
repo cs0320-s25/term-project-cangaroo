@@ -3,7 +3,10 @@ import "../styles/EventPage.css";
 import { useUser } from "@clerk/clerk-react";
 import { useState, useEffect } from "react";
 import EventCardGridSearch from "./EventGridSearch";
-import { viewEvent } from "../utils/api";
+import { viewEvent, changeAttendance, viewProfile } from "../utils/api";
+import { useNavigate } from "react-router-dom";
+import useEventDetails from "../hooks/useEventDetails";
+import EditEventForm from "./EditEventForm";
 
 interface EventPageProps {
   eventID: string;
@@ -11,37 +14,33 @@ interface EventPageProps {
 }
 
 export default function EventPage({ eventID, onClose }: EventPageProps) {
-  const [organizer, setOrganizer] = useState("Organizer");
-  const [rsvp, setRSVP] = useState(false);
-  const [attendeeCount, setAttendeeCount] = useState(0);
-  const [tags, setTags] = useState([]);
-  const [attendees, setAttendees] = useState([]);
-  const [startTime, setStartTime] = useState("00:00");
-  const [endTime, setEndTime] = useState("00:00");
-  const [date, setDate] = useState("1st January 2025");
-  const [description, setDescription] = useState("Event Description Here");
-
-  // get events from backend
-  useEffect(() => {
-    const getEventInfo = async () => {
-      console.log("Fetching event info from Firebase...");
-      console.log("input id ", eventID, " displayed id: ", )
-      const eventInfo = await viewEvent(eventID); // replace later with other num
-      if (eventInfo !== null) {
-        console.log("Fetched event info from Firebase:", eventInfo.data);
-        setStartTime(eventInfo.data.startTime)
-        setEndTime(eventInfo.data.endTime)
-        setAttendees(eventInfo.data.usersAttending)
-        setAttendeeCount(eventInfo.data.usersAttending.length)
-        setOrganizer(eventInfo.data.eventOrganizer)
-        setDate(eventInfo.data.date)
-        setDescription(eventInfo.data.description)
-        setTags(eventInfo.data.tags)
-      }
-    };
+  const { user } = useUser();
+  const navigate = useNavigate();
+  const [showEditForm, setShowEditForm] = useState(false);
   
-    getEventInfo();
-  }, []);
+
+  const {
+    organizerID,
+    organizerName,
+    thumbnailUrl,
+    rsvp,
+    setRSVP,
+    attendeeInfo,
+    setAttendeeInfo,
+    attendeeCount,
+    setAttendeeCount,
+    tags,
+    date,
+    startTime,
+    endTime,
+    description,
+    name,
+    selfEvent,
+    refetch
+  } = useEventDetails(eventID, user?.id);
+
+  console.log("selfEvent", selfEvent);
+
 
   return (   
     <div className="event-overlay">
@@ -53,14 +52,41 @@ export default function EventPage({ eventID, onClose }: EventPageProps) {
         <div className="event-grid">
           {/* Left Column */}
           <div className="event-section">
-
-            <h1>Event Name</h1>
+            <h1>{name}</h1>
             <div className="event-header">
-                <button id="org">{organizer}</button>
+            <button id="org" onClick={() => navigate(`/profile/${organizerID}`)}>
+              {organizerName}
+            </button>
                 <button>Add to GCal</button>
                 <button 
                 className={rsvp ? "rsvp-button rsvped" : "rsvp-button"}
-                onClick={() => setRSVP(!rsvp)}>
+                onClick={async () => {
+                  if (!user?.id) return;
+                
+                  const newRSVP = !rsvp;
+                  setRSVP(newRSVP);
+                
+                  try {
+                    const response = await changeAttendance(user.id, eventID, newRSVP);
+                    console.log("changeAttendance response:", response);
+                
+                    if (newRSVP) {
+                      setAttendeeCount((prev) => prev + 1);
+                      setAttendeeInfo((prev) => [
+                        ...prev,
+                        { id: user.id, name: user.fullName || user.username || user.id }
+                      ]);
+                    } else {
+                      setAttendeeCount((prev) => prev - 1);
+                      setAttendeeInfo((prev) => prev.filter((info) => info.id !== user.id));
+                    }
+                    
+                  } catch (err) {
+                    console.error("Failed to update attendance:", err);
+                  }
+                }}
+                
+                >
                   {rsvp ? "RSVPed" : "RSVP"}
                 </button>
             </div>
@@ -78,19 +104,45 @@ export default function EventPage({ eventID, onClose }: EventPageProps) {
               ))}
             </div>
 
-            <h2>Atendees <span id="attendee-count">&middot; {attendeeCount}</span></h2>
+            <h2>Attendees <span id="attendee-count">&middot; {attendeeCount}</span></h2>
             <div className="atendee-container">
-              {attendees.map((attendee, idx) => (
-                <span key={idx}> {attendee} </span>
+              {attendeeInfo.map(({ id, name }) => (
+                <button key={id} onClick={() => navigate(`/profile/${id}`)}>
+                  {name}
+                </button>
               ))}
             </div>
           </div>
 
           {/* Right Column */}
           <div className="event-section">
-            <h2>Similar Events</h2>
+          {selfEvent && !showEditForm && (
+            <button className="edit-button" onClick={() => setShowEditForm(true)}>
+              Edit
+            </button>
+          
+          )}
           </div>
         </div>
+
+        <EditEventForm
+          isOpen={showEditForm}
+          onClose={() => {
+            setShowEditForm(false);
+            refetch();
+          }}
+          initialData={{
+            eventID: eventID,
+            title: name,
+            date,
+            startTime,
+            endTime,
+            description,
+            tags,
+            thumbnailUrl,
+          }}
+        />
+
       </div>
 
     </div>
