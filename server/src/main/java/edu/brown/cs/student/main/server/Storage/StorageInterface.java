@@ -98,4 +98,10 @@ public interface StorageInterface {
 
   Map<String, String> getUsers(String uid)
       throws NoProfileFoundException, ExecutionException, InterruptedException;
+
+  List<Map<String, Object>> getEventHistory(String uid)
+      throws NoProfileFoundException,
+          ExecutionException,
+          InterruptedException,
+          NoEventFoundException;
 }

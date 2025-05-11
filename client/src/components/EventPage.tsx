@@ -6,7 +6,9 @@ import { useNavigate } from "react-router-dom";
 import useEventDetails from "../hooks/useEventDetails";
 import EditEventForm from "./EditEventForm";
 import { createGcalEvent } from "./OAuthCallback";
-        
+      
+import { useUser } from "@clerk/clerk-react";
+
 interface EventPageProps {
   eventID: string;
   onClose: () => void;
@@ -70,7 +72,7 @@ export default function EventPage({ eventID, onClose }: EventPageProps) {
                 </button>
 
                 <button onClick={() => createGcalEvent({
-                  summary: organizer,
+                  summary: name + " (" + organizerName + ")",
                   description: description,
                   start: {
                     dateTime: date + "T" + startTime + ":00-05:00",
@@ -99,9 +101,17 @@ export default function EventPage({ eventID, onClose }: EventPageProps) {
                         ...prev,
                         { id: user.id, name: user.fullName || user.username || user.id }
                       ]);
+
+                      // add-event-history
+                      // set event history
+
+
                     } else {
                       setAttendeeCount((prev) => prev - 1);
                       setAttendeeInfo((prev) => prev.filter((info) => info.id !== user.id));
+
+                      // remove-event-history
+                      // set event history
                     }
                     
                   } catch (err) {

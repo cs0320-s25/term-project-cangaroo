@@ -605,7 +605,22 @@ public class FirebaseUtilities implements StorageInterface {
     return usersList;
   }
 
-  //
+  @Override
+  public List<Map<String, Object>> getEventHistory(String uid)
+      throws NoProfileFoundException,
+          ExecutionException,
+          InterruptedException,
+          NoEventFoundException {
+    this.checkProfilesExist(uid, null);
+    Firestore db = FirestoreClient.getFirestore();
+    DocumentReference userRef = db.collection("users").document(uid);
+    List<String> eventHistoryIDs = (List<String>) userRef.get().get().get("eventHistory");
+    List<Map<String, Object>> eventHistoryList = new ArrayList<>();
+    for (String id : eventHistoryIDs) {
+      eventHistoryList.add(getEvent(id));
+    }
+    return eventHistoryList;
+  }
 
   @Override
   public Map<String, Object> getEvent(String eventID)
@@ -636,7 +651,6 @@ public class FirebaseUtilities implements StorageInterface {
 
     return data;
   }
-
 
   //
   public Event getEventRecord(String eventID)

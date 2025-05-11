@@ -2,12 +2,14 @@ package edu.brown.cs.student.main.server;
 
 import static spark.Spark.after;
 
+import edu.brown.cs.student.main.server.Handlers.AddEventHistoryHandler;
 import edu.brown.cs.student.main.server.Handlers.ChangeAttendanceHandler;
 import edu.brown.cs.student.main.server.Handlers.DeleteAllHandler;
 import edu.brown.cs.student.main.server.Handlers.DeleteEventHandler;
 import edu.brown.cs.student.main.server.Handlers.EditEventHandler;
 import edu.brown.cs.student.main.server.Handlers.EditProfileHandler;
 import edu.brown.cs.student.main.server.Handlers.EventCreationHandler;
+import edu.brown.cs.student.main.server.Handlers.GetEventHistoryHandler;
 import edu.brown.cs.student.main.server.Handlers.GetFriendsHandler;
 import edu.brown.cs.student.main.server.Handlers.GetNonFriendsHandler;
 import edu.brown.cs.student.main.server.Handlers.GetOutgoingFriendRequestsHandler;
@@ -79,6 +81,8 @@ public class Server {
 
       Spark.get("delete-all", new DeleteAllHandler(storageHandler));
       Spark.get("get-non-friends", new GetNonFriendsHandler(storageHandler));
+      Spark.get("get-event-history", new GetEventHistoryHandler(storageHandler));
+      Spark.get("add-event-history", new AddEventHistoryHandler(storageHandler));
       Spark.notFound(
           (request, response) -> {
             response.status(404); // Not Found
