@@ -637,7 +637,6 @@ public class FirebaseUtilities implements StorageInterface {
     return data;
   }
 
-
   //
   public Event getEventRecord(String eventID)
       throws ExecutionException, InterruptedException, NoEventFoundException {
