@@ -26,7 +26,11 @@ public class GetNonFriendsHandler implements Route {
       return Utils.toMoshiJson(responseMap);
     }
     try {
-      responseMap.put("users", this.storageHandler.getUsers(uid));
+      Map<String, String> users = this.storageHandler.getUsers(uid);
+
+      responseMap.put("result", "success");
+      responseMap.put("users", users);
+
     } catch (NoProfileFoundException e) {
       responseMap.put("result", "failure");
       responseMap.put("error_message", "Profile does not exist.");
