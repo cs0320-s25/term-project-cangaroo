@@ -3,6 +3,8 @@ package edu.brown.cs.student.main.server.HandlerLogic;
 import edu.brown.cs.student.main.server.Events.Event;
 import java.io.IOException;
 import java.util.*;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class MatchEvents {
 
@@ -10,20 +12,23 @@ public class MatchEvents {
 
   public List<Integer> getMatchedEvents(
       List<String> personalTags, List<String> favEventOrgs, List<Event> allEvents) {
-    Set<String> expandedInputStems = new HashSet<>();
+
+    Set<String> expandedInputWords = new HashSet<>();
 
     try {
-      // Stem original input words
       List<String> stemmedInput = Stemmer.stemSentence(personalTags);
-      expandedInputStems.addAll(stemmedInput);
+      expandedInputWords.addAll(stemmedInput);
 
-      // For each input word, fetch synonyms and stem them
       for (String word : personalTags) {
-        String formattedWord = word.replace(" ", "-");
-        Set<String> synonyms = SynonymFetcher.getSynonyms(formattedWord);
-        for (String syn : synonyms) {
-          String stemmedSyn = Stemmer.stemWord(syn);
-          expandedInputStems.add(stemmedSyn);
+        if (word.length() > 2) {
+          String formattedWord = word.replace(" ", "-");
+          Set<String> synonyms = SynonymFetcher.getSynonyms(formattedWord);
+          for (String syn : synonyms) {
+            String stemmedSyn = Stemmer.stemWord(syn);
+            if (stemmedSyn.length() > 2) {
+              expandedInputWords.add(stemmedSyn.toLowerCase());
+            }
+          }
         }
       }
     } catch (IOException e) {
@@ -36,51 +41,71 @@ public class MatchEvents {
     for (Event event : allEvents) {
       int score = 0;
 
+      Set<String> nameWords =
+          event.name().stream()
+              .flatMap(s -> Arrays.stream(s.split("\\s+")))
+              .map(String::toLowerCase)
+              .collect(Collectors.toSet());
+
+      List<String> stemmedName = new ArrayList<>();
       try {
-        List<String> nameStems = Stemmer.stemSentence(event.name());
-        for (String inputStem : expandedInputStems) {
-          if (nameStems.contains(inputStem)) {
-            score += 5;
-          }
-        }
+        stemmedName = Stemmer.stemSentence(new ArrayList<>(nameWords));
       } catch (IOException e) {
         e.printStackTrace();
       }
-
-      try {
-        List<String> descStems = Stemmer.stemSentence(event.description());
-        for (String inputStem : expandedInputStems) {
-          if (descStems.contains(inputStem)) {
-            score += 3;
-          }
+      for (String input : expandedInputWords) {
+        if (stemmedName.contains(input)) {
+          score += 5;
         }
+      }
+
+      Set<String> descWords =
+          event.description().stream()
+              .flatMap(s -> Arrays.stream(s.split("\\s+")))
+              .map(String::toLowerCase)
+              .collect(Collectors.toSet());
+
+      List<String> stemmedDesc = new ArrayList<>();
+      try {
+        stemmedDesc = Stemmer.stemSentence(new ArrayList<>(descWords));
       } catch (IOException e) {
         e.printStackTrace();
+      }
+      for (String input : expandedInputWords) {
+        if (stemmedDesc.contains(input)) {
+          score += 3;
+        }
       }
 
       if (event.tags() != null) {
-        for (String tag : event.tags()) {
-          if (tag != null) {
-            try {
-              String tagStem = Stemmer.stemWord(tag);
-              if (expandedInputStems.contains(tagStem)) {
-                score += 1;
-              }
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
+        List<String> stemmedTags = new ArrayList<>();
+        try {
+          stemmedTags =
+              Stemmer.stemSentence(
+                  event.tags().stream()
+                      .filter(Objects::nonNull)
+                      .map(String::toLowerCase)
+                      .collect(Collectors.toList()));
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+
+        for (String input : expandedInputWords) {
+          if (stemmedTags.contains(input)) {
+            score += 5;
           }
         }
       }
 
-      // compare all the person's fav event organizers with the event organizer
-      if (favEventOrgs != null) {
-        for (String favOrganizer : favEventOrgs) {
+      if (favEventOrgs != null && event.eventOrganizer() != null) {
+        Set<String> organizerWords =
+            Arrays.stream(event.eventOrganizer().split("\\s+"))
+                .map(String::toLowerCase)
+                .collect(Collectors.toSet());
 
-          if (event.eventOrganizer() != null && favOrganizer != null) {
-            if (event.eventOrganizer().toLowerCase().contains(favOrganizer.toLowerCase())) {
-              score += 10;
-            }
+        for (String favOrg : favEventOrgs) {
+          if (favOrg != null && organizerWords.contains(favOrg.toLowerCase())) {
+            score += 10;
           }
         }
       }
@@ -90,19 +115,9 @@ public class MatchEvents {
       }
     }
 
-    List<Map.Entry<Event, Integer>> sortedEntries = new ArrayList<>(eventScores.entrySet());
-    sortedEntries.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
-
-    List<Event> rankedResults = new ArrayList<>();
-    for (Map.Entry<Event, Integer> entry : sortedEntries) {
-      rankedResults.add(entry.getKey());
-    }
-
-    List<Integer> sortedEventIDs = new ArrayList<>();
-    for (Event event : rankedResults) {
-      sortedEventIDs.add(event.eventID());
-    }
-
-    return sortedEventIDs;
+    return eventScores.entrySet().stream()
+        .sorted((a, b) -> Integer.compare(b.getValue(), a.getValue()))
+        .map(entry -> entry.getKey().eventID())
+        .collect(Collectors.toList());
   }
 }

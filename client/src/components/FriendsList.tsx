@@ -1,7 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import FriendCard from "./FriendCard";
 import { useNavigate } from "react-router-dom";
 import "../styles/FriendsList.css"; 
+// import { viewFriends } from "../utils/api";
+import { useParams } from "react-router"
+
+import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutgoingFriendRequests, getReceivedFriendRequests,
+  unfriend, viewFriends, viewProfile
+} from "../utils/api";
 
 interface FriendsListProps {
   isOpen: boolean;
@@ -78,6 +84,8 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   // routing
   const navigate = useNavigate();
 
+  // get current user
+  const { userId } = useParams<{ userId: string }>();
 
   // basic usestates to keep track of other users in each column 
   const [friends, setFriends] = useState<User[]>(existingFriends);
@@ -85,19 +93,69 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   const [users, setUsers] = useState<User[]>(allUsers);
 
 
-  // search bar functionality
+  // basic search bar functionality
   const [searchTermFriends, setSearchTermFriends] = useState("");
   const [searchTermUsers, setSearchTermUsers] = useState("");
 
-  const filteredFriends = friends
-    .filter(friend => friend.requestStatus == "friend") 
-    .filter(friend => friend.name.toLowerCase().includes(searchTermFriends.toLowerCase()) // filter
-  );
+  
 
   const filteredUsers = users
     .filter(user => user.requestStatus=="none" || "incoming") 
     .filter(user => user.name.toLowerCase().includes(searchTermUsers.toLowerCase()) // filter
   );
+
+
+  // get current friends from backend
+  const [currentFriends, setCurrentFriends] = useState<string[]>([]);
+  const filteredCurrentFriends = currentFriends
+    .filter(currentFriend => currentFriend.toLowerCase().includes(searchTermFriends.toLowerCase()) // filter
+  );
+  useEffect(() => {
+    const getCurrentFriends = async () => {
+      console.log("Fetching current friends from Firebase...");
+      if (userId) {
+        const viewFriendsResponse = await viewFriends(userId); 
+        if (viewFriendsResponse.friends !== null) {
+          console.log("Fetched event info from Firebase:", viewFriendsResponse.friends);
+          const friendsList = Object.keys(viewFriendsResponse.friends);
+          setCurrentFriends(friendsList)
+        }
+      }
+    };
+  
+    getCurrentFriends();
+  }, []);
+
+
+  // handling unfriending
+
+  const handleUnfriendClick = () => {
+    // if (requestStatus === 'incoming') {
+    //   onAcceptRequest(); // accept request
+    // } else if (requestStatus === 'friend') {
+    //   onUnfriend(); // unfriend a friend in second col
+    // } else if (requestStatus === 'none') {
+    //   onSendRequest(); // send friend invite!!
+    // }
+    const unfriendClick = async (frienduid: string) => {
+      try {
+        if (userId) {
+          const result = await unfriend(userId, frienduid);
+          if (result.result !== "success") {
+            console.error(result.error_message);
+            // navigate("/");
+            return;
+          }
+
+          console.error("UNFRIENDED.");
+        }
+      } catch (err) {
+        console.error("Failed to load profile:", err);
+        // navigate("/");
+        return;
+      }  
+    }  
+  };
 
 
   // handling actions (various button clicks)
@@ -129,14 +187,17 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
 
 
   // navigate to new profile
-  const handleFriendCardNameClick= (name: string) => {
+  const handleFriendCardNameClick= (uid: string) => {
     // close modal friendslist, go back to profile pg
     onClose();
-    navigate(`/profile/${name}`);
+    navigate(`/profile/${uid}`);
   };
 
   // only show if component is open
   if (!isOpen) return null;
+
+
+
 
   return (
     <div className="friends-list-modal">
@@ -151,17 +212,13 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           <h3>Incoming Friend Requests</h3>
 
           <div className="friend-cards-container">
-          {incoming.map((user, index) => (
-            <FriendCard
-              key={index}
-              {...user}
-              onAcceptRequest={() => handleAcceptRequest(user.name)}
-              onDeclineRequest={() => handleDeclineRequest(user.name)}
-              onSendRequest={() => {}}
-              onUnfriend={() => {}}
-              handleNameClick={() => handleFriendCardNameClick(user.name)}
-            />
-          ))}
+          {filteredCurrentFriends.map((frienduid, index) => (
+              <FriendCard 
+                key={index} 
+                uid={frienduid}
+                handleNameClick={(onClose)}
+              />
+            ))}
           </div>
         </div>
         {/* column 1: incoming requests */}
@@ -179,15 +236,11 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           />
 
           <div className="friend-cards-container">
-            {filteredFriends.map((friend, index) => (
+            {filteredCurrentFriends.map((frienduid, index) => (
               <FriendCard 
                 key={index} 
-                {...friend} 
-                onAcceptRequest={() => {}}
-                onDeclineRequest={() => {}}
-                onSendRequest={() => {}}
-                onUnfriend={() => handleUnfriend(friend.name)}
-                handleNameClick={() => handleFriendCardNameClick(friend.name)}
+                uid={frienduid}
+                handleNameClick={(onClose)}
               />
             ))}
           </div>

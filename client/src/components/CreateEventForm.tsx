@@ -41,6 +41,7 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
 
         const newEvent = await addEvent(user.id, title as string, user.fullName, description as string, date as string, startTime, endTime, tags.join(","), url as string);
         console.log("Event added! " + newEvent);
+        onClose();
   
       } catch (err) {
         console.error("Error adding event:", err);
@@ -96,7 +97,6 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
 
             <label>Thumbnail</label>
             <input type="text" name="url"></input>
-            <button className="upload-btn">Upload</button>
           </div>
 
           {/* Right Column */}
