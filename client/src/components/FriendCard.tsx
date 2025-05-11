@@ -1,17 +1,12 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom'; 
 import "../styles/FriendCard.css";
+import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutgoingFriendRequests, getReceivedFriendRequests,
+         unfriend, viewFriends, viewProfile
+ } from "../utils/api";
 
-type FriendCardProps = {
-  name: string;
-  profilePictureUrl: string;
-  initialIsFollowing?: boolean; // optional, since will default to false
-  friendCount: number;
-  requestStatus: 'incoming' | 'friend' | 'none'; // incoming, friend, or user (for request sent state, each is a column)
-  onAcceptRequest: () => void;
-  onDeclineRequest: () => void;
-  onSendRequest: () => void;
-  onUnfriend: () => void;
+interface FriendCardProps {
+  uid: string;
   handleNameClick: () => void;
 };
 
@@ -21,52 +16,95 @@ type FriendCardProps = {
  * @returns - the JSX FriendCard component.
  */
 function FriendCard({
-  name,
-  profilePictureUrl,
-  initialIsFollowing = false,
-  friendCount,
-  requestStatus,
-  onAcceptRequest,
-  onDeclineRequest,
-  onSendRequest,
-  onUnfriend,
+  uid,
   handleNameClick,
 }: FriendCardProps){
+  // const { currentUseruid } = useParams<{ userId: string }>();
 
-  const handleButtonClick = () => {
-    if (requestStatus === 'incoming') {
-      onAcceptRequest(); // accept request
-    } else if (requestStatus === 'friend') {
-      onUnfriend(); // unfriend a friend in second col
-    } else if (requestStatus === 'none') {
-      onSendRequest(); // send friend invite!!
-    }
+  const handleUnfriendClick = () => {
+    // if (requestStatus === 'incoming') {
+    //   onAcceptRequest(); // accept request
+    // } else if (requestStatus === 'friend') {
+    //   onUnfriend(); // unfriend a friend in second col
+    // } else if (requestStatus === 'none') {
+    //   onSendRequest(); // send friend invite!!
+    // }
+    
+    const unfriendClick = async () => {
+      try {
+        const result = await unfriend(uid, currentUseruid);
+        if (result.result !== "success") {
+          console.error(result.error_message);
+          // navigate("/");
+          return;
+        }
+        const data = result.data;
+        setName(data.username);
+        setNumFriends(data.friendsList?.length || 0);
+        // setProfilePic(data.) doesn't exist yet
+      } catch (err) {
+        console.error("Failed to load profile:", err);
+        // navigate("/");
+        return;
+      }
+    };
   };
+  const [name, setName] = useState("")
+  const [numFriends, setNumFriends] = useState(0)
+  const navigate = useNavigate();
+  // const [profilePic, setProfilePic] = useState("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg")
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const result = await viewProfile(uid);
+        console.log(uid)
+        if (result.result !== "success") {
+          console.error(result.error_message);
+          // navigate("/");
+          return;
+        }
+        const data = result.data;
+        setName(data.username);
+        setNumFriends(data.friendsList?.length || 0);
+        // setProfilePic(data.) doesn't exist yet
+      } catch (err) {
+        console.error("Failed to load profile:", err);
+        // navigate("/");
+        return;
+      }
+    };
+
+    fetchProfile();
+  }, [])
+
+  const onNameClick = (() => {
+    handleNameClick()
+    navigate(`/profile/${uid}`);
+  })
 
   return (
     <div className="friend-card">
 
-      <img src={profilePictureUrl} className="friend-image" />
+      {/* <img src={profilePictureUrl} className="friend-image" /> */}
 
       <div className="friend-info">
 
         <h2 
           className="friend-name" 
-          onClick={handleNameClick} 
+          onClick={onNameClick} 
           style={{ cursor: 'pointer' }} // pointer hover so user knows to click
         >
           {name}
         </h2>
 
         <p className="friend-count">
-          {friendCount} friend{friendCount !== 1 ? 's' : ''} 
+          {numFriends} friend{numFriends !== 1 ? 's' : ''} 
         </p>
 
         <button 
-          onClick={handleButtonClick} 
-          className={`friend-button ${requestStatus}`} 
+          // onClick={handleButtonClick} 
+          className={`friend-button`} 
         >
-          {requestStatus === 'incoming' ? 'Accept Request' : requestStatus === 'friend' ? 'Unfriend' : 'Send Request'}
         </button>
 
       </div>

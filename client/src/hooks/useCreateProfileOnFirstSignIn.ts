@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { createProfile, viewProfile } from "../utils/api";
 
+
+
 export default function useCreateProfileOnFirstSignIn() {
   const { user } = useUser();
   const [checked, setChecked] = useState(false);
@@ -9,12 +11,14 @@ export default function useCreateProfileOnFirstSignIn() {
   useEffect(() => {
     const ensureProfileExists = async () => {
       if (checked || !user?.id) return;
-
+  
+      
       try {
         const result = await viewProfile(user.id);
 
         if (result.result === "success" && result.data) {
           console.log("Profile already exists:", result.data);
+        
         } else {
           console.log("No profile found. Creating...");
 
@@ -25,7 +29,7 @@ export default function useCreateProfileOnFirstSignIn() {
             "Brown Events", // default orgs
             user.imageUrl || "", // default pfp
           );
-
+        
           if (response.result === "success") {
             console.log("Profile created!");
           } else {
@@ -34,6 +38,7 @@ export default function useCreateProfileOnFirstSignIn() {
         }
 
         setChecked(true);
+
       } catch (err) {
         console.error("Error during profile check/creation:", err);
       }

@@ -8,11 +8,11 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class ViewFriendsHandler implements Route {
+public class GetNonFriendsHandler implements Route {
 
   public StorageInterface storageHandler;
 
-  public ViewFriendsHandler(StorageInterface storageHandler) {
+  public GetNonFriendsHandler(StorageInterface storageHandler) {
     this.storageHandler = storageHandler;
   }
 
@@ -25,18 +25,11 @@ public class ViewFriendsHandler implements Route {
       responseMap.put("error_message", "Missing required parameter: uid");
       return Utils.toMoshiJson(responseMap);
     }
-
     try {
-      Map<String, String> friendData = this.storageHandler.viewFriends(uid);
-      responseMap.put("result", "success");
-      responseMap.put("friends", friendData);
+      responseMap.put("users", this.storageHandler.getUsers(uid));
     } catch (NoProfileFoundException e) {
       responseMap.put("result", "failure");
       responseMap.put("error_message", "Profile does not exist.");
-    } catch (Exception e) {
-      responseMap.put("result", "failure");
-      responseMap.put("error_message", "Internal server error: " + e.getMessage());
-      e.printStackTrace();
     }
     return Utils.toMoshiJson(responseMap);
   }
