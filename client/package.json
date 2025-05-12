@@ -1,3 +1,4 @@
+
 {
   "name": "CanGo",
   "private": true,
@@ -5,11 +6,13 @@
   "type": "module",
   "scripts": {
     "start": "vite",
+    "build": "vite build",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
-    "build": "vite build",
+    
     "serve": "vite preview"
+    
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.25.5",

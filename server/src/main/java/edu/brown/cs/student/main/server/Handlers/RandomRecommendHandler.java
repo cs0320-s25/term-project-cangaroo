@@ -57,7 +57,6 @@ public class RandomRecommendHandler implements Route {
     this.responseMap = new HashMap<>();
     RandomMatch randomMatch = new RandomMatch();
     List<String> results = randomMatch.getRandomEvent(this.storageHandler.getAllEvents());
-
     // no events matched
     if (results == null || results.isEmpty()) {
       this.responseMap.put("result", "Success");

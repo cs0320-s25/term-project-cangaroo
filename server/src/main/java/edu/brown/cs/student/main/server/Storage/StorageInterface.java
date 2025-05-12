@@ -6,6 +6,7 @@ import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
 import edu.brown.cs.student.main.server.Exceptions.NoExistingFriendRequestException;
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
 import edu.brown.cs.student.main.server.Exceptions.NotFriendsException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -50,7 +51,7 @@ public interface StorageInterface {
   Map<String, Object> getProfile(String uid)
       throws ExecutionException, InterruptedException, NoProfileFoundException;
 
-  List<Event> getAllEvents() throws ExecutionException, InterruptedException;
+  List<Event> getAllEvents() throws ExecutionException, InterruptedException, IOException;
 
   List<Map<String, Object>> getAllEventsMap() throws ExecutionException, InterruptedException;
 

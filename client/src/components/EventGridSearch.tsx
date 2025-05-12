@@ -51,6 +51,7 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
       }
     };
     getSearchResults();
+    
   }, [searchTerm]);
 
   // Recommend button
