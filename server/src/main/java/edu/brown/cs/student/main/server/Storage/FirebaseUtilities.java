@@ -241,7 +241,7 @@ public class FirebaseUtilities implements StorageInterface {
     DocumentReference docRef = db.collection("users").document(uid);
     if (docRef.get().get().exists()) {
       docRef.update("interestedTags", tags);
-      docRef.update("favEventOrganizers", favEventOrganizers);
+      docRef.update("interestedOrganizations", favEventOrganizers);
       docRef.update("profilePicUrl", profilePicUrl);
     } else {
       throw new NoProfileFoundException("No such profile.");
