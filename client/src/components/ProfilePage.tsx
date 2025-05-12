@@ -8,8 +8,8 @@ import Navbar from "./Navbar";
 // components
 import EventCardSmall from "./EventCardSmall";
 import FriendsList from "./FriendsList";
-import { editProfile, viewProfile } from "../utils/api";
-
+import { editProfile, viewProfile, getEventHistory } from "../utils/api";
+import EventPage from "./EventPage";
 // later can import the recommended events from elsewhere
 const events = [
   { title: "Spring Weekend", 
@@ -40,6 +40,9 @@ export default function ProfilePage() {
   const [orgs, setOrgs] = useState<string[]>([]);
   const [profilePicUrl, setProfilePicUrl] = useState<string | null>(null);
 
+  const [eventHistory, setEventHistory] = useState<{title: string, description: string, imageUrl: string, id: string}[]>([]); // Placeholder for event history data
+
+  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
 
   useEffect(() => {
     if (user?.id === userId) {
@@ -80,6 +83,25 @@ export default function ProfilePage() {
         setOrgs(data.interestedOrganizations);
         setProfilePicUrl(data.profilePicUrl || null);
 
+        const eventHist = await getEventHistory(userId);
+
+        if (result.result !== "success") {
+          console.error(eventHist.error_message);
+          navigate("/");
+          return;
+        }
+        const eventData = eventHist.data;
+        setEventHistory(eventData.map((event: any) => {
+
+          console.log(event)
+          console.log(event.ID)
+          return {
+          title: event.name,
+          description: event.description,
+          imageUrl: event.thumbnailUrl,
+          id: event.ID,
+          }
+        }));
 
       } catch (err) {
         console.error("Failed to load profile:", err);
@@ -90,6 +112,8 @@ export default function ProfilePage() {
     fetchProfile();
   }, [userId, user, navigate]);
 
+
+  console.log('eventHistory', eventHistory)
   return (   
     <div className="profile-page-all">
 
@@ -259,18 +283,31 @@ export default function ProfilePage() {
                   <div className="profile-section">
                     <h2 className="event-header">Event History</h2>
                       <div className="recommended-events-grid">
-                        {events.map((event, idx) => (
-                          <EventCardSmall key={idx} {...event} />
+                        {eventHistory.map((event, idx) => (
+                          <EventCardSmall key={idx} {...event} onClick={()=>setSelectedEvent(event.id)}/>
                         ))}
+                        {/* {events.map((event, idx) => (
+                          <EventCardSmall key={idx} {...event} />
+                        ))} */}
                       </div>
                   </div>
                   {/* right column */}
             </div>
 
           </div>
+
+           
           {/* PROFILE AREA */}
 
         </div>
+
+        {selectedEvent && (
+                    <EventPage
+                      eventID={selectedEvent}
+                      onClose={() => setSelectedEvent(null)}
+                      cameFromHome={false}
+                    />
+                  )}
 
       </SignedIn>
 

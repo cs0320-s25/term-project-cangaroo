@@ -582,7 +582,7 @@ public class FirebaseUtilities implements StorageInterface {
       throw new NoEventFoundException("Event not found.");
     }
 
-    userRef.update("eventHistory", FieldValue.arrayUnion(eventID));
+    userRef.update("eventHistory", FieldValue.arrayUnion(getEvent(eventID)));
   }
 
   @Override
@@ -607,19 +607,11 @@ public class FirebaseUtilities implements StorageInterface {
 
   @Override
   public List<Map<String, Object>> getEventHistory(String uid)
-      throws NoProfileFoundException,
-          ExecutionException,
-          InterruptedException,
-          NoEventFoundException {
+      throws NoProfileFoundException, ExecutionException, InterruptedException {
     this.checkProfilesExist(uid, null);
     Firestore db = FirestoreClient.getFirestore();
     DocumentReference userRef = db.collection("users").document(uid);
-    List<String> eventHistoryIDs = (List<String>) userRef.get().get().get("eventHistory");
-    List<Map<String, Object>> eventHistoryList = new ArrayList<>();
-    for (String id : eventHistoryIDs) {
-      eventHistoryList.add(getEvent(id));
-    }
-    return eventHistoryList;
+    return (List<Map<String, Object>>) userRef.get().get().get("eventHistory");
   }
 
   @Override

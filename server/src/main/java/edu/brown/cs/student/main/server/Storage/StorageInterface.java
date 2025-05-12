@@ -100,8 +100,5 @@ public interface StorageInterface {
       throws NoProfileFoundException, ExecutionException, InterruptedException;
 
   List<Map<String, Object>> getEventHistory(String uid)
-      throws NoProfileFoundException,
-          ExecutionException,
-          InterruptedException,
-          NoEventFoundException;
+      throws NoProfileFoundException, ExecutionException, InterruptedException;
 }
