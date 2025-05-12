@@ -1,18 +1,21 @@
 import "../styles/EventPage.css";
 import { useState, useEffect } from "react";
 import EventCardGridSearch from "./EventGridSearch";
-import { viewEvent, changeAttendance, viewProfile } from "../utils/api";
+import { viewEvent, changeAttendance, viewProfile, addEventHistory } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import useEventDetails from "../hooks/useEventDetails";
 import EditEventForm from "./EditEventForm";
 import { createGcalEvent } from "./OAuthCallback";
-        
+      
+import { useUser } from "@clerk/clerk-react";
+
 interface EventPageProps {
   eventID: string;
   onClose: () => void;
+  cameFromHome: boolean;
 }
 
-export default function EventPage({ eventID, onClose }: EventPageProps) {
+export default function EventPage({ eventID, onClose, cameFromHome }: EventPageProps) {
   const { user } = useUser();
   const navigate = useNavigate();
   const [showEditForm, setShowEditForm] = useState(false);
@@ -55,8 +58,9 @@ export default function EventPage({ eventID, onClose }: EventPageProps) {
 
     <div className="event-overlay">
       <div className="event-content">
+  
       <button className="return-home-button" onClick={onClose}>
-        ← Return to Home
+      {cameFromHome ? "← Return to Home" : "← Return to Profile"}
       </button>
       
         <div className="event-grid">
@@ -70,7 +74,7 @@ export default function EventPage({ eventID, onClose }: EventPageProps) {
                 </button>
 
                 <button onClick={() => createGcalEvent({
-                  summary: organizer,
+                  summary: name + " (" + organizerName + ")",
                   description: description,
                   start: {
                     dateTime: date + "T" + startTime + ":00-05:00",
@@ -99,9 +103,15 @@ export default function EventPage({ eventID, onClose }: EventPageProps) {
                         ...prev,
                         { id: user.id, name: user.fullName || user.username || user.id }
                       ]);
+
+                      await addEventHistory(user.id, eventID);
+
                     } else {
                       setAttendeeCount((prev) => prev - 1);
                       setAttendeeInfo((prev) => prev.filter((info) => info.id !== user.id));
+
+                      // remove-event-history
+                      // set event history
                     }
                     
                   } catch (err) {

@@ -18,12 +18,13 @@ public class Utils {
     return adapter.toJson(map);
   }
 
-  public static Event deserializeJsonEvent(java.lang.String jsonString) throws IOException {
+  public static Event deserializeEventMap(Map<String, Object> eventMap) throws IOException {
     // Initializes Moshi
-    Moshi moshi = new Moshi.Builder().build();
-    JsonAdapter<Event> jsonAdapter = moshi.adapter(Event.class);
+    String json = toMoshiJson(eventMap);
 
-    //    JsonAdapter<List<String>> adapter = moshi.adapter(listType);
-    return jsonAdapter.fromJson(jsonString);
+    Moshi moshi = new Moshi.Builder().build();
+    JsonAdapter<Event> adapter = moshi.adapter(Event.class);
+
+    return adapter.fromJson(json); // Deserialize into Event
   }
 }

@@ -238,12 +238,33 @@ export async function viewProfile(uid: string) {
 }
 
 /**
+ * Methods that queries the backend using the get-event-history endpoint
+ * @param uid - a string that refers to the event creator’s ID (should be something like email or Clerk ID)
+ * @returns a list of events that the user has attended
+ */
+export async function getEventHistory(uid: string) {
+  return await queryAPI("get-event-history", { uid });
+}
+/**
  * Method that queries the backend using the edit-profile endpoint
  * @param uid - user's Clerk ID
  * @param interestedTags - comma-separated string of interests
  * @param favEventOrganizers - comma-separated string of favorite organizers
  * @param profilePicUrl - string URL to profile picture
  */
+
+/**
+ * Method that queries the backend using the add-event-history endpoint
+ * @param uid - user's Clerk ID
+ * @param eventID - event ID
+ * @returns - standard success/error message
+ */
+export async function addEventHistory(uid: string, eventID: string) {
+  return await queryAPI("add-event-history", {
+    uid,
+    eventID
+  });
+}
 export async function editProfile(
   uid: string,
   interestedTags: string,

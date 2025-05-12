@@ -51,6 +51,7 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
       }
     };
     getSearchResults();
+    
   }, [searchTerm]);
 
   // Recommend button
@@ -142,6 +143,7 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
           <EventPage
             eventID={selectedEvent}
             onClose={() => setSelectedEvent(null)}
+            cameFromHome={true}
           />
         )}
       </div>
