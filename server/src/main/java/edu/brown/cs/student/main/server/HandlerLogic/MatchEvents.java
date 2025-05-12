@@ -98,13 +98,16 @@ public class MatchEvents {
       }
 
       if (favEventOrgs != null && event.eventOrganizer() != null) {
-        Set<String> organizerWords =
-            Arrays.stream(event.eventOrganizer().split("\\s+"))
-                .map(String::toLowerCase)
-                .collect(Collectors.toSet());
+        //        Set<String> organizerWords =
+        //            Arrays.stream(event.eventOrganizer().split("\\s+"))
+        //                .map(String::toLowerCase)
+        //                .collect(Collectors.toSet());
+
+        String organizerWords = event.eventOrganizer().toLowerCase();
+
 
         for (String favOrg : favEventOrgs) {
-          if (favOrg != null && organizerWords.contains(favOrg.toLowerCase())) {
+          if (favOrg != null && organizerWords.equals(favOrg.toLowerCase())) {
             score += 10;
           }
         }
