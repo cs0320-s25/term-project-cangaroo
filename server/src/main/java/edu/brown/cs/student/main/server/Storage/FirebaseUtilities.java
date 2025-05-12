@@ -33,6 +33,8 @@ import java.util.concurrent.ExecutionException;
 
 public class FirebaseUtilities implements StorageInterface {
 
+  private final Firestore db;
+
   public FirebaseUtilities() throws IOException {
 
     // TODO: FIRESTORE PART 0:
@@ -53,6 +55,7 @@ public class FirebaseUtilities implements StorageInterface {
             .build();
 
     FirebaseApp.initializeApp(options);
+    this.db = FirestoreClient.getFirestore();
   }
 
   //
@@ -65,7 +68,7 @@ public class FirebaseUtilities implements StorageInterface {
 
     // gets all documents in the collection 'collection_id' for user 'user'
 
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     // 1: Make the data payload to add to your collection
     CollectionReference dataRef = db.collection("users").document(user).collection(collection_id);
 
@@ -86,7 +89,7 @@ public class FirebaseUtilities implements StorageInterface {
   public Map<String, Object> getProfile(String uid)
       throws ExecutionException, InterruptedException, NoProfileFoundException {
 
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference docRef = db.collection("users").document(uid);
 
     ApiFuture<DocumentSnapshot> future = docRef.get();
@@ -129,7 +132,7 @@ public class FirebaseUtilities implements StorageInterface {
   public List<Map<String, Object>> getCompleteCollection()
       throws InterruptedException, ExecutionException, IllegalArgumentException {
 
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
 
     // Get all pin documents for all users
     List<Map<String, Object>> data = new ArrayList<>();
@@ -144,7 +147,7 @@ public class FirebaseUtilities implements StorageInterface {
   //
   @Override
   public void updateEventID(int newVal) {
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     Map<String, Object> data = new HashMap<>();
     data.put("eventID", newVal);
     db.collection("currentIDs").document("currentEventID").set(data);
@@ -154,7 +157,7 @@ public class FirebaseUtilities implements StorageInterface {
   @Override
   public int getCurrEventID() throws ExecutionException, InterruptedException {
 
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference docRef = db.collection("currentIDs").document("currentEventID");
 
     ApiFuture<DocumentSnapshot> future = docRef.get();
@@ -182,7 +185,7 @@ public class FirebaseUtilities implements StorageInterface {
       String eventOrganizer,
       String thumbnailUrl)
       throws ExecutionException, InterruptedException, NoEventFoundException {
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
 
     DocumentReference docRef =
         db.collection("users").document(uid).collection("events").document("event-" + eventID);
@@ -233,7 +236,7 @@ public class FirebaseUtilities implements StorageInterface {
       String uid, List<String> tags, List<String> favEventOrganizers, String profilePicUrl)
       throws ExecutionException, InterruptedException, NoProfileFoundException {
 
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
 
     DocumentReference docRef = db.collection("users").document(uid);
     if (docRef.get().get().exists()) {
@@ -249,7 +252,7 @@ public class FirebaseUtilities implements StorageInterface {
   @Override
   public List<Event> getAllEvents() throws ExecutionException, InterruptedException {
 
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     CollectionReference collection = db.collection("users");
     ArrayList<Event> events = new ArrayList<>();
 
@@ -299,7 +302,7 @@ public class FirebaseUtilities implements StorageInterface {
   @Override
   public List<Map<String, Object>> getAllEventsMap()
       throws ExecutionException, InterruptedException {
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     CollectionReference usersCollection = db.collection("users");
 
     List<Map<String, Object>> allEventData = new ArrayList<>();
@@ -330,7 +333,7 @@ public class FirebaseUtilities implements StorageInterface {
           NoProfileFoundException,
           NoEventFoundException,
           EventAlreadyAttendingException {
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference profileRef = db.collection("users").document(uid);
     DocumentReference eventRef = db.collection("events").document("event-" + eventID);
     // change database architecture to allow storing all events in their own collection
@@ -391,7 +394,7 @@ public class FirebaseUtilities implements StorageInterface {
 
   private void checkProfilesExist(String user1, String user2) throws NoProfileFoundException {
     // probably do some error-checking to see if the ids actually correspond to profiles
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     boolean foundUser1 = false;
     boolean foundUser2 = false;
     for (DocumentReference userRef : db.collection("users").listDocuments()) {
@@ -411,7 +414,7 @@ public class FirebaseUtilities implements StorageInterface {
   @Override
   public void sendFriendRequest(String senderID, String receiverID) throws NoProfileFoundException {
 
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     this.checkProfilesExist(senderID, receiverID);
     // create a document in the receiver's collection for the friend request
     db.collection("users")
@@ -431,7 +434,7 @@ public class FirebaseUtilities implements StorageInterface {
   @Override
   public void unsendFriendRequest(String senderID, String receiverID)
       throws NoProfileFoundException {
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     // will throw NoProfileFoundException if profiles don't exist
     this.checkProfilesExist(senderID, receiverID);
 
@@ -455,7 +458,7 @@ public class FirebaseUtilities implements StorageInterface {
           InterruptedException,
           NoExistingFriendRequestException {
     this.checkProfilesExist(senderID, receiverID);
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
 
     // check if there is a friend request there
     if (!db.collection("users")
@@ -484,7 +487,7 @@ public class FirebaseUtilities implements StorageInterface {
   //
   @Override
   public void addProfile(String uid, Map<String, Object> data) {
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     //    db.collection("users")
     //        .document(uid)
     //        .collection("profile")
@@ -496,7 +499,7 @@ public class FirebaseUtilities implements StorageInterface {
   //
   @Override
   public void deleteDatabase() {
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     clearCollection(db.collection("users"));
     clearCollection(db.collection("events"));
     clearCollection(db.collection("currentIDs"));
@@ -511,7 +514,7 @@ public class FirebaseUtilities implements StorageInterface {
           InterruptedException {
     this.checkProfilesExist(user1, user2);
 
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
 
     // check if they are friends
     DocumentReference user1Ref = db.collection("users").document(user1);
@@ -527,7 +530,7 @@ public class FirebaseUtilities implements StorageInterface {
 
   //
   private String getNameFromID(String id) throws ExecutionException, InterruptedException {
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     return db.collection("users").document(id).get().get().get("username").toString();
   }
 
@@ -536,7 +539,7 @@ public class FirebaseUtilities implements StorageInterface {
   public Map<String, String> viewFriends(String uid)
       throws NoProfileFoundException, ExecutionException, InterruptedException {
     this.checkProfilesExist(uid, null);
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference userRef = db.collection("users").document(uid);
     Map<String, String> idToName = new HashMap<>();
     for (String friend : (List<String>) userRef.get().get().get("friendsList")) {
@@ -550,7 +553,7 @@ public class FirebaseUtilities implements StorageInterface {
   public Map<String, String> getFriendRequests(String uid, boolean isOutgoing)
       throws NoProfileFoundException, ExecutionException, InterruptedException {
     this.checkProfilesExist(uid, null);
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     Map<String, String> idToName = new HashMap<>();
     String friendRequestCollection;
     if (isOutgoing) {
@@ -572,7 +575,7 @@ public class FirebaseUtilities implements StorageInterface {
           NoEventFoundException,
           ExecutionException,
           InterruptedException {
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference userRef = db.collection("users").document(uid);
     if (!userRef.get().get().exists()) {
       throw new NoProfileFoundException("Profile not found.");
@@ -589,7 +592,7 @@ public class FirebaseUtilities implements StorageInterface {
   public Map<String, String> getUsers(String uid)
       throws NoProfileFoundException, ExecutionException, InterruptedException {
     this.checkProfilesExist(uid, null);
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference userRef = db.collection("users").document(uid);
     List<String> friends = (List<String>) userRef.get().get().get("friendsList");
     System.out.println(friends);
@@ -609,7 +612,7 @@ public class FirebaseUtilities implements StorageInterface {
   public List<Map<String, Object>> getEventHistory(String uid)
       throws NoProfileFoundException, ExecutionException, InterruptedException {
     this.checkProfilesExist(uid, null);
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference userRef = db.collection("users").document(uid);
     return (List<Map<String, Object>>) userRef.get().get().get("eventHistory");
   }
@@ -618,7 +621,7 @@ public class FirebaseUtilities implements StorageInterface {
   public Map<String, Object> getEvent(String eventID)
       throws ExecutionException, InterruptedException, NoEventFoundException {
 
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference docRef = db.collection("events").document("event-" + eventID);
 
     ApiFuture<DocumentSnapshot> future = docRef.get();
@@ -647,7 +650,7 @@ public class FirebaseUtilities implements StorageInterface {
   //
   public Event getEventRecord(String eventID)
       throws ExecutionException, InterruptedException, NoEventFoundException {
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference docRef = db.collection("events").document("event-" + eventID);
 
     DocumentSnapshot snapshot = docRef.get().get();
@@ -673,7 +676,7 @@ public class FirebaseUtilities implements StorageInterface {
   @Override
   public void deleteEvent(String uid, String id) throws NoEventFoundException {
 
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     CollectionReference dataRef = db.collection("users").document(uid).collection("events");
 
     for (DocumentReference eventRef : dataRef.listDocuments()) {
@@ -693,7 +696,7 @@ public class FirebaseUtilities implements StorageInterface {
           ExecutionException,
           InterruptedException,
           NoProfileFoundException {
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     if (!db.collection("users").document(user).get().get().exists()) {
       throw new NoProfileFoundException("Profile does not exist");
     }
@@ -719,7 +722,7 @@ public class FirebaseUtilities implements StorageInterface {
     // use the gusere below to implement this handler
     // - https://firebase.google.com/docs/firestore/quickstart#add_data
 
-    Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
     CollectionReference collection =
         db.collection("users").document(user).collection(collection_id);
     collection.document(doc_id).set(data);
@@ -733,7 +736,7 @@ public class FirebaseUtilities implements StorageInterface {
     }
     try {
       // removes all data for user 'user'
-      Firestore db = FirestoreClient.getFirestore();
+      //      Firestore db = FirestoreClient.getFirestore();
       // 1: Get a ref to the user document
       DocumentReference userDoc = db.collection("users").document(user);
       // 2: Delete the user document
