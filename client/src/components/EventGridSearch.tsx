@@ -112,7 +112,7 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
           <div className="search-buttons">
             <div className="sort-wrapper">
               <button className="search-button" onClick={handleSeeMyFriendsClick}>
-                See My Friends
+                See Friends
               </button>
             </div>
 
