@@ -240,7 +240,7 @@ public class FirebaseUtilities implements StorageInterface {
 
     DocumentReference docRef = db.collection("users").document(uid);
     if (docRef.get().get().exists()) {
-      docRef.update("tags", tags);
+      docRef.update("interestedTags", tags);
       docRef.update("favEventOrganizers", favEventOrganizers);
       docRef.update("profilePicUrl", profilePicUrl);
     } else {
