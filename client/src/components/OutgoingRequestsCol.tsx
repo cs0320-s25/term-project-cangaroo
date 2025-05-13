@@ -11,19 +11,20 @@ import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutg
 } from "../utils/api";
 
 interface OutgoingRequestsColumnProps {
-  friendUIDs: [string, string][];
+  userTuples: [string, string][];
   onNameClick: (uid: string) => void;
 }
 
 export default function OutgoingRequestsColumn({
-  friendUIDs,
+  userTuples,
   onNameClick,
 }: OutgoingRequestsColumnProps) {
+  console.log(userTuples)
   return (
     <div className="friends-column left">
       <h3>Pending Friend Requests</h3>
       <div className="friend-cards-container">
-        {friendUIDs.map((userTuple, index) => (
+        {userTuples.map((userTuple, index) => (
           <FriendCardOutgoingRequest
             key={userTuple[0]}
             uid={userTuple[0]}

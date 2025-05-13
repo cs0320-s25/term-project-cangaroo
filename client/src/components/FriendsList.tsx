@@ -90,9 +90,11 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           }
           console.log("Successfully fetched non-friends from Firebase:", getNonFriendsResponse.users);
           const nonFriendsList: [string, string][] = Array.from(Object.entries(getNonFriendsResponse.users));
-          
-          console.log("List of non-friends tuples: ", nonFriendsList);
-          setNonFriends(nonFriendsList);
+          const filteredNonFriendsList = nonFriendsList.filter(
+            ([uid]) => !outgoingRequests.some(([requestUid]) => requestUid === uid)
+          );          
+          console.log("List of non-friends tuples: ", filteredNonFriendsList);
+          setNonFriends(filteredNonFriendsList);
         }
       } catch (err) {
         console.error("Failed to fetch non-friends:", err);
@@ -127,7 +129,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
             console.log("Successfully fetched incoming requests from Firebase:", viewIncomingRequestsResponse.receivedFriendRequests);
             const requestsList: [string, string][] = Array.from(Object.entries(viewIncomingRequestsResponse.receivedFriendRequests));
             
-            console.log("List of current friends tuples: ", requestsList);
+            console.log("List of incoming requests user tuples: ", requestsList);
             setIncomingRequests(requestsList);
           }  
         }
@@ -149,23 +151,23 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   useEffect(() => {
     const getOutgoingRequests = async () => {
       try {
-        console.log("Fetching incoming requests from Firebase...");
+        console.log("Fetching outgoing requests from Firebase...");
         if (userId) {
           const viewOutgoingRequestsResponse = await getOutgoingFriendRequests(userId); 
           if (viewOutgoingRequestsResponse.result !== "success") {
             console.error(viewOutgoingRequestsResponse.result.error_message);
             return;
           }
-          if (!viewOutgoingRequestsResponse.receivedFriendRequests ||
-            Object.keys(viewOutgoingRequestsResponse.receivedFriendRequests).length === 0) {
+          if (!viewOutgoingRequestsResponse.outgoingFriendRequests ||
+            Object.keys(viewOutgoingRequestsResponse.outgoingFriendRequests).length === 0) {
             setOutgoingRequests([]);
             return;
           }
           else {
-            console.log("Successfully fetched incoming requests from Firebase:", viewOutgoingRequestsResponse.outgoingFriendRequests);
+            console.log("Successfully fetched outgoing requests from Firebase:", viewOutgoingRequestsResponse.outgoingFriendRequests);
             const requestsList: [string, string][] = Array.from(Object.entries(viewOutgoingRequestsResponse.outgoingFriendRequests));
             
-            console.log("List of current friends tuples: ", requestsList);
+            console.log("List of current outgoing requests user tuples: ", requestsList);
             setOutgoingRequests(requestsList);
           }  
         }
@@ -194,6 +196,8 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
         console.log("SUCCESS: FRIEND REQUEST SENT.");
         const profile = await viewProfile(receiveruid);
         setOutgoingRequests([...outgoingRequests, profile.data.username])
+
+        setNonFriends(nonFriends.filter(([uid, username]) => uid !== receiveruid))
       }
     } catch (err) {
       console.error("Failed to send request to ", receiveruid, err);
@@ -317,7 +321,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           </div>
           <div className="request-section">
             <OutgoingRequestsColumn
-              friendUIDs={outgoingRequests} 
+              userTuples={outgoingRequests} 
               onNameClick={handleFriendCardNameClick}
             />
           </div>

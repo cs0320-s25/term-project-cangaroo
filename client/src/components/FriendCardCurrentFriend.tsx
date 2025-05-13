@@ -25,7 +25,7 @@ function FriendCardCurrentFriend({
   const [name, setName] = useState("")
   const [numFriends, setNumFriends] = useState(0)
   const navigate = useNavigate();
-  // const [profilePic, setProfilePic] = useState("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg")
+  const [profilePic, setProfilePic] = useState("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg")
   
   useEffect(() => {
     const fetchProfile = async () => {
@@ -40,7 +40,10 @@ function FriendCardCurrentFriend({
         const data = result.data;
         setName(data.username);
         setNumFriends(data.friendsList?.length || 0);
-        // setProfilePic(data.) doesn't exist yet
+        if (data.ProfilePicUrl) {
+          setProfilePic(data.profilePicUrl);
+          console.log("Profile Picture Successfully Loaded: ", data.profilePicUrl)
+        }
       } catch (err) {
         console.error("Failed to load profile:", err);
         // navigate("/");
@@ -60,7 +63,7 @@ function FriendCardCurrentFriend({
   return (
     <div className="friend-card">
 
-      {/* <img src={profilePictureUrl} className="friend-image" /> */}
+      <img src={profilePic} className="friend-image" />
 
       <div className="friend-info">
 
