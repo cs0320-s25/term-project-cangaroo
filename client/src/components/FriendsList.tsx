@@ -208,6 +208,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           console.error(result.error_message);
           return;
         }
+        // local state updates :D
         const profile = await viewProfile(receiveruid);
         setCurrentFriends([...currentFriends, [receiveruid, profile.data.username]]);
         console.log("SUCCESS: ACCEPTED FRIEND REQUEST.");
@@ -245,6 +246,8 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
         console.log("SUCCESS: UNFRIENDED.");
         // for updating the frontend (else lag?)
         setCurrentFriends(currentFriends.filter(([uid, username]) => uid !== frienduid)) // filter out the unfriended user & update useState
+        const profile = await viewProfile(frienduid);
+        setNonFriends([...nonFriends, [frienduid, profile.data.username]])
       }
     } catch (err) {
       console.error("Failed to unfriend ", userId, "and ", frienduid, err);
@@ -325,7 +328,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           nonFriendTuples={nonFriends}
           searchTerm={searchTermNonFriends}
           onSearchChange={setSearchTermNonFriends}
-          onSendRequest={handleFriendCardNameClick}
+          handleSendRequest={handleSendFriendRequest}
           onNameClick={handleFriendCardNameClick}
         />
         {/* column 3: general users (search for new friends) */}

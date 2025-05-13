@@ -5,11 +5,10 @@ import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutg
          unfriend, viewFriends, viewProfile
  } from "../utils/api";
 
-interface FriendCardProps {
+interface FriendCardNonFriendProps {
   uid: string;
   handleNameClick: () => void;
-  displayText: string;
-  handleButtonClick?: () => void;
+  handleSendRequest: () => void;
 };
 
 /**
@@ -17,12 +16,11 @@ interface FriendCardProps {
  * 
  * @returns - the JSX FriendCard component.
  */
-function FriendCard({
+function FriendCardNonFriend({
   uid,
   handleNameClick,
-  displayText, 
-  handleButtonClick
-}: FriendCardProps){
+  handleSendRequest
+}: FriendCardNonFriendProps){
 
   const [name, setName] = useState("")
   const [numFriends, setNumFriends] = useState(0)
@@ -78,19 +76,11 @@ function FriendCard({
           {numFriends} friend{numFriends !== 1 ? 's' : ''} 
         </p>
 
-        {/* <button 
-          // onClick={handleButtonClick} 
-          className={`friend-button`} 
-        >
-          
-        </button> */}
-        {}
-
         <button
-          onClick={handleButtonClick} 
+          onClick={handleSendRequest} 
           className="friend-button"
         >
-          {displayText}
+          Send Friend Request
         </button>
 
       </div>
@@ -99,4 +89,4 @@ function FriendCard({
   );
 }
 
-export default FriendCard;
+export default FriendCardNonFriend;

@@ -76,14 +76,6 @@ function FriendCardCurrentFriend({
           {numFriends} friend{numFriends !== 1 ? 's' : ''} 
         </p>
 
-        {/* <button 
-          // onClick={handleButtonClick} 
-          className={`friend-button`} 
-        >
-          
-        </button> */}
-        {}
-
         <button
           onClick={handleUnfriend} 
           className="friend-button"

@@ -4,15 +4,16 @@ interface NonFriendColProps {
   nonFriendTuples: [string,string][];
   searchTerm: string;
   onSearchChange: (term: string) => void;
-  onSendRequest: (name: string) => void;
   onNameClick: (uid: string) => void;
+  handleSendRequest: (uid: string) => void;
 }
+import FriendCardNonFriend from "./FriendCardNonFriend";
 
 export default function NonFriendsColumn({
   nonFriendTuples,
   searchTerm,
   onSearchChange,
-  onSendRequest,
+  handleSendRequest,
   onNameClick,
 }: NonFriendColProps) {
   const filteredNonFriendTuples = nonFriendTuples.filter(tuple =>
@@ -32,11 +33,11 @@ export default function NonFriendsColumn({
       <div className="scrollable-list">
         <div className="user-cards-container">
           {filteredNonFriendTuples.map((nonFriendTuple, index) => (
-            <FriendCard 
+            <FriendCardNonFriend 
               key={nonFriendTuple[0]} 
               uid={nonFriendTuple[0]} 
               handleNameClick={() => onNameClick(nonFriendTuple[0])} 
-              friendStatus="non-friend"
+              handleSendRequest={() => handleSendRequest(nonFriendTuple[0])}
               />
           ))}
         </div>

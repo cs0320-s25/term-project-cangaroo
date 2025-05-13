@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/FriendsList.css"; 
 // import { viewFriends } from "../utils/api";
 import { useParams } from "react-router"
+import FriendCardOutgoingRequest from "./FriendCardOutgoingRequest";
 
 import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutgoingFriendRequests, getReceivedFriendRequests,
   unfriend, viewFriends, viewProfile
@@ -23,11 +24,10 @@ export default function OutgoingRequestsColumn({
       <h3>Pending Friend Requests</h3>
       <div className="friend-cards-container">
         {friendUIDs.map((userTuple, index) => (
-          <FriendCard
+          <FriendCardOutgoingRequest
             key={userTuple[0]}
             uid={userTuple[0]}
             handleNameClick={() => onNameClick(userTuple[0])}
-            displayText="Friend Request Sent"
           />
         ))}
       </div>
