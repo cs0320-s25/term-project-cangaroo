@@ -163,6 +163,18 @@ export async function viewFriends(
 }
 
 /**
+ * Method that queries the backend using the get-non-friends endpoint (viewNonFriends for consistency with viewFriends)
+ * @returns 
+ */
+export async function viewNonFriends(
+  uid: string
+) {
+  return await queryAPI("get-non-friends", {
+    uid
+  });
+}
+
+/**
  * Method that queries the backend using the get-outgoing-friend-requests endpoint
  * @returns 
  */

@@ -156,7 +156,11 @@ export default function ProfilePage() {
                         <div className="profile-header-section">
                             <h2>{profileUserName}</h2>
                             <h3>{connections} Connections</h3>
-                            <button id="friend-list" onClick={() => setModalOpen(true)}>Friends List</button>
+                            {userId === user?.id ? (
+                              <button id="friend-list" onClick={() => setModalOpen(true)}>My Friends</button>
+                            ) : (
+                              null
+                            )}
                         </div>
                     </div>
                     

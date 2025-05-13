@@ -49,7 +49,7 @@
   background-color: #ffffff;
   margin-top: 40px;
   position: absolute; 
-  z-index: 200; /*makes sure navbar is always on top of other components*/
+  z-index: 1001; /*makes sure navbar is always on top of other components*/
   left: 20vw;
 }
 

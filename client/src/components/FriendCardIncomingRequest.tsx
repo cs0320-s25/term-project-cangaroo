@@ -5,34 +5,29 @@ import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutg
          unfriend, viewFriends, viewProfile
  } from "../utils/api";
 
-interface FriendCardProps {
+interface FriendCardIncomingRequestProps {
   uid: string;
   handleNameClick: () => void;
-  displayText: string;
-  handleButtonClick?: () => void;
+  handleAccept: (uid: string) => void;
+  handleReject: (uid: string) => void;
 };
-
-
-// NO LONGER NEED THIS VER. BUT COULD ALSO JUST LEAVE AS REFERENCE.
-
-
 
 /**
  * Method to render an friend card component. Contains various interactions with other users (friend, unfriend, accept, reject, send invite, click profile)
  * 
  * @returns - the JSX FriendCard component.
  */
-function FriendCard({
+function FriendCardIncomingRequest({
   uid,
   handleNameClick,
-  displayText, 
-  handleButtonClick
-}: FriendCardProps){
+  handleAccept,
+  handleReject
+}: FriendCardIncomingRequestProps){
 
   const [name, setName] = useState("")
   const [numFriends, setNumFriends] = useState(0)
   const navigate = useNavigate();
-  // const [profilePic, setProfilePic] = useState("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg")
+  const [profilePic, setProfilePic] = useState("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg")
   
   useEffect(() => {
     const fetchProfile = async () => {
@@ -47,7 +42,10 @@ function FriendCard({
         const data = result.data;
         setName(data.username);
         setNumFriends(data.friendsList?.length || 0);
-        // setProfilePic(data.) doesn't exist yet
+        if (data.ProfilePicUrl) {
+          setProfilePic(data.profilePicUrl);
+          console.log("Profile Picture Successfully Loaded: ", data.profilePicUrl)
+        }
       } catch (err) {
         console.error("Failed to load profile:", err);
         // navigate("/");
@@ -67,7 +65,7 @@ function FriendCard({
   return (
     <div className="friend-card">
 
-      {/* <img src={profilePictureUrl} className="friend-image" /> */}
+      <img src={profilePic} className="friend-image" />
 
       <div className="friend-info">
 
@@ -83,19 +81,18 @@ function FriendCard({
           {numFriends} friend{numFriends !== 1 ? 's' : ''} 
         </p>
 
-        {/* <button 
-          // onClick={handleButtonClick} 
-          className={`friend-button`} 
-        >
-          
-        </button> */}
-        {}
-
         <button
-          onClick={handleButtonClick} 
+          onClick={() => handleAccept(uid)} 
           className="friend-button"
         >
-          {displayText}
+          Accept Friend Request
+        </button>
+
+        <button
+          onClick={() => handleAccept(uid)} 
+          className="friend-button"
+        >
+          Decline Friend Request
         </button>
 
       </div>
@@ -104,4 +101,4 @@ function FriendCard({
   );
 }
 
-export default FriendCard;
+export default FriendCardIncomingRequest;
