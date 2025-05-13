@@ -55,10 +55,31 @@ export default function ProfilePage() {
 
 
   useEffect(() => {
-    if (!userId) {
-      navigate("/");
-    }
-  }, [userId, navigate]);
+    if (!userId || !user) return;
+  
+    const syncClerkPhoto = async () => {
+      if (userId !== user.id) return; // only sync for own profile
+  
+      const latestClerkImage = user.imageUrl;
+      if (latestClerkImage && latestClerkImage !== profilePicUrl) {
+        try {
+          console.log("Profile pic out of sync — updating...");
+          await editProfile(
+            user.id,
+            tags.join(","),
+            orgs.join(","),
+            latestClerkImage
+          );
+          setProfilePicUrl(latestClerkImage);
+        } catch (err) {
+          console.error("Failed to sync Clerk profile picture:", err);
+        }
+      }
+    };
+  
+    syncClerkPhoto();
+  }, [user, userId, profilePicUrl, tags, orgs]);
+  
 
 
   useEffect(() => {
@@ -73,6 +94,7 @@ export default function ProfilePage() {
         if (result.result !== "success") {
           console.error(result.error_message);
           navigate("/");
+          alert("Sorry, this profile no longer exists or couldn't be loaded.");
           return;
         }
 

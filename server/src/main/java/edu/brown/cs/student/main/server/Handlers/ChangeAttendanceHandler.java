@@ -25,12 +25,15 @@ public class ChangeAttendanceHandler implements Route {
     String eventID = request.queryParams("eventID");
     String isAttending = request.queryParams("isAttending");
 
-    if ((uid == null)
-        || (eventID == null)
-        || (!isAttending.equalsIgnoreCase("false") && !isAttending.equalsIgnoreCase("true"))) {
-      responseMap.put("result", "success");
-      responseMap.put(
-          "error_message", "Missing required parameters: uid, eventID, isAttending (boolean)");
+    if (uid == null || eventID == null || isAttending == null) {
+      responseMap.put("result", "failure");
+      responseMap.put("error_message", "Missing required parameters: uid, eventID, isAttending");
+      return Utils.toMoshiJson(responseMap);
+    }
+
+    if (!isAttending.equalsIgnoreCase("true") && !isAttending.equalsIgnoreCase("false")) {
+      responseMap.put("result", "failure");
+      responseMap.put("error_message", "isAttending must be 'true' or 'false'");
       return Utils.toMoshiJson(responseMap);
     }
 

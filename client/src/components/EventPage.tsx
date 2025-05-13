@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import useEventDetails from "../hooks/useEventDetails";
 import EditEventForm from "./EditEventForm";
 import { createGcalEvent } from "./OAuthCallback";
-      
 import { useUser } from "@clerk/clerk-react";
 
 interface EventPageProps {
