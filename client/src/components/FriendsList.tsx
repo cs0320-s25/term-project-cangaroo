@@ -90,11 +90,11 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           }
           console.log("Successfully fetched non-friends from Firebase:", getNonFriendsResponse.users);
           const nonFriendsList: [string, string][] = Array.from(Object.entries(getNonFriendsResponse.users));
-          const filteredNonFriendsList = nonFriendsList.filter(
-            ([uid]) => !outgoingRequests.some(([requestUid]) => requestUid === uid)
-          );          
-          console.log("List of non-friends tuples: ", filteredNonFriendsList);
-          setNonFriends(filteredNonFriendsList);
+          // const filteredNonFriendsList = nonFriendsList.filter(
+          //   ([uid]) => !outgoingRequests.some(([requestUid]) => requestUid === uid)
+          // );          
+          console.log("List of non-friends tuples: ", nonFriendsList);
+          setNonFriends(nonFriendsList);
         }
       } catch (err) {
         console.error("Failed to fetch non-friends:", err);
