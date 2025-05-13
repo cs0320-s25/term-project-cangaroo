@@ -21,14 +21,18 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [eventIDs, setEventIDs] = useState<string[]>([]);
   const [searchSource, setSearchSource] = useState<"default" | "search" | "recommend" | "friends">("default");
+  const [loading, setLoading] = useState(true);
+
 
   // Fetch random events when searchSource is "default"
   useEffect(() => {
     const getDefaultEvents = async () => {
       if (searchSource === "default") {
+        setLoading(true);
         const result = await randomRecommend();
         if (result?.event_ids) {
           setEventIDs(result.event_ids);
+          setLoading(false);
           console.log("Default random events:", result.event_ids);
         }
       }
@@ -41,9 +45,11 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
     const getSearchResults = async () => {
       if (searchTerm !== "") {
         setSearchSource("search");
+        setLoading(true);
         const searchResults = await search(searchTerm);
         if (searchResults?.event_ids) {
           setEventIDs(searchResults.event_ids);
+          setLoading(false);
           console.log("Search matches:", searchResults.event_ids);
         }
       } else {
@@ -58,9 +64,11 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
   const handleRecommendClick = async () => {
     if (!user?.id) return;
     setSearchSource("recommend");
+    setLoading(true);
     const result = await recommend(user.id);
     if (result?.event_ids?.length > 0) {
       setEventIDs(result.event_ids);
+      setLoading(false);
       setSelectedEvent(null);
       console.log("Recommended:", result.event_ids);
     } else {
@@ -73,10 +81,12 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
     if (!user?.id) return;
     console.log("Calling rankEventsByFriends with:", user.id);
     setSearchSource("friends");
+    setLoading(true);
     const friendResults = await rankEventsByFriends(user.id);
     console.log("Friend results:", friendResults);
     if (friendResults?.event_ids?.length > 0) {
       setEventIDs(friendResults.event_ids);
+      setLoading(false);
       setSelectedEvent(null);
       console.log("Ranked by friends:", friendResults.event_ids);
     } else {
@@ -124,7 +134,9 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
       <div className="event-grid-page">
         <div className="scrollable-grid">
           <div className="card-grid">
-            {eventIDs.length === 0 ? (
+            {loading ? (
+              <h2>Loading events...</h2>
+            ) : eventIDs.length === 0 ? (
               <h2>No Events Found</h2>
             ) : (
               eventIDs.map((eventID) => (

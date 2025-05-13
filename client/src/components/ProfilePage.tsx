@@ -55,12 +55,6 @@ export default function ProfilePage() {
 
 
   useEffect(() => {
-    if (!userId) {
-      navigate("/");
-    }
-  }, [userId, navigate]);
-
-  useEffect(() => {
     if (!userId || !user) return;
   
     const syncClerkPhoto = async () => {
@@ -100,6 +94,7 @@ export default function ProfilePage() {
         if (result.result !== "success") {
           console.error(result.error_message);
           navigate("/");
+          alert("Sorry, this profile no longer exists or couldn't be loaded.");
           return;
         }
 
