@@ -120,6 +120,7 @@ public class MatchEvents {
         String organizerWords = event.eventOrganizer().toLowerCase();
 
         //if your fav event organizer is the event organizer, add 10 points
+
         for (String favOrg : favEventOrgs) {
           if (favOrg != null && organizerWords.equals(favOrg.toLowerCase())) {
             score += 10;

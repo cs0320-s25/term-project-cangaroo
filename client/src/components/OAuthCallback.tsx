@@ -18,8 +18,6 @@ const params = new URLSearchParams({
   access_type: "online",
 });
 
-
-
 let event2 = sessionStorage.getItem("event")
 
 let access_token = ""
@@ -45,9 +43,6 @@ function initiate() {
             }
         )
 }
-
-
-
 
 const OAuthCallback = () => {
 
