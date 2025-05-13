@@ -7,8 +7,15 @@ import java.net.URL;
 import java.util.*;
 import org.json.*;
 
+//this class will get synonyms to ensure words like "latte" and "coffee" match
 public class SynonymFetcher {
 
+  /*
+  * Get all the synonyms for a word
+  *
+  * @input word - the word you are trying to get synonyms for
+  * @return - a set of all the synonyms for a word
+  */
   public static Set<String> getSynonyms(String word) {
     Set<String> synonyms = new HashSet<>();
     try {
