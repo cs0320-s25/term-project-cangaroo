@@ -19,36 +19,7 @@ function FriendCard({
   uid,
   handleNameClick,
 }: FriendCardProps){
-  // const { currentUseruid } = useParams<{ userId: string }>();
 
-  const handleUnfriendClick = () => {
-    // if (requestStatus === 'incoming') {
-    //   onAcceptRequest(); // accept request
-    // } else if (requestStatus === 'friend') {
-    //   onUnfriend(); // unfriend a friend in second col
-    // } else if (requestStatus === 'none') {
-    //   onSendRequest(); // send friend invite!!
-    // }
-    
-    const unfriendClick = async () => {
-      try {
-        const result = await unfriend(uid, currentUseruid);
-        if (result.result !== "success") {
-          console.error(result.error_message);
-          // navigate("/");
-          return;
-        }
-        const data = result.data;
-        setName(data.username);
-        setNumFriends(data.friendsList?.length || 0);
-        // setProfilePic(data.) doesn't exist yet
-      } catch (err) {
-        console.error("Failed to load profile:", err);
-        // navigate("/");
-        return;
-      }
-    };
-  };
   const [name, setName] = useState("")
   const [numFriends, setNumFriends] = useState(0)
   const navigate = useNavigate();
@@ -105,6 +76,7 @@ function FriendCard({
           // onClick={handleButtonClick} 
           className={`friend-button`} 
         >
+
         </button>
 
       </div>

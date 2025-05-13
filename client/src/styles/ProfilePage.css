@@ -100,14 +100,15 @@
 }
 
 #friend-list {
-  font-family: "Inter", sans-serif;
-  background: #EFEFEF;
-  border: 2px solid #8D99AE;
-  padding: 0.5rem 1.5rem;
-  border-radius: 999px;
-  font-size: 20px;
-  color: #8D99AE;
+  padding: 0.6rem 1rem;
+  background-color: #DD1155;
+  color: white;
+  border: none;
+  border-radius: 100px;
+  font-weight: 500;
+  font-size: 1.5rem;
   cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
 }  
 
 /* --- INTEREST / TAG STYLES --- */

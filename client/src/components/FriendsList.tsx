@@ -4,9 +4,12 @@ import { useNavigate } from "react-router-dom";
 import "../styles/FriendsList.css"; 
 // import { viewFriends } from "../utils/api";
 import { useParams } from "react-router"
+import IncomingRequestsColumn from "./IncomingRequestsCol";
+import CurrentFriendsColumn from "./CurrentFriendsCol";
+import NonFriendsColumn from "./NonFriendsCol";
 
 import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutgoingFriendRequests, getReceivedFriendRequests,
-  unfriend, viewFriends, viewProfile
+  unfriend, viewFriends, viewProfile, viewNonFriends
 } from "../utils/api";
 
 interface FriendsListProps {
@@ -27,59 +30,6 @@ interface FriendsListProps {
   onClose: () => void;
 }
 
-// MOCK!!
-const incomingRequests: User[] = [
-  {
-    name: "Christina Paxson",
-    profilePictureUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg",
-    friendCount: 198,
-    requestStatus: "incoming", 
-  },
-  {
-    name: "Blueno",
-    profilePictureUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg",
-    friendCount: 123,
-    requestStatus: "incoming", 
-  },
-];
-
-const existingFriends: User[] = [
-  {
-    name: "Bruno",
-    profilePictureUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg",
-    friendCount: 45,
-    requestStatus: "friend", 
-  },
-  {
-    name: "Ratty Rat",
-    profilePictureUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg",
-    friendCount: 112,
-    requestStatus: "friend", 
-  },
-  {
-    name: "Ratty Rat #2",
-    profilePictureUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg",
-    friendCount: 112,
-    requestStatus: "friend", 
-  },
-];
-
-const allUsers: User[] = [
-  {
-    name: "CS32 Warrior",
-    profilePictureUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg",
-    friendCount: 15,
-    requestStatus: "none", 
-  },
-  {
-    name: "Ronald McDonald",
-    profilePictureUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg",
-    friendCount: 30,
-    requestStatus: "none",
-  },
-];
-
-
 export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   // routing
   const navigate = useNavigate();
@@ -87,195 +37,162 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   // get current user
   const { userId } = useParams<{ userId: string }>();
 
-  // basic usestates to keep track of other users in each column 
-  const [friends, setFriends] = useState<User[]>(existingFriends);
-  const [incoming, setIncoming] = useState<User[]>(incomingRequests);
-  const [users, setUsers] = useState<User[]>(allUsers);
-
 
   // basic search bar functionality
   const [searchTermFriends, setSearchTermFriends] = useState("");
-  const [searchTermUsers, setSearchTermUsers] = useState("");
-
-  
-
-  const filteredUsers = users
-    .filter(user => user.requestStatus=="none" || "incoming") 
-    .filter(user => user.name.toLowerCase().includes(searchTermUsers.toLowerCase()) // filter
-  );
+  const [searchTermNonFriends, setSearchTermNonFriends] = useState("");
 
 
-  // get current friends from backend
-  const [currentFriends, setCurrentFriends] = useState<string[]>([]);
-  const filteredCurrentFriends = currentFriends
-    .filter(currentFriend => currentFriend.toLowerCase().includes(searchTermFriends.toLowerCase()) // filter
-  );
+  /**
+   * Get current friends from backend
+   */
+  const [currentFriends, setCurrentFriends] = useState<[string, string][]>([]); // storing as a list of tuples to preserve information and make iterable
+
   useEffect(() => {
     const getCurrentFriends = async () => {
-      console.log("Fetching current friends from Firebase...");
-      if (userId) {
-        const viewFriendsResponse = await viewFriends(userId); 
-        if (viewFriendsResponse.friends !== null) {
-          console.log("Fetched event info from Firebase:", viewFriendsResponse.friends);
-          const friendsList = Object.keys(viewFriendsResponse.friends);
-          setCurrentFriends(friendsList)
+      try {
+        console.log("Fetching current friends from Firebase...");
+        if (userId) {
+          const viewFriendsResponse = await viewFriends(userId); 
+          if (viewFriendsResponse.result !== "success") {
+            console.error(viewFriendsResponse.result.error_message);
+            return;
+          }
+          console.log("Successfully fetched current friends from Firebase:", viewFriendsResponse.friends);
+          const friendsList: [string, string][] = Array.from(Object.entries(viewFriendsResponse.friends));
+          
+          console.log("List of current friends tuples: ", friendsList);
+          setCurrentFriends(friendsList);
         }
+      } catch (err) {
+        console.error("Failed to fetch current friends:", err);
+        return;
       }
     };
   
     getCurrentFriends();
   }, []);
 
+  /**
+   * Get non-friends from backend
+   */
+  const [nonFriends, setNonFriends] = useState<[string, string][]>([]); // storing as a list of tuples to preserve information and make iterable
+
+  useEffect(() => {
+    const getNonFriends = async () => {
+      try {
+        console.log("Fetching non-friends from Firebase...");
+        if (userId) {
+          const getNonFriendsResponse = await viewNonFriends(userId); 
+          if (getNonFriendsResponse.result !== "success") {
+            console.error(getNonFriendsResponse.result.error_message);
+            return;
+          }
+          console.log("Successfully fetched non-friends from Firebase:", getNonFriendsResponse.users);
+          const nonFriendsList: [string, string][] = Array.from(Object.entries(getNonFriendsResponse.users));
+          
+          console.log("List of non-friends tuples: ", nonFriendsList);
+          setNonFriends(nonFriendsList);
+        }
+      } catch (err) {
+        console.error("Failed to fetch non-friends:", err);
+        return;
+      }
+    };
+  
+    getNonFriends();
+  }, []);
+  
 
   // handling unfriending
 
   const handleUnfriendClick = () => {
-    // if (requestStatus === 'incoming') {
-    //   onAcceptRequest(); // accept request
-    // } else if (requestStatus === 'friend') {
-    //   onUnfriend(); // unfriend a friend in second col
-    // } else if (requestStatus === 'none') {
-    //   onSendRequest(); // send friend invite!!
-    // }
+
     const unfriendClick = async (frienduid: string) => {
       try {
         if (userId) {
           const result = await unfriend(userId, frienduid);
           if (result.result !== "success") {
             console.error(result.error_message);
-            // navigate("/");
             return;
           }
 
           console.error("UNFRIENDED.");
         }
       } catch (err) {
-        console.error("Failed to load profile:", err);
-        // navigate("/");
+        console.error("Failed to unfriend ", userId, "and ", frienduid, err);
         return;
       }  
     }  
   };
 
 
-  // handling actions (various button clicks)
-  const handleAcceptRequest = (name: string) => {
-    // filter out user from pending requests (col 1) and add to the friends list (col 2)
-    setIncoming(prevState => prevState.filter(friend => friend.name !== name));
-    
-    const acceptedFriend = incoming.find(friend => friend.name === name);
-  
-    if (acceptedFriend) {
-      setFriends(prevState => [
-        ...prevState,
-        { ...acceptedFriend, status: 'friend' } 
-      ]);
-    }
-  };
-
-  const handleDeclineRequest = (name: string) => {
-    setIncoming(prevState => prevState.filter(friend => friend.name !== name)); // set the incoming list to remove the declined invites
-  };
-
-  const handleSendRequest = (name: string) => {
-    setUsers(prevState => prevState.map(user => user.name === name ? { ...user, status: 'user' } : user)); 
-  };
-
-  const handleUnfriend = (name: string) => {
-    setFriends(prevState => prevState.filter(friend => friend.name !== name)); // filter out the unfriended user from the middle col
-  };
-
-
-  // navigate to new profile
+  /**
+   * Should navigate to the clicked user's profile. Handles rerouting!
+   * @param uid uid of the user whose name was clicked
+   */
   const handleFriendCardNameClick= (uid: string) => {
     // close modal friendslist, go back to profile pg
     onClose();
     navigate(`/profile/${uid}`);
   };
 
-  // only show if component is open
+  /**
+   * Only show if friendslist is open!
+   */
   if (!isOpen) return null;
 
-
-
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   return (
     <div className="friends-list-modal">
-
-      <button className="close-friend-list" onClick={onClose}>
-      ← Return to My Profile
-      </button>
+      <div className="header-container">
+        <button className="back-button" onClick={onClose}>
+        ← return to my profile
+        </button>
+      </div>
 
       <div className="friends-list-grid">
         {/* column 1: incoming requests */}
-        <div className="friends-column left">
-          <h3>Incoming Friend Requests</h3>
-
-          <div className="friend-cards-container">
-          {filteredCurrentFriends.map((frienduid, index) => (
-              <FriendCard 
-                key={index} 
-                uid={frienduid}
-                handleNameClick={(onClose)}
-              />
-            ))}
-          </div>
-        </div>
+        <IncomingRequestsColumn
+          friendUIDs={[]} // or use UID if available
+          onNameClick={handleFriendCardNameClick}
+        />
         {/* column 1: incoming requests */}
 
 
         {/* column 2: current friends */}
-        <div className="friends-column middle">
-          <h3>My Friends</h3>
-          <input
-            className="friend-search-bar"
-            type="text"
-            placeholder="Search friends..."
-            value={searchTermFriends}
-            onChange={(e) => setSearchTermFriends(e.target.value)}
-          />
-
-          <div className="friend-cards-container">
-            {filteredCurrentFriends.map((frienduid, index) => (
-              <FriendCard 
-                key={index} 
-                uid={frienduid}
-                handleNameClick={(onClose)}
-              />
-            ))}
-          </div>
-        </div>
-        {/* column 2: current friends */}
+        <CurrentFriendsColumn
+          friendTuples={currentFriends}
+          searchTerm={searchTermFriends}
+          onSearchChange={setSearchTermFriends}
+          onNameClick={handleFriendCardNameClick}
+        />
+        {/* column 2: current friends (EACH COL HANDLES SEARCHING SEPARATELY) */}
         
 
         {/* column 3: general users (search for new friends) */}
-        <div className="friends-column right">
-          <h3>Search Users</h3>
-          <input
-            className="friend-search-bar"
-            type="text"
-            placeholder="Search all users..."
-            value={searchTermUsers}
-            onChange={(e) => setSearchTermUsers(e.target.value)}
-          />
-          <div className="user-cards-container">
-            {filteredUsers.map((user, index) => (
-              <FriendCard 
-                key={index} 
-                {...user} 
-                onAcceptRequest={() => {}}
-                onDeclineRequest={() => {}}
-                onSendRequest={() => handleSendRequest(user.name)}
-                onUnfriend={() => {}}
-                handleNameClick={() => handleFriendCardNameClick(user.name)}
-              />
-            ))}
-          </div>
-        </div>
+        <NonFriendsColumn
+          nonFriendTuples={nonFriends}
+          searchTerm={searchTermNonFriends}
+          onSearchChange={setSearchTermNonFriends}
+          onSendRequest={handleFriendCardNameClick}
+          onNameClick={handleFriendCardNameClick}
+        />
         {/* column 3: general users (search for new friends) */}
-
-        
+      
       </div>
+        
     </div>
   );
 }

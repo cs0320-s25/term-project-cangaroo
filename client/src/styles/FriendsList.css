@@ -1,18 +1,24 @@
+/* For logo: */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
 .friends-list-modal {
     background-color: #FBFBFB;
-    padding: 8rem;
-    border-radius: 10px;
+    /* padding: 8rem; */
+    /* border-radius: 10px; */
     position: relative;
-    max-width: 1500px;
-    margin: auto;
+    max-width: 1300px;
+    /* margin: auto; */
+    margin-top: 6rem;
+    align-items: flex-start;
+    overflow-y: auto;
+    z-index: 1000;
 }
 
-.close-friend-list {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
+.back-button {
+    position: relative;
+    top: 0rem;
+    left: 0rem;
     background: #DD1155;
-    width: 240px;
+    /* width: 50px; */
     padding: 0.6rem 1rem;
     background-color: #DD1155;
     color: white;
@@ -32,12 +38,21 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 2rem;
+    overflow: hidden;
 }
 
+.scrollable-list {
+    flex: 1;
+    overflow-y: auto;
+    padding-top: 8px;
+    box-sizing: border-box;
+}
 
-.friends-column.left {
+.friends-column {
     display: flex;
     flex-direction: column;
+    overflow-y: hidden;
+    max-height: 70vh;
 }
 
 .friend-search-bar {
@@ -54,8 +69,22 @@
     gap: 1rem;
 }
 
-.friends-column.right {
+/* .friends-column.right {
     background-color: #f9f9f9;
     border-radius: 6px;
     min-height: 300px;
+    overflow-y: auto;
+    max-height: 100%;
+} */
+
+.header-container {
+    display: flex;
+    align-items: center; 
+    gap: 10px; 
+}
+
+#can-go {
+    color: #DD1155;
+    font-family: "Outfit", sans-serif;
+    font-size: 30px;
 }
