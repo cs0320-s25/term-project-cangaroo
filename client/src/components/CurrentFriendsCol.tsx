@@ -1,10 +1,12 @@
 import FriendCard from "./FriendCard";
+import FriendCardCurrentFriend from "./FriendCardCurrentFriend";
 
 interface CurrentFriendsColumnProps {
   friendTuples: [string, string][];
   searchTerm: string;
   onSearchChange: (term: string) => void;
   onNameClick: (uid: string) => void;
+  handleUnfriendClick: (uid: string) => void;
 }
 
 export default function CurrentFriendsColumn({
@@ -12,6 +14,7 @@ export default function CurrentFriendsColumn({
   searchTerm,
   onSearchChange,
   onNameClick,
+  handleUnfriendClick,
 }: CurrentFriendsColumnProps) {
   const filteredFriendTuples = friendTuples.filter(tuple =>
     tuple[1].toLowerCase().includes(searchTerm.toLowerCase())
@@ -29,11 +32,11 @@ export default function CurrentFriendsColumn({
       />
       <div className="friend-cards-container">
         {filteredFriendTuples.map((friendTuple, index) => (
-          <FriendCard 
+          <FriendCardCurrentFriend 
             key={friendTuple[0]} 
             uid={friendTuple[0]} 
             handleNameClick={() => onNameClick(friendTuple[0])} 
-            friendStatus="friend"
+            handleUnfriend={() => handleUnfriendClick(friendTuple[0])}
             />
         ))}
       </div>

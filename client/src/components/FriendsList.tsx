@@ -8,6 +8,7 @@ import IncomingRequestsColumn from "./IncomingRequestsCol";
 import CurrentFriendsColumn from "./CurrentFriendsCol";
 import NonFriendsColumn from "./NonFriendsCol";
 import OutgoingRequestsColumn from "./OutgoingRequestsCol";
+import FriendCardIncomingRequest from "./FriendCardIncomingRequest";
 
 import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutgoingFriendRequests, getReceivedFriendRequests,
   unfriend, viewFriends, viewProfile, viewNonFriends
@@ -182,41 +183,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
 
   // handling unfriending
 
-  const handleFriendButtonClick = () => {
-
-    const unfriendClick = async (frienduid: string) => {
-      try {
-        if (userId) {
-          const result = await unfriend(userId, frienduid);
-          if (result.result !== "success") {
-            console.error(result.error_message);
-            return;
-          }
-          console.log("SUCCESS: UNFRIENDED.");
-        }
-      } catch (err) {
-        console.error("Failed to unfriend ", userId, "and ", frienduid, err);
-        return;
-      }  
-    }  
-    const handleSendFriendRequest = async (receiveruid: string) => {
-      try {
-        if (userId) {
-          const result = await sendFriendRequest(userId, receiveruid);
-          if (result.result !== "success") {
-            console.error(result.error_message);
-            return;
-          }
-          console.log("SUCCESS: FRIEND REQUEST SENT.");
-
-        }
-      } catch (err) {
-        console.error("Failed to send request to ", receiveruid, err);
-        return;
-      }  
-    }  
-  };
-
+  
   const handleSendFriendRequest = async (receiveruid: string) => {
     try {
       if (userId) {
@@ -290,7 +257,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
    * Should navigate to the clicked user's profile. Handles rerouting!
    * @param uid uid of the user whose name was clicked
    */
-  const handleFriendCardNameClick= (uid: string) => {
+  const handleFriendCardNameClick = (uid: string) => {
     // close modal friendslist, go back to profile pg
     onClose();
     navigate(`/profile/${uid}`);
@@ -328,6 +295,8 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
             <IncomingRequestsColumn
               friendUIDs={incomingRequests} 
               onNameClick={handleFriendCardNameClick}
+              handleAccept={handleAcceptFriendRequest}
+              handleReject={handleRejectFriendRequest}
           />
           </div>
           <div className="request-section">
@@ -346,6 +315,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           searchTerm={searchTermFriends}
           onSearchChange={setSearchTermFriends}
           onNameClick={handleFriendCardNameClick}
+          handleUnfriendClick={handleUnfriend}
         />
         {/* column 2: current friends (EACH COL HANDLES SEARCHING SEPARATELY) */}
         
