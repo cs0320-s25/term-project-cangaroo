@@ -68,7 +68,7 @@ function EventCard ({ eventID, onClick }: EventCardProps) {
   }, [selectedEvent]);
 
   if (!thumbnail) {
-    setThumbnail("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg");
+    setThumbnail("");
   }
 
   return (

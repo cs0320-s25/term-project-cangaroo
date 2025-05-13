@@ -195,9 +195,10 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
         }
         console.log("SUCCESS: FRIEND REQUEST SENT.");
         const profile = await viewProfile(receiveruid);
-        setOutgoingRequests([...outgoingRequests, profile.data.username])
+        setOutgoingRequests([...outgoingRequests, [receiveruid, profile.data.username]])
 
         setNonFriends(nonFriends.filter(([uid, username]) => uid !== receiveruid))
+        console.log("INCOMING", outgoingRequests)
       }
     } catch (err) {
       console.error("Failed to send request to ", receiveruid, err);
@@ -221,6 +222,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
         // local state updates :D
         const profile = await viewProfile(senderuid); // too many calls to backend lowkey
         setCurrentFriends([...currentFriends, [senderuid, profile.data.username]]);
+        setIncomingRequests(incomingRequests.filter(([uid, username]) => uid !== senderuid));
         console.log("SUCCESS: ACCEPTED FRIEND REQUEST.");
       }
     } catch (err) {
@@ -251,7 +253,12 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
       return;
     }  
   };
-    
+  
+  /**
+   * Handles unfriending two users
+   * @param frienduid the uid of the friend to unfriend :(
+   * @returns 
+   */
   const handleUnfriend = async (frienduid: string) => {
     try {
       if (userId) {
@@ -337,7 +344,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           onNameClick={handleFriendCardNameClick}
           handleUnfriendClick={handleUnfriend}
         />
-        {/* column 2: current friends (EACH COL HANDLES SEARCHING SEPARATELY) */}
+        {/* column 2: current friends (each col handles searching within the child component) */}
         
 
         {/* column 3: general users (search for new friends) */}
