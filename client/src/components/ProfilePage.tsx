@@ -39,6 +39,8 @@ export default function ProfilePage() {
   const [tags, setTags] = useState<string[]>([]);
   const [orgs, setOrgs] = useState<string[]>([]);
   const [profilePicUrl, setProfilePicUrl] = useState<string | null>(null);
+  const [profileLoaded, setProfileLoaded] = useState(false);
+
 
   const [eventHistory, setEventHistory] = useState<{title: string, description: string, imageUrl: string, id: string}[]>([]); // Placeholder for event history data
 
@@ -55,7 +57,7 @@ export default function ProfilePage() {
 
 
   useEffect(() => {
-    if (!userId || !user) return;
+    if (!userId || !user || !profileLoaded) return;
   
     const syncClerkPhoto = async () => {
       if (userId !== user.id) return; // only sync for own profile
@@ -104,6 +106,7 @@ export default function ProfilePage() {
         setTags(data.interestedTags);
         setOrgs(data.interestedOrganizations);
         setProfilePicUrl(data.profilePicUrl || null);
+        
 
         const eventHist = await getEventHistory(userId);
 
@@ -112,6 +115,7 @@ export default function ProfilePage() {
           navigate("/");
           return;
         }
+
         const eventData = eventHist.data;
         setEventHistory(eventData.map((event: any) => {
 
@@ -129,6 +133,9 @@ export default function ProfilePage() {
         console.error("Failed to load profile:", err);
         navigate("/");
       }
+
+      setProfileLoaded(true);
+
     };
   
     fetchProfile();
