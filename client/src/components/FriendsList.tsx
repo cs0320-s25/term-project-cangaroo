@@ -39,11 +39,9 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   // get current user
   const { userId } = useParams<{ userId: string }>();
 
-
   // basic search bar functionality
   const [searchTermFriends, setSearchTermFriends] = useState("");
   const [searchTermNonFriends, setSearchTermNonFriends] = useState("");
-
 
   /**
    * Get current friends from backend
@@ -180,10 +178,11 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
     getOutgoingRequests();
   }, []);
   
-
-  // handling unfriending
-
-  
+  /**
+   * Handles sending friend request
+   * @param receiveruid the friend to send the request to
+   * @returns 
+   */
   const handleSendFriendRequest = async (receiveruid: string) => {
     try {
       if (userId) {
@@ -193,6 +192,8 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           return;
         }
         console.log("SUCCESS: FRIEND REQUEST SENT.");
+        const profile = await viewProfile(receiveruid);
+        setOutgoingRequests([...outgoingRequests, profile.data.username])
       }
     } catch (err) {
       console.error("Failed to send request to ", receiveruid, err);
@@ -200,17 +201,22 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
     }  
   };
 
-  const handleAcceptFriendRequest = async (receiveruid: string) => {
+  /**
+   * Handles accepting a friend request
+   * @param senderuid the other person who has sent YOU the request
+   * @returns 
+   */
+  const handleAcceptFriendRequest = async (senderuid: string) => {
     try {
       if (userId) {
-        const result = await respondToFriendRequest(userId, receiveruid, true); // CHECK THAT THIS ORDER IS RIGHT
+        const result = await respondToFriendRequest(senderuid, userId, true); // CHECK THAT THIS ORDER IS RIGHT
         if (result.result !== "success") {
           console.error(result.error_message);
           return;
         }
         // local state updates :D
-        const profile = await viewProfile(receiveruid);
-        setCurrentFriends([...currentFriends, [receiveruid, profile.data.username]]);
+        const profile = await viewProfile(senderuid); // too many calls to backend lowkey
+        setCurrentFriends([...currentFriends, [senderuid, profile.data.username]]);
         console.log("SUCCESS: ACCEPTED FRIEND REQUEST.");
       }
     } catch (err) {
@@ -219,18 +225,25 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
     }  
   };
 
-  const handleRejectFriendRequest = async (receiveruid: string) => {
+  /**
+   * Handles rejecting a friend request
+   * @param receiveruid the other person who has sent YOU the request
+   * @returns 
+   */
+  const handleRejectFriendRequest = async (senderuid: string) => {
     try {
       if (userId) {
-        const result = await respondToFriendRequest(userId, receiveruid, false);
+        const result = await respondToFriendRequest(senderuid, userId, false);
         if (result.result !== "success") {
           console.error(result.error_message);
           return;
         }
-        console.log("SUCCESS: ACCEPTED FRIEND REQUEST.");
+        console.log("SUCCESS: REJECTED FRIEND REQUEST.");
+        setIncomingRequests(incomingRequests.filter(([uid, username]) => uid !== senderuid))
+
       }
     } catch (err) {
-      console.error("Failed to accept request. ", err);
+      console.error("Failed to reject request. ", err);
       return;
     }  
   };

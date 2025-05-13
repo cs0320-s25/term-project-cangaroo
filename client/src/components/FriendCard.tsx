@@ -12,6 +12,11 @@ interface FriendCardProps {
   handleButtonClick?: () => void;
 };
 
+
+// NO LONGER NEED THIS VER. BUT COULD ALSO JUST LEAVE AS REFERENCE.
+
+
+
 /**
  * Method to render an friend card component. Contains various interactions with other users (friend, unfriend, accept, reject, send invite, click profile)
  * 
