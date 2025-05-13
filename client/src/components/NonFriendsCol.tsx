@@ -21,7 +21,7 @@ export default function NonFriendsColumn({
 
   return (
     <div className="friends-column right">
-      <h3>Search Users</h3>
+      <h3>Find New Friends!</h3>
       <input
         className="friend-search-bar"
         type="text"
@@ -32,7 +32,12 @@ export default function NonFriendsColumn({
       <div className="scrollable-list">
         <div className="user-cards-container">
           {filteredNonFriendTuples.map((nonFriendTuple, index) => (
-            <FriendCard key={nonFriendTuple[0]} uid={nonFriendTuple[0]} handleNameClick={() => onNameClick(nonFriendTuple[0])} />
+            <FriendCard 
+              key={nonFriendTuple[0]} 
+              uid={nonFriendTuple[0]} 
+              handleNameClick={() => onNameClick(nonFriendTuple[0])} 
+              friendStatus="non-friend"
+              />
           ))}
         </div>
       </div>

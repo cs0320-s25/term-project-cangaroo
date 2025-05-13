@@ -8,6 +8,8 @@ import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutg
 interface FriendCardProps {
   uid: string;
   handleNameClick: () => void;
+  displayText: string;
+  handleButtonClick?: () => void;
 };
 
 /**
@@ -18,12 +20,15 @@ interface FriendCardProps {
 function FriendCard({
   uid,
   handleNameClick,
+  displayText, 
+  handleButtonClick
 }: FriendCardProps){
 
   const [name, setName] = useState("")
   const [numFriends, setNumFriends] = useState(0)
   const navigate = useNavigate();
   // const [profilePic, setProfilePic] = useState("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg")
+  
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -53,6 +58,7 @@ function FriendCard({
     navigate(`/profile/${uid}`);
   })
 
+
   return (
     <div className="friend-card">
 
@@ -72,11 +78,19 @@ function FriendCard({
           {numFriends} friend{numFriends !== 1 ? 's' : ''} 
         </p>
 
-        <button 
+        {/* <button 
           // onClick={handleButtonClick} 
           className={`friend-button`} 
         >
+          
+        </button> */}
+        {}
 
+        <button
+          onClick={handleButtonClick} 
+          className="friend-button"
+        >
+          {displayText}
         </button>
 
       </div>

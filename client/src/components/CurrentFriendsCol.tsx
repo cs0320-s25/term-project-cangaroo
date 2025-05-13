@@ -29,7 +29,12 @@ export default function CurrentFriendsColumn({
       />
       <div className="friend-cards-container">
         {filteredFriendTuples.map((friendTuple, index) => (
-          <FriendCard key={friendTuple[0]} uid={friendTuple[0]} handleNameClick={() => onNameClick(friendTuple[0])} />
+          <FriendCard 
+            key={friendTuple[0]} 
+            uid={friendTuple[0]} 
+            handleNameClick={() => onNameClick(friendTuple[0])} 
+            friendStatus="friend"
+            />
         ))}
       </div>
     </div>

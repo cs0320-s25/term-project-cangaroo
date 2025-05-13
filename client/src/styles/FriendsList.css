@@ -52,7 +52,15 @@
     display: flex;
     flex-direction: column;
     overflow-y: hidden;
-    max-height: 70vh;
+    height: 70vh;
+}
+
+.request-section {
+    flex: 1;
+    overflow-y: auto;
+    background-color: #f8f8f8;
+    padding: 1rem;
+    border-radius: 8px;
 }
 
 .friend-search-bar {

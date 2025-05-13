@@ -9,27 +9,25 @@ import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutg
   unfriend, viewFriends, viewProfile
 } from "../utils/api";
 
-interface IncomingRequestsColumnProps {
+interface OutgoingRequestsColumnProps {
   friendUIDs: [string, string][];
   onNameClick: (uid: string) => void;
-  handleButtonClick: () => void;
 }
 
-export default function IncomingRequestsColumn({
+export default function OutgoingRequestsColumn({
   friendUIDs,
   onNameClick,
-}: IncomingRequestsColumnProps) {
+}: OutgoingRequestsColumnProps) {
   return (
     <div className="friends-column left">
-      <h3>Incoming Friend Requests</h3>
+      <h3>Pending Friend Requests</h3>
       <div className="friend-cards-container">
         {friendUIDs.map((userTuple, index) => (
           <FriendCard
             key={userTuple[0]}
             uid={userTuple[0]}
             handleNameClick={() => onNameClick(userTuple[0])}
-            displayText="Accept Request"
-            handleButtonClick={}
+            displayText="Friend Request Sent"
           />
         ))}
       </div>

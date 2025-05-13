@@ -1,4 +1,4 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect, useId} from "react";
 import FriendCard from "./FriendCard";
 import { useNavigate } from "react-router-dom";
 import "../styles/FriendsList.css"; 
@@ -7,6 +7,7 @@ import { useParams } from "react-router"
 import IncomingRequestsColumn from "./IncomingRequestsCol";
 import CurrentFriendsColumn from "./CurrentFriendsCol";
 import NonFriendsColumn from "./NonFriendsCol";
+import OutgoingRequestsColumn from "./OutgoingRequestsCol";
 
 import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutgoingFriendRequests, getReceivedFriendRequests,
   unfriend, viewFriends, viewProfile, viewNonFriends
@@ -102,11 +103,86 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   
     getNonFriends();
   }, []);
+
+  /**
+   * Get incoming requests from backend
+   */
+  const [incomingRequests, setIncomingRequests] = useState<[string, string][]>([]); // storing as a list of tuples to preserve information and make iterable
+
+  useEffect(() => {
+    const getIncomingRequests = async () => {
+      try {
+        console.log("Fetching incoming requests from Firebase...");
+        if (userId) {
+          const viewIncomingRequestsResponse = await getReceivedFriendRequests(userId); 
+          if (viewIncomingRequestsResponse.result !== "success") {
+            console.error(viewIncomingRequestsResponse.result.error_message);
+            return;
+          }
+          if (!viewIncomingRequestsResponse.receivedFriendRequests ||
+            Object.keys(viewIncomingRequestsResponse.receivedFriendRequests).length === 0) {
+            setIncomingRequests([]);
+            return;
+          }
+          else {
+            console.log("Successfully fetched incoming requests from Firebase:", viewIncomingRequestsResponse.receivedFriendRequests);
+            const requestsList: [string, string][] = Array.from(Object.entries(viewIncomingRequestsResponse.receivedFriendRequests));
+            
+            console.log("List of current friends tuples: ", requestsList);
+            setIncomingRequests(requestsList);
+          }  
+        }
+      } catch (err) {
+        console.error("Failed to fetch incoming requests:", err);
+        return;
+      }
+    };
+  
+    getIncomingRequests();
+  }, []);
+
+
+  /**
+   * Get incoming requests from backend
+   */
+  const [outgoingRequests, setOutgoingRequests] = useState<[string, string][]>([]); // storing as a list of tuples to preserve information and make iterable
+
+  useEffect(() => {
+    const getOutgoingRequests = async () => {
+      try {
+        console.log("Fetching incoming requests from Firebase...");
+        if (userId) {
+          const viewOutgoingRequestsResponse = await getOutgoingFriendRequests(userId); 
+          if (viewOutgoingRequestsResponse.result !== "success") {
+            console.error(viewOutgoingRequestsResponse.result.error_message);
+            return;
+          }
+          if (!viewOutgoingRequestsResponse.receivedFriendRequests ||
+            Object.keys(viewOutgoingRequestsResponse.receivedFriendRequests).length === 0) {
+            setOutgoingRequests([]);
+            return;
+          }
+          else {
+            console.log("Successfully fetched incoming requests from Firebase:", viewOutgoingRequestsResponse.outgoingFriendRequests);
+            const requestsList: [string, string][] = Array.from(Object.entries(viewOutgoingRequestsResponse.outgoingFriendRequests));
+            
+            console.log("List of current friends tuples: ", requestsList);
+            setOutgoingRequests(requestsList);
+          }  
+        }
+      } catch (err) {
+        console.error("Failed to fetch incoming requests:", err);
+        return;
+      }
+    };
+  
+    getOutgoingRequests();
+  }, []);
   
 
   // handling unfriending
 
-  const handleUnfriendClick = () => {
+  const handleFriendButtonClick = () => {
 
     const unfriendClick = async (frienduid: string) => {
       try {
@@ -116,15 +192,98 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
             console.error(result.error_message);
             return;
           }
-
-          console.error("UNFRIENDED.");
+          console.log("SUCCESS: UNFRIENDED.");
         }
       } catch (err) {
         console.error("Failed to unfriend ", userId, "and ", frienduid, err);
         return;
       }  
     }  
+    const handleSendFriendRequest = async (receiveruid: string) => {
+      try {
+        if (userId) {
+          const result = await sendFriendRequest(userId, receiveruid);
+          if (result.result !== "success") {
+            console.error(result.error_message);
+            return;
+          }
+          console.log("SUCCESS: FRIEND REQUEST SENT.");
+
+        }
+      } catch (err) {
+        console.error("Failed to send request to ", receiveruid, err);
+        return;
+      }  
+    }  
   };
+
+  const handleSendFriendRequest = async (receiveruid: string) => {
+    try {
+      if (userId) {
+        const result = await sendFriendRequest(userId, receiveruid);
+        if (result.result !== "success") {
+          console.error(result.error_message);
+          return;
+        }
+        console.log("SUCCESS: FRIEND REQUEST SENT.");
+      }
+    } catch (err) {
+      console.error("Failed to send request to ", receiveruid, err);
+      return;
+    }  
+  };
+
+  const handleAcceptFriendRequest = async (receiveruid: string) => {
+    try {
+      if (userId) {
+        const result = await respondToFriendRequest(userId, receiveruid, true); // CHECK THAT THIS ORDER IS RIGHT
+        if (result.result !== "success") {
+          console.error(result.error_message);
+          return;
+        }
+        const profile = await viewProfile(receiveruid);
+        setCurrentFriends([...currentFriends, [receiveruid, profile.data.username]]);
+        console.log("SUCCESS: ACCEPTED FRIEND REQUEST.");
+      }
+    } catch (err) {
+      console.error("Failed to accept request. ", err);
+      return;
+    }  
+  };
+
+  const handleRejectFriendRequest = async (receiveruid: string) => {
+    try {
+      if (userId) {
+        const result = await respondToFriendRequest(userId, receiveruid, false);
+        if (result.result !== "success") {
+          console.error(result.error_message);
+          return;
+        }
+        console.log("SUCCESS: ACCEPTED FRIEND REQUEST.");
+      }
+    } catch (err) {
+      console.error("Failed to accept request. ", err);
+      return;
+    }  
+  };
+    
+  const handleUnfriend = async (frienduid: string) => {
+    try {
+      if (userId) {
+        const result = await unfriend(userId, frienduid);
+        if (result.result !== "success") {
+          console.error(result.error_message);
+          return;
+        }
+        console.log("SUCCESS: UNFRIENDED.");
+        // for updating the frontend (else lag?)
+        setCurrentFriends(currentFriends.filter(([uid, username]) => uid !== frienduid)) // filter out the unfriended user & update useState
+      }
+    } catch (err) {
+      console.error("Failed to unfriend ", userId, "and ", frienduid, err);
+      return;
+    }  
+  }; 
 
 
   /**
@@ -164,10 +323,20 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
 
       <div className="friends-list-grid">
         {/* column 1: incoming requests */}
-        <IncomingRequestsColumn
-          friendUIDs={[]} // or use UID if available
-          onNameClick={handleFriendCardNameClick}
-        />
+        <div className="friends-column">
+          <div className="request-section">
+            <IncomingRequestsColumn
+              friendUIDs={incomingRequests} 
+              onNameClick={handleFriendCardNameClick}
+          />
+          </div>
+          <div className="request-section">
+            <OutgoingRequestsColumn
+              friendUIDs={outgoingRequests} 
+              onNameClick={handleFriendCardNameClick}
+            />
+          </div>
+        </div>
         {/* column 1: incoming requests */}
 
 
