@@ -115,8 +115,6 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
                 See Friends
               </button>
             </div>
-
-            <button className="search-button">Filter</button>
           </div>
         </div>
       </div>

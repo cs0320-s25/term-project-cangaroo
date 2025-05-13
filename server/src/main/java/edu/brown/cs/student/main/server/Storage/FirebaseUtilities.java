@@ -630,6 +630,7 @@ public class FirebaseUtilities implements StorageInterface {
     //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference userRef = db.collection("users").document(uid);
     List<String> friends = (List<String>) userRef.get().get().get("friendsList");
+
     Iterable<DocumentReference> friendRequests =
         userRef.collection("outgoingFriendRequests").listDocuments();
     List<String> friendRequestIDs = new ArrayList<>();
