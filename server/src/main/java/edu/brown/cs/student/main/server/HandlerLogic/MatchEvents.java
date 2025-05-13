@@ -105,7 +105,6 @@ public class MatchEvents {
 
         String organizerWords = event.eventOrganizer().toLowerCase();
 
-
         for (String favOrg : favEventOrgs) {
           if (favOrg != null && organizerWords.equals(favOrg.toLowerCase())) {
             score += 10;
