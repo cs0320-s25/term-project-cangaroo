@@ -630,11 +630,11 @@ public class FirebaseUtilities implements StorageInterface {
     //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference userRef = db.collection("users").document(uid);
     List<String> friends = (List<String>) userRef.get().get().get("friendsList");
-    System.out.println(friends);
+    // System.out.println(friends);
     assert friends != null;
     Map<String, String> usersList = new HashMap<>();
     for (DocumentReference ref : db.collection("users").listDocuments()) {
-      System.out.println(ref.getId() + " " + getNameFromID(ref.getId()));
+      // System.out.println(ref.getId() + " " + getNameFromID(ref.getId()));
       if (!ref.getId().equals(uid) && !friends.contains(ref.getId())) {
 
         usersList.put(ref.getId(), getNameFromID(ref.getId()));
