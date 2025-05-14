@@ -61,8 +61,8 @@ test('test profile components', async ({ page }) => {
     await expect(page.getByRole('button', { name: 'My Friends' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'My Interests' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'My Favorite CanGo Organizers' })).toBeVisible();
-    await expect(page.locator('#add-tag')).toBeVisible();
-    await expect(page.locator('#add-org')).toBeVisible();
+    await expect(page.locator('#add-tag')).toBeVisible(); // should be visible for own profile
+    await expect(page.locator('#add-org')).toBeVisible(); // should be visible for own profile
     await expect(page.getByRole('heading', { name: 'Event History' })).toBeVisible();
     await expect(page.getByRole('img', { name: 'Profile' })).toBeVisible();
 
@@ -163,3 +163,78 @@ test('test event creation/editing/deletion', async ({ page }) => {
     await page.waitForTimeout(3000);
     await expect(page.getByRole('heading', { name: 'No Events Found' })).toBeVisible();
 });
+
+/**
+ * Tests that searchbar functionality works as expected
+ */
+
+test('test search', async ({ page }) => {
+    // checking latte art event shows up for "coffee"
+    await page.getByRole('textbox', { name: 'Search events...' }).click();
+    await page.getByRole('textbox', { name: 'Search events...' }).fill('Coffee');
+    await page.waitForTimeout(3000);
+    await expect(page.getByText('Latte Art 101Date: 2025-06-16')).toBeVisible();
+    await page.getByRole('textbox', { name: 'Search events...' }).click();
+
+    // checking game related events show up for "Game"
+    await page.getByRole('textbox', { name: 'Search events...' }).fill('');
+    await page.getByRole('textbox', { name: 'Search events...' }).fill('Game');
+    await page.waitForTimeout(3000);
+    await expect(page.getByText('Board Game BonanzaDate: 2025-')).toBeVisible();
+    await expect(page.getByText('Ice Cream SocialDate: 2025-06')).toBeVisible();
+    await expect(page.getByText('Trivia TournamentDate: 2025-')).toBeVisible();
+
+    // check previous results (non relevant) don't appear
+    await expect(page.getByText('Latte Art 101Date: 2025-06-16')).not.toBeVisible();
+
+  });
+
+/**
+ * Tests that own profile page can be edited
+ */
+
+test('test profile edits', async ({ page }) => {
+    await page.getByRole('button', { name: 'Profile' }).nth(1).click();
+    await page.waitForTimeout(3000);
+
+    // adding tags
+    await page.locator('#add-tag').click();
+    await page.locator('#add-tag').fill('Reading');
+    await page.locator('#add-tag').press('Enter');
+    await page.waitForTimeout(1000);
+    await expect(page.getByRole('button', { name: 'Reading' })).toBeVisible();
+
+    // removing tags and checking they no longer exist
+    await page.getByRole('button', { name: 'Reading' }).click();
+    await page.waitForTimeout(1000);
+    await expect(page.getByRole('button', { name: 'Reading' })).not.toBeVisible();
+
+})
+
+/**
+ * Tests that other's profile page CANNOT be edited
+ */
+
+test('test other profile views', async ({ page }) => {
+    await page.getByRole('button', { name: 'Profile' }).nth(1).click();
+    await page.waitForTimeout(3000);
+
+    // clicking on event in event history
+
+    await expect(page.getByText('Trail HikeA refreshing group')).toBeVisible();
+    await page.getByText('Trail HikeA refreshing group').click();
+    await page.waitForTimeout(3000);
+
+    // checking attendence in RSVP block
+    await expect(page.getByRole('button', { name: 'Aarav Kumar' })).toBeVisible();
+
+    // clciking on other profile
+    await page.getByRole('button', { name: 'Outdoor Adventures' }).click();
+    await page.waitForTimeout(2000);
+    await expect(page.getByRole('heading', { name: 'EvilGuy321' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'My Interests' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'My Favorite CanGo Organizers' })).toBeVisible();
+    await expect(page.locator('#add-tag')).not.toBeVisible(); // should NOT be visible for other profile
+    await expect(page.locator('#add-org')).not.toBeVisible(); // should NOT be visible for other profile
+
+})

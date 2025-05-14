@@ -10,21 +10,6 @@ import EventCardSmall from "./EventCardSmall";
 import FriendsList from "./FriendsList";
 import { editProfile, viewProfile, getEventHistory } from "../utils/api";
 import EventPage from "./EventPage";
-// later can import the recommended events from elsewhere
-const events = [
-  { title: "Spring Weekend", 
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ", 
-    imageUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg" },
-  { title: "Spring Weekend", 
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ", 
-    imageUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg" },
-  { title: "Spring Weekend", 
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ", 
-    imageUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg" },
-  { title: "Spring Weekend", 
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ", 
-    imageUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg" },
-];
 
 
 export default function ProfilePage() {
@@ -53,36 +38,7 @@ export default function ProfilePage() {
       setSelfProfile(false);
     }
   }, [user?.id, userId]);    
-  // user is looking at their own profile, so fields should be editable
-
-
-  useEffect(() => {
-    if (!userId || !user || !profileLoaded) return;
-  
-    const syncClerkPhoto = async () => {
-      if (userId !== user.id) return; // only sync for own profile
-  
-      const latestClerkImage = user.imageUrl;
-      if (latestClerkImage && latestClerkImage !== profilePicUrl) {
-        try {
-          console.log("Profile pic out of sync — updating...");
-          await editProfile(
-            user.id,
-            tags.join(","),
-            orgs.join(","),
-            latestClerkImage
-          );
-          setProfilePicUrl(latestClerkImage);
-        } catch (err) {
-          console.error("Failed to sync Clerk profile picture:", err);
-        }
-      }
-    };
-  
-    syncClerkPhoto();
-  }, [user, userId, profilePicUrl, tags, orgs]);
-  
-
+  // user is looking at their own profile, so fields should be editable  
 
   useEffect(() => {
     if (!userId) {
@@ -106,8 +62,25 @@ export default function ProfilePage() {
         setTags(data.interestedTags);
         setOrgs(data.interestedOrganizations);
         setProfilePicUrl(data.profilePicUrl || null);
-        
 
+        // adding profile picture 
+
+        if (userId === user?.id && user.imageUrl && user.imageUrl !== (data.profilePicUrl || null)) {
+          try {
+            console.log("Syncing profile pic...");
+            await editProfile(
+              user.id,
+              data.interestedTags.join(","),
+              data.interestedOrganizations.join(","),
+              user.imageUrl
+            );
+            setProfilePicUrl(user.imageUrl); // update locally to prevent re-trigger
+          } catch (err) {
+            console.error("Failed to sync profile picture:", err);
+          }
+        }
+      
+        // setting event history
         const eventHist = await getEventHistory(userId);
 
         if (result.result !== "success") {
