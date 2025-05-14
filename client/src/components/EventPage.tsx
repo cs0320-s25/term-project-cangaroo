@@ -159,9 +159,12 @@ export default function EventPage({ eventID, onClose, cameFromHome }: EventPageP
 
         <EditEventForm
           isOpen={showEditForm}
-          onClose={() => {
-            setShowEditForm(false);
-            refetch();
+          onClose={() => {setShowEditForm(false)}}
+          onSuccessfulEdit={() => {
+            setTimeout(() => {
+              console.log("Refetching updated event after slight delay");
+              refetch();
+            }, 1000);
           }}
           initialData={{
             eventID: eventID,
