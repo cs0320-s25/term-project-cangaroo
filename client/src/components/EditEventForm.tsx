@@ -8,6 +8,7 @@ import { deleteEvent, editEvent } from "../utils/api";
 interface EditEventFormProps {
     isOpen: boolean;
     onClose: () => void;
+    onSuccessfulEdit?: () => void;
     isEdit?: boolean;
     initialData?: {
       eventID: string;
@@ -21,7 +22,7 @@ interface EditEventFormProps {
     };
 }
 
-export default function EditEventForm({ isOpen, onClose, isEdit, initialData }: EditEventFormProps) {
+export default function EditEventForm({ isOpen, onClose, onSuccessfulEdit, isEdit, initialData }: EditEventFormProps) {
   if (!isOpen || !initialData) return null; // should not show up 
   console.log("EditEventForm initialData:", initialData);
 
@@ -72,6 +73,7 @@ async function onEditClick(e: React.FormEvent<HTMLFormElement>) {
         console.error("Edit failed:", response.message || response.error);
       } else {
         console.log("Event updated successfully!");
+        if (onSuccessfulEdit) onSuccessfulEdit();
         onClose();
       }
   
