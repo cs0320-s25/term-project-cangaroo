@@ -68,7 +68,10 @@ export default function EventPage({ eventID, onClose, cameFromHome }: EventPageP
             <h1>{name}</h1>
             <div className="event-header">
               
-                <button id="org" onClick={() => navigate(`/profile/${organizerID}`)}>
+                <button id="org" onClick={() => {
+                  navigate(`/profile/${organizerID}`)
+                  onClose();
+                }}>
                   {organizerName}
                 </button>
 
