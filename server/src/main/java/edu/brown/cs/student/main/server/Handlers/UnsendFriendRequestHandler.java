@@ -1,7 +1,7 @@
 package edu.brown.cs.student.main.server.Handlers;
 
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import edu.brown.cs.student.main.server.Storage.FriendsStorage;
 import java.util.HashMap;
 import java.util.Map;
 import spark.Request;
@@ -10,9 +10,9 @@ import spark.Route;
 
 public class UnsendFriendRequestHandler implements Route {
 
-  public StorageInterface storageHandler;
+  public FriendsStorage storageHandler;
 
-  public UnsendFriendRequestHandler(StorageInterface storageHandler) {
+  public UnsendFriendRequestHandler(FriendsStorage storageHandler) {
     this.storageHandler = storageHandler;
   }
 

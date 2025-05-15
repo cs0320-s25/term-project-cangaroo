@@ -2,7 +2,7 @@ package edu.brown.cs.student.main.server.Handlers;
 
 import edu.brown.cs.student.main.server.Events.Event;
 import edu.brown.cs.student.main.server.HandlerLogic.MatchEvents;
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import edu.brown.cs.student.main.server.Storage.ProfileStorage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,10 +49,10 @@ public class RecommendHandler implements Route {
 
   List<String> mockedTags = List.of("cooking");
 
-  public StorageInterface storageHandler;
+  public ProfileStorage storageHandler;
   private Map<String, Object> responseMap;
 
-  public RecommendHandler(StorageInterface storageHandler) {
+  public RecommendHandler(ProfileStorage storageHandler) {
     this.storageHandler = storageHandler;
   }
 

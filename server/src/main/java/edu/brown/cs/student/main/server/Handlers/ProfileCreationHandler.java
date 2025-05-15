@@ -1,6 +1,6 @@
 package edu.brown.cs.student.main.server.Handlers;
 
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import edu.brown.cs.student.main.server.Storage.ProfileStorage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,9 +11,9 @@ import spark.Response;
 import spark.Route;
 
 public class ProfileCreationHandler implements Route {
-  public StorageInterface storageHandler;
+  public ProfileStorage storageHandler;
 
-  public ProfileCreationHandler(StorageInterface storageHandler) {
+  public ProfileCreationHandler(ProfileStorage storageHandler) {
     this.storageHandler = storageHandler;
   }
 

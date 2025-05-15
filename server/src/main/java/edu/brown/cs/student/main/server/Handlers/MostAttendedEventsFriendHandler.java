@@ -1,7 +1,7 @@
 package edu.brown.cs.student.main.server.Handlers;
 
 import edu.brown.cs.student.main.server.HandlerLogic.MostAttendedEventsByFriends;
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import edu.brown.cs.student.main.server.Storage.ProfileStorage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,10 +10,10 @@ import spark.Response;
 import spark.Route;
 
 public class MostAttendedEventsFriendHandler implements Route {
-  public StorageInterface storageHandler;
+  public ProfileStorage storageHandler;
   private Map<String, Object> responseMap;
 
-  public MostAttendedEventsFriendHandler(StorageInterface storageHandler) {
+  public MostAttendedEventsFriendHandler(ProfileStorage storageHandler) {
     this.storageHandler = storageHandler;
   }
 

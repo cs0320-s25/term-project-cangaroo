@@ -290,47 +290,6 @@ public class FirebaseUtilities implements StorageInterface {
               eventOrganizer));
     }
     return events;
-    //    for (DocumentReference userDocRef : collection.listDocuments()) {
-    //      for (DocumentReference eventRef : userDocRef.collection("events").listDocuments()) {
-
-    //        ApiFuture<DocumentSnapshot> future = eventRef.get();
-    //        DocumentSnapshot document = future.get();
-    //
-    //        // Get name, description, and tags as List<String> directly
-    //        String name = (String) document.get("name");
-    //        String description = (String) document.get("description");
-    //        List<String> tags = (List<String>) document.get("tags");
-    //
-    //        List<String> listOfNames = Arrays.asList(name.trim().split("\\s+"));
-    //        List<String> listOfDescriptions = Arrays.asList(description.trim().split("\\s+"));
-    //
-    //        String date = document.getString("date") != null ? document.getString("date") : "";
-    //        String startTime =
-    //            document.getString("startTime") != null ? document.getString("startTime") : "";
-    //        String endTime = document.getString("endTime") != null ? document.getString("endTime")
-    // : "";
-    //
-    //        Long eventIDLong = document.getLong("ID");
-    //        int eventID = eventIDLong != null ? eventIDLong.intValue() : -1;
-    //
-    //        String eventOrganizer =
-    //            document.getString("eventOrganizer") != null
-    //                ? document.getString("eventOrganizer")
-    //                : "";
-    //
-    //        events.add(
-    //            new Event(
-    //                listOfNames,
-    //                listOfDescriptions,
-    //                date,
-    //                startTime,
-    //                endTime,
-    //                tags,
-    //                eventID,
-    //                eventOrganizer));
-    //      }
-    //    }
-    //    return events;
   }
 
   //

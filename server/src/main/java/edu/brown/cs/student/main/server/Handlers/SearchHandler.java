@@ -2,7 +2,7 @@ package edu.brown.cs.student.main.server.Handlers;
 
 import edu.brown.cs.student.main.server.Events.Event;
 import edu.brown.cs.student.main.server.HandlerLogic.Search;
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import edu.brown.cs.student.main.server.Storage.ProfileStorage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -49,10 +49,10 @@ public class SearchHandler implements Route {
           3,
           null);
 
-  public StorageInterface storageHandler;
+  public ProfileStorage storageHandler;
   private Map<String, Object> responseMap;
 
-  public SearchHandler(StorageInterface storageHandler) {
+  public SearchHandler(ProfileStorage storageHandler) {
     this.storageHandler = storageHandler;
   }
 
