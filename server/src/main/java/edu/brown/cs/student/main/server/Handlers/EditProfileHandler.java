@@ -1,7 +1,7 @@
 package edu.brown.cs.student.main.server.Handlers;
 
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import edu.brown.cs.student.main.server.Storage.ProfileStorage;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -11,9 +11,9 @@ import spark.Response;
 import spark.Route;
 
 public class EditProfileHandler implements Route {
-  public StorageInterface storageHandler;
+  public ProfileStorage storageHandler;
 
-  public EditProfileHandler(StorageInterface storageHandler) {
+  public EditProfileHandler(ProfileStorage storageHandler) {
     this.storageHandler = storageHandler;
   }
 

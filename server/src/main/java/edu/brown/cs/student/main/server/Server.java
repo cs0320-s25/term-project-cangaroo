@@ -10,7 +10,6 @@ import edu.brown.cs.student.main.server.Handlers.EditEventHandler;
 import edu.brown.cs.student.main.server.Handlers.EditProfileHandler;
 import edu.brown.cs.student.main.server.Handlers.EventCreationHandler;
 import edu.brown.cs.student.main.server.Handlers.GetEventHistoryHandler;
-import edu.brown.cs.student.main.server.Handlers.GetFriendsHandler;
 import edu.brown.cs.student.main.server.Handlers.GetNonFriendsHandler;
 import edu.brown.cs.student.main.server.Handlers.GetOutgoingFriendRequestsHandler;
 import edu.brown.cs.student.main.server.Handlers.GetReceivedFriendRequestsHandler;
@@ -18,7 +17,6 @@ import edu.brown.cs.student.main.server.Handlers.MostAttendedEventsFriendHandler
 import edu.brown.cs.student.main.server.Handlers.ProfileCreationHandler;
 import edu.brown.cs.student.main.server.Handlers.RSVPHandler;
 import edu.brown.cs.student.main.server.Handlers.RandomRecommendHandler;
-import edu.brown.cs.student.main.server.Handlers.RateHandler;
 import edu.brown.cs.student.main.server.Handlers.RecommendHandler;
 import edu.brown.cs.student.main.server.Handlers.RemoveEventHistoryHandler;
 import edu.brown.cs.student.main.server.Handlers.RespondToFriendRequestHandler;
@@ -29,7 +27,10 @@ import edu.brown.cs.student.main.server.Handlers.UnsendFriendRequestHandler;
 import edu.brown.cs.student.main.server.Handlers.ViewEventHandler;
 import edu.brown.cs.student.main.server.Handlers.ViewFriendsHandler;
 import edu.brown.cs.student.main.server.Handlers.ViewProfileHandler;
-import edu.brown.cs.student.main.server.Storage.FirebaseUtilities;
+import edu.brown.cs.student.main.server.Storage.EventsStorage;
+import edu.brown.cs.student.main.server.Storage.FriendsStorage;
+import edu.brown.cs.student.main.server.Storage.GeneralStorage;
+import edu.brown.cs.student.main.server.Storage.ProfileStorage;
 import edu.brown.cs.student.main.server.Storage.StorageInterface;
 import java.io.IOException;
 import spark.Filter;
@@ -52,39 +53,45 @@ public class Server {
 
     // pondered mocking this, but figured it would be too complex mock the entire database
     StorageInterface firebaseUtils;
+    GeneralStorage generalStorage;
+    EventsStorage eventsStorage;
+    ProfileStorage profileStorage;
+    FriendsStorage friendsStorage;
     try {
-      StorageInterface storageHandler = new FirebaseUtilities();
+      //      StorageInterface storageHandler = new FirebaseUtilities();
+      generalStorage = new GeneralStorage();
+      eventsStorage = new EventsStorage(generalStorage.db);
+      profileStorage = new ProfileStorage(generalStorage.db);
+      friendsStorage = new FriendsStorage(generalStorage.db);
 
-      Spark.get("send-friend-request", new SendFriendRequestHandler(storageHandler));
-      Spark.get("unsend-friend-request", new UnsendFriendRequestHandler(storageHandler));
-      Spark.get("edit-event", new EditEventHandler(storageHandler));
-      Spark.get("edit-profile", new EditProfileHandler(storageHandler));
-      Spark.get("create-event", new EventCreationHandler(storageHandler));
-      Spark.get("get-friends", new GetFriendsHandler(storageHandler));
-      Spark.get("random-recommend", new RandomRecommendHandler(storageHandler));
-      Spark.get("rate", new RateHandler(storageHandler));
-      Spark.get("recommend", new RecommendHandler(storageHandler));
-      Spark.get("delete-event", new DeleteEventHandler(storageHandler));
+      Spark.get("send-friend-request", new SendFriendRequestHandler(friendsStorage));
+      Spark.get("unsend-friend-request", new UnsendFriendRequestHandler(friendsStorage));
+      Spark.get("edit-event", new EditEventHandler(eventsStorage));
+      Spark.get("edit-profile", new EditProfileHandler(profileStorage));
+      Spark.get("create-event", new EventCreationHandler(eventsStorage));
+      Spark.get("random-recommend", new RandomRecommendHandler(profileStorage));
+      Spark.get("recommend", new RecommendHandler(profileStorage));
+      Spark.get("delete-event", new DeleteEventHandler(eventsStorage));
       Spark.get("rsvp", new RSVPHandler());
-      Spark.get("search", new SearchHandler(storageHandler));
-      Spark.get("create-profile", new ProfileCreationHandler(storageHandler));
-      Spark.get("view-event", new ViewEventHandler(storageHandler));
-      Spark.get("view-profile", new ViewProfileHandler(storageHandler));
-      Spark.get("change-attendance", new ChangeAttendanceHandler(storageHandler));
-      Spark.get("respond-to-friend-request", new RespondToFriendRequestHandler(storageHandler));
-      Spark.get("unfriend", new UnfriendHandler(storageHandler));
-      Spark.get("view-friends", new ViewFriendsHandler(storageHandler));
+      Spark.get("search", new SearchHandler(profileStorage));
+      Spark.get("create-profile", new ProfileCreationHandler(profileStorage));
+      Spark.get("view-event", new ViewEventHandler(eventsStorage));
+      Spark.get("view-profile", new ViewProfileHandler(profileStorage));
+      Spark.get("change-attendance", new ChangeAttendanceHandler(profileStorage));
+      Spark.get("respond-to-friend-request", new RespondToFriendRequestHandler(friendsStorage));
+      Spark.get("unfriend", new UnfriendHandler(friendsStorage));
+      Spark.get("view-friends", new ViewFriendsHandler(friendsStorage));
       Spark.get(
-          "get-received-friend-requests", new GetReceivedFriendRequestsHandler(storageHandler));
+          "get-received-friend-requests", new GetReceivedFriendRequestsHandler(friendsStorage));
       Spark.get(
-          "get-outgoing-friend-requests", new GetOutgoingFriendRequestsHandler(storageHandler));
-      Spark.get("rank-events-by-friend", new MostAttendedEventsFriendHandler(storageHandler));
+          "get-outgoing-friend-requests", new GetOutgoingFriendRequestsHandler(friendsStorage));
+      Spark.get("rank-events-by-friend", new MostAttendedEventsFriendHandler(profileStorage));
 
-      Spark.get("delete-all", new DeleteAllHandler(storageHandler));
-      Spark.get("get-non-friends", new GetNonFriendsHandler(storageHandler));
-      Spark.get("get-event-history", new GetEventHistoryHandler(storageHandler));
-      Spark.get("add-event-history", new AddEventHistoryHandler(storageHandler));
-      Spark.get("remove-event-history", new RemoveEventHistoryHandler(storageHandler));
+      Spark.get("delete-all", new DeleteAllHandler(generalStorage));
+      Spark.get("get-non-friends", new GetNonFriendsHandler(friendsStorage));
+      Spark.get("get-event-history", new GetEventHistoryHandler(profileStorage));
+      Spark.get("add-event-history", new AddEventHistoryHandler(profileStorage));
+      Spark.get("remove-event-history", new RemoveEventHistoryHandler(profileStorage));
       Spark.notFound(
           (request, response) -> {
             response.status(404); // Not Found

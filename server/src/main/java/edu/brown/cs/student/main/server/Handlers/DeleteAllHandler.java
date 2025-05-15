@@ -1,6 +1,6 @@
 package edu.brown.cs.student.main.server.Handlers;
 
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import edu.brown.cs.student.main.server.Storage.GeneralStorage;
 import java.util.HashMap;
 import java.util.Map;
 import spark.Request;
@@ -8,9 +8,9 @@ import spark.Response;
 import spark.Route;
 
 public class DeleteAllHandler implements Route {
-  public StorageInterface storageHandler;
+  public GeneralStorage storageHandler;
 
-  public DeleteAllHandler(StorageInterface storageHandler) {
+  public DeleteAllHandler(GeneralStorage storageHandler) {
     this.storageHandler = storageHandler;
   }
 

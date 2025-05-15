@@ -1,7 +1,7 @@
 package edu.brown.cs.student.main.server.Handlers;
 
 import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import edu.brown.cs.student.main.server.Storage.EventsStorage;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -11,9 +11,9 @@ import spark.Response;
 import spark.Route;
 
 public class EditEventHandler implements Route {
-  public StorageInterface storageHandler;
+  public EventsStorage storageHandler;
 
-  public EditEventHandler(StorageInterface storageHandler) {
+  public EditEventHandler(EventsStorage storageHandler) {
     this.storageHandler = storageHandler;
   }
 

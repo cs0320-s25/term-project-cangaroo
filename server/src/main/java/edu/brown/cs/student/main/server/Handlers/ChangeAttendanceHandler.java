@@ -3,7 +3,7 @@ package edu.brown.cs.student.main.server.Handlers;
 import edu.brown.cs.student.main.server.Exceptions.EventAlreadyAttendingException;
 import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import edu.brown.cs.student.main.server.Storage.ProfileStorage;
 import java.util.HashMap;
 import java.util.Map;
 import spark.Request;
@@ -12,9 +12,9 @@ import spark.Route;
 
 public class ChangeAttendanceHandler implements Route {
 
-  public StorageInterface storageHandler;
+  public ProfileStorage storageHandler;
 
-  public ChangeAttendanceHandler(StorageInterface storageHandler) {
+  public ChangeAttendanceHandler(ProfileStorage storageHandler) {
     this.storageHandler = storageHandler;
   }
 

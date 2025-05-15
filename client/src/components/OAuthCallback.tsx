@@ -63,6 +63,7 @@ const OAuthCallback = () => {
       gapi.load('client', initiate)
       navigate("/");
     } else {
+      navigate("/");
       console.error("Access token not found.");
     }
   }, [navigate]);

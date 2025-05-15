@@ -1,7 +1,7 @@
 package edu.brown.cs.student.main.server.HandlerLogic;
 
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import edu.brown.cs.student.main.server.Storage.ProfileStorage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +18,7 @@ public class MostAttendedEventsByFriends {
    * @param profileID - the ID of the profile whose friends you are trying to rank events by friend attendance
    * @returns: list of event IDs in order of most attended events by friends
    */
-  public List<Integer> rankEventsWithFriends(StorageInterface storageHandler, String profileID)
+  public List<Integer> rankEventsWithFriends(ProfileStorage storageHandler, String profileID)
       throws ExecutionException, InterruptedException, NoProfileFoundException {
 
     // get the list of friends

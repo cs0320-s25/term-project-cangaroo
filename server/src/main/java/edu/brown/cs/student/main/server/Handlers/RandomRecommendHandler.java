@@ -2,7 +2,7 @@ package edu.brown.cs.student.main.server.Handlers;
 
 import edu.brown.cs.student.main.server.Events.Event;
 import edu.brown.cs.student.main.server.HandlerLogic.RandomMatch;
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import edu.brown.cs.student.main.server.Storage.ProfileStorage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,9 +47,9 @@ public class RandomRecommendHandler implements Route {
           null);
 
   private Map<String, Object> responseMap;
-  public StorageInterface storageHandler;
+  public ProfileStorage storageHandler;
 
-  public RandomRecommendHandler(StorageInterface storageHandler) {
+  public RandomRecommendHandler(ProfileStorage storageHandler) {
     this.storageHandler = storageHandler;
   }
 

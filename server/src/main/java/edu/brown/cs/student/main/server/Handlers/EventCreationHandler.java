@@ -1,7 +1,7 @@
 package edu.brown.cs.student.main.server.Handlers;
 
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import edu.brown.cs.student.main.server.Storage.EventsStorage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,9 +12,9 @@ import spark.Response;
 import spark.Route;
 
 public class EventCreationHandler implements Route {
-  public StorageInterface storageHandler;
+  public EventsStorage storageHandler;
 
-  public EventCreationHandler(StorageInterface storageHandler) {
+  public EventCreationHandler(EventsStorage storageHandler) {
     this.storageHandler = storageHandler;
   }
 
