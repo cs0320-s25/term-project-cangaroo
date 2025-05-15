@@ -79,8 +79,7 @@ export function createGcalEvent(event: { summary: string; description: string; s
     const storage = sessionStorage.getItem("google_access_token");
     const time = sessionStorage.getItem("token_creation_time");
 
-    console.log("storage" + storage)
-    console.log("time" + time)
+    console.log(event.start.dateTime)
     if (!storage || !time || (Date.now() - parseInt(time)) > 3600000) {
       const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`; 
       window.location.href = oauthUrl; 
