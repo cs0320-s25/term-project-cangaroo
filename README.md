@@ -1,7 +1,11 @@
 # Project Details
+
 Final Project: CanGo
+
 Group Members: Aarav Kumar (akuma143), Chris Ho (clho), Grace Wang (gwang71), and Nathan Phan (ncphan)
+
 Estimated Time: 100 hours (split 4 ways)
+
 Github Link: https://github.com/cs0320-s25/term-project-cangaroo
 
 Our project (CanGo) is a social platform designed to foster in-person social connections. We believe our app 
