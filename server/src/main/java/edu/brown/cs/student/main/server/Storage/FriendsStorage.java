@@ -18,15 +18,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Class that manipulates friends data in the Firestore database
- */
+/** Class that manipulates friends data in the Firestore database */
 public class FriendsStorage {
   // database object
   private Firestore db;
 
   /**
    * Manipulates friends data in the Firestore database
+   *
    * @param db - the Firestore database created by GeneralStorage
    */
   public FriendsStorage(Firestore db) throws IOException {
@@ -35,6 +34,7 @@ public class FriendsStorage {
 
   /**
    * Sends a friend request from one user to another
+   *
    * @param senderID - clerkID of the sender
    * @param receiverID - clerkID of the receiver
    * @throws NoProfileFoundException - if one of the profiles not found
@@ -57,6 +57,7 @@ public class FriendsStorage {
 
   /**
    * Unsends a friend request from one user to another
+   *
    * @param senderID - clerkID of the sender
    * @param receiverID - clerkID of the receiver
    * @throws NoProfileFoundException - if one of the profiles not found
@@ -81,6 +82,7 @@ public class FriendsStorage {
 
   /**
    * Responds a friend request from one user to another
+   *
    * @param senderID - clerkID of the sender
    * @param receiverID - clerkID of the receiver
    * @throws NoProfileFoundException - if one of the profiles not found
@@ -122,6 +124,7 @@ public class FriendsStorage {
 
   /**
    * Unfriends two users
+   *
    * @param user1 - one of the users (order doesn't matter)
    * @param user2 - the other user (order doesn't matter)
    * @throws NoProfileFoundException - if profile not found
@@ -150,6 +153,7 @@ public class FriendsStorage {
 
   /**
    * Gets the friends of a user
+   *
    * @param uid - clerkID of the user
    * @return a HashMap that maps uid -> username
    * @throws NoProfileFoundException - if no profile found
@@ -169,6 +173,7 @@ public class FriendsStorage {
 
   /**
    * Gets either all outgoing or received friend requests
+   *
    * @param uid - clerkID of the user
    * @param isOutgoing - a boolean that is true when intending to get all outgoing requests
    * @return a Hashmap from uid -> username
@@ -195,6 +200,7 @@ public class FriendsStorage {
 
   /**
    * Gets all non-friends of a user
+   *
    * @param uid - clerkID of a user
    * @return - a map from uid -> username
    * @throws NoProfileFoundException - if profile not found
@@ -229,7 +235,6 @@ public class FriendsStorage {
   }
 
   /**
-   *
    * @param id
    * @return
    * @throws ExecutionException
@@ -242,6 +247,7 @@ public class FriendsStorage {
 
   /**
    * Checks if two profiles exist
+   *
    * @param user1 - one of the users
    * @param user2 - the other user (can be null, then method only checks if user1 exists)
    * @throws NoProfileFoundException
@@ -265,6 +271,7 @@ public class FriendsStorage {
 
   /**
    * Helper method to delete a document
+   *
    * @param doc - the DocumentReference to the document
    */
   private void deleteDocument(DocumentReference doc) {
@@ -276,8 +283,10 @@ public class FriendsStorage {
     // then delete the document
     doc.delete();
   }
+
   /**
    * Helper method to delete a collection
+   *
    * @param collection - a reference to the collection
    */
   private void deleteCollection(CollectionReference collection) {

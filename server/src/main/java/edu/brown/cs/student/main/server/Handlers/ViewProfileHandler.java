@@ -8,15 +8,14 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-/**
- * Handler that returns a user's profile details
- */
+/** Handler that returns a user's profile details */
 public class ViewProfileHandler implements Route {
   // database object
   public ProfileStorage storageHandler;
 
   /**
    * Handler that returns a user's profile details
+   *
    * @param storageHandler - a ProfileStorage object that has the Firestore object
    */
   public ViewProfileHandler(ProfileStorage storageHandler) {

@@ -9,15 +9,14 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-/**
- * Handler that responds to a friend request
- */
+/** Handler that responds to a friend request */
 public class RespondToFriendRequestHandler implements Route {
   // database object
   public FriendsStorage storageHandler;
 
   /**
    * Handler that responds to a friend request
+   *
    * @param storageHandler - a FriendsStorage object that has the Firestore object
    */
   public RespondToFriendRequestHandler(FriendsStorage storageHandler) {

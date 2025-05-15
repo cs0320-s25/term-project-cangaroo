@@ -9,30 +9,29 @@ import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Class that manipulates event data in the Firestore database
- */
+/** Class that manipulates event data in the Firestore database */
 public class EventsStorage {
   // database object
   private Firestore db;
 
   /**
    * Manipulates event data in the Firestore database
+   *
    * @param db - the Firestore database created by GeneralStorage
    */
-  public EventsStorage(Firestore db){
+  public EventsStorage(Firestore db) {
     this.db = db;
   }
 
   /**
    * Gets the current available eventID
+   *
    * @return the current available eventID
    * @throws ExecutionException - if the computation threw an exception
    * @throws InterruptedException - if the current thread was interrupted while waiting
@@ -51,6 +50,7 @@ public class EventsStorage {
 
   /**
    * Edits the details of an event in the database
+   *
    * @param uid - clerkID of the creator of the event
    * @param eventID - the unique ID for an event
    * @param name - name of the event
@@ -103,6 +103,7 @@ public class EventsStorage {
 
   /**
    * helper method that updates the event details for an event
+   *
    * @param name - name of the event
    * @param description - event's description
    * @param date - YYYY/MM/DD format
@@ -135,6 +136,7 @@ public class EventsStorage {
 
   /**
    * returns an Event given its ID
+   *
    * @param eventID - the unique eventID for the event
    * @return a Map<String, Object> that represents an Event
    * @throws InterruptedException - if the current thread was interrupted while waiting
@@ -171,6 +173,7 @@ public class EventsStorage {
 
   /**
    * Deletes an event in the database
+   *
    * @param uid - clerkID of the creator of the event
    * @param id - eventID of the event
    * @throws NoEventFoundException - if the event isn't found
@@ -192,6 +195,7 @@ public class EventsStorage {
 
   /**
    * Adds an event to the database
+   *
    * @param user - clerkID of the creator
    * @param id - eventID of the event
    * @param data - the event details
@@ -200,9 +204,7 @@ public class EventsStorage {
    * @throws NoProfileFoundException - if profile not found
    */
   public void addEvent(String user, int id, Map<String, Object> data)
-      throws ExecutionException,
-          InterruptedException,
-          NoProfileFoundException {
+      throws ExecutionException, InterruptedException, NoProfileFoundException {
 
     if (!db.collection("users").document(user).get().get().exists()) {
       throw new NoProfileFoundException("Profile does not exist");
@@ -216,6 +218,7 @@ public class EventsStorage {
 
   /**
    * Updates the next available eventID
+   *
    * @param newVal - the next available eventID
    */
   public void updateEventID(int newVal) {
@@ -227,6 +230,7 @@ public class EventsStorage {
 
   /**
    * Helper method to delete a document
+   *
    * @param doc - the DocumentReference to the document
    */
   private void deleteDocument(DocumentReference doc) {
@@ -241,6 +245,7 @@ public class EventsStorage {
 
   /**
    * Helper method to delete a collection
+   *
    * @param collection - a reference to the collection
    */
   private void deleteCollection(CollectionReference collection) {

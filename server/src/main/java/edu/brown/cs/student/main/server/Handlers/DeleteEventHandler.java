@@ -8,15 +8,14 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-/**
- * Handler that deletes an event
- */
+/** Handler that deletes an event */
 public class DeleteEventHandler implements Route {
   // database object
   public EventsStorage storageHandler;
 
   /**
    * Handler that deletes an event
+   *
    * @param storageHandler - an EventsStorage object that has the Firestore object
    */
   public DeleteEventHandler(EventsStorage storageHandler) {

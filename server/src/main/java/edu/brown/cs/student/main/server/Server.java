@@ -15,7 +15,6 @@ import edu.brown.cs.student.main.server.Handlers.GetOutgoingFriendRequestsHandle
 import edu.brown.cs.student.main.server.Handlers.GetReceivedFriendRequestsHandler;
 import edu.brown.cs.student.main.server.Handlers.MostAttendedEventsFriendHandler;
 import edu.brown.cs.student.main.server.Handlers.ProfileCreationHandler;
-import edu.brown.cs.student.main.server.Handlers.RSVPHandler;
 import edu.brown.cs.student.main.server.Handlers.RandomRecommendHandler;
 import edu.brown.cs.student.main.server.Handlers.RecommendHandler;
 import edu.brown.cs.student.main.server.Handlers.RemoveEventHistoryHandler;
@@ -74,7 +73,6 @@ public class Server {
       Spark.get("random-recommend", new RandomRecommendHandler(profileStorage));
       Spark.get("recommend", new RecommendHandler(profileStorage));
       Spark.get("delete-event", new DeleteEventHandler(eventsStorage));
-      Spark.get("rsvp", new RSVPHandler());
       Spark.get("search", new SearchHandler(profileStorage));
       Spark.get("create-profile", new ProfileCreationHandler(profileStorage));
       Spark.get("view-event", new ViewEventHandler(eventsStorage));

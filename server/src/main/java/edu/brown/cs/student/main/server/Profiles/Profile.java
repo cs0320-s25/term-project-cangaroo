@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Record that contains profile details
+ *
  * @param username - name of the profile
  * @param interestedTags - tags that describe what the profile is interested in
  * @param friendNames - names of their friends
