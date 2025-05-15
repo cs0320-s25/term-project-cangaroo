@@ -4,8 +4,9 @@ import edu.brown.cs.student.main.server.Events.Event;
 import java.io.IOException;
 import java.util.*;
 
-//allows you to search for a specific event, using word stemming (ie. hiking and hikes are the same)
-//and synonym matching (ie. latte and coffee match)
+// allows you to search for a specific event, using word stemming (ie. hiking and hikes are the
+// same)
+// and synonym matching (ie. latte and coffee match)
 public class Search {
 
   public Search() {}
@@ -27,11 +28,9 @@ public class Search {
 
       // For each input word, fetch synonyms and stem them
       for (String word : inputWords) {
-        System.out.println("input: " + word);
         Set<String> synonyms = SynonymFetcher.getSynonyms(word);
         for (String syn : synonyms) {
           String stemmedSyn = Stemmer.stemWord(syn);
-          System.out.println("synonym of : " + word + " : " + stemmedSyn);
           expandedInputStems.add(stemmedSyn);
         }
       }
@@ -42,11 +41,11 @@ public class Search {
 
     Map<Event, Integer> eventScores = new HashMap<>();
 
-    //for each event, keep a score
+    // for each event, keep a score
     for (Event event : allEvents) {
       int score = 0;
 
-      //each time the event name matches an input, add 5 points
+      // each time the event name matches an input, add 5 points
       try {
         List<String> nameStems = Stemmer.stemSentence(event.name());
         for (String inputStem : expandedInputStems) {
@@ -58,7 +57,7 @@ public class Search {
         e.printStackTrace();
       }
 
-      //each time the event desc matches an input, add 3 points
+      // each time the event desc matches an input, add 3 points
       try {
         List<String> descStems = Stemmer.stemSentence(event.description());
         for (String inputStem : expandedInputStems) {
@@ -70,7 +69,7 @@ public class Search {
         e.printStackTrace();
       }
 
-      //each time the event tag matches an input, add 3 points
+      // each time the event tag matches an input, add 3 points
       for (String tag : event.tags()) {
         if (tag != null) {
           try {
@@ -84,13 +83,13 @@ public class Search {
         }
       }
 
-      //display every event with a score above 0
+      // display every event with a score above 0
       if (score > 0) {
         eventScores.put(event, score);
       }
     }
 
-    //sort entries by score to display most relevant ones first
+    // sort entries by score to display most relevant ones first
     List<Map.Entry<Event, Integer>> sortedEntries = new ArrayList<>(eventScores.entrySet());
     sortedEntries.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
 

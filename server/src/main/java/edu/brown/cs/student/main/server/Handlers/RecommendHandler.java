@@ -11,7 +11,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-//handler processes the api requests for event-profile matching
+// handler processes the api requests for event-profile matching
 public class RecommendHandler implements Route {
 
   Event e1 =

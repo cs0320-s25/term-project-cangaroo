@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-//profile will recommend 10 events to you (or all events depending on whichever is less)
+// profile will recommend 10 events to you (or all events depending on whichever is less)
 public class RandomMatch {
 
   public RandomMatch() {}

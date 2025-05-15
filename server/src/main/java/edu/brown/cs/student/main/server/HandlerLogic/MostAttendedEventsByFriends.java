@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-//recommends events solely based on how many friends are attending
+// recommends events solely based on how many friends are attending
 public class MostAttendedEventsByFriends {
 
   public MostAttendedEventsByFriends() {}
@@ -21,21 +21,21 @@ public class MostAttendedEventsByFriends {
   public List<Integer> rankEventsWithFriends(StorageInterface storageHandler, String profileID)
       throws ExecutionException, InterruptedException, NoProfileFoundException {
 
-    //get the list of friends
+    // get the list of friends
     List<String> profileFriends =
         (List<String>) storageHandler.getProfile(profileID).get("friendsList");
     List<Map<String, Object>> allEvents = storageHandler.getAllEventsMap();
 
     Map<Integer, Integer> eventFriendCounts = new HashMap<>();
 
-    //for each event
+    // for each event
     for (Map<String, Object> event : allEvents) {
-      //get users attending every event
+      // get users attending every event
       List<String> attendees = (List<String>) event.get("usersAttending");
       Long eventIDLong = (Long) event.get("ID");
       int eventID = eventIDLong != null ? eventIDLong.intValue() : -1;
 
-      //tally up how many friends are attending
+      // tally up how many friends are attending
       int count = 0;
       for (String friend : profileFriends) {
         if (attendees.contains(friend)) {
@@ -43,13 +43,13 @@ public class MostAttendedEventsByFriends {
         }
       }
 
-      //allows you to display every event where your friend(s) is/are attending
+      // allows you to display every event where your friend(s) is/are attending
       if (count > 0) {
         eventFriendCounts.put(eventID, count);
       }
     }
 
-    //organizes display order by events with most friends attending
+    // organizes display order by events with most friends attending
     return eventFriendCounts.entrySet().stream()
         .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
         .limit(50)

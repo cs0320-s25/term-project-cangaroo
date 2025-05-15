@@ -8,7 +8,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-//handler processes the api requests for rating events
+// handler processes the api requests for rating events
 public class RateHandler implements Route {
 
   public StorageInterface storageHandler;

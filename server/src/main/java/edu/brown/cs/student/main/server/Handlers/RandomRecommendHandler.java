@@ -10,7 +10,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-//handler processes the api requests for recommending events randomly
+// handler processes the api requests for recommending events randomly
 public class RandomRecommendHandler implements Route {
 
   Event e1 =

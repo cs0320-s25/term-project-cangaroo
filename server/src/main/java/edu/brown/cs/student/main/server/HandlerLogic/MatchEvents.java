@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-//this class handles the logic behind matching a profile's tags and fav event organizers to events
+// this class handles the logic behind matching a profile's tags and fav event organizers to events
 public class MatchEvents {
 
   public MatchEvents() {}
@@ -25,11 +25,11 @@ public class MatchEvents {
     Set<String> expandedInputWords = new HashSet<>();
 
     try {
-      //stem the tags
+      // stem the tags
       List<String> stemmedInput = Stemmer.stemSentence(personalTags);
       expandedInputWords.addAll(stemmedInput);
 
-      //filter out words 2 characters or less
+      // filter out words 2 characters or less
       for (String word : personalTags) {
         if (word.length() > 2) {
           String formattedWord = word.replace(" ", "-");
@@ -58,7 +58,7 @@ public class MatchEvents {
               .map(String::toLowerCase)
               .collect(Collectors.toSet());
 
-      //if event name contains profile tag, add 5 points
+      // if event name contains profile tag, add 5 points
       List<String> stemmedName = new ArrayList<>();
       try {
         stemmedName = Stemmer.stemSentence(new ArrayList<>(nameWords));
@@ -83,7 +83,7 @@ public class MatchEvents {
       } catch (IOException e) {
         e.printStackTrace();
       }
-      //if event description contains profile tag, add 3 points
+      // if event description contains profile tag, add 3 points
       for (String input : expandedInputWords) {
         if (stemmedDesc.contains(input)) {
           score += 3;
@@ -103,7 +103,7 @@ public class MatchEvents {
           e.printStackTrace();
         }
 
-        //if event tag contains profile tag, add 5 points
+        // if event tag contains profile tag, add 5 points
         for (String input : expandedInputWords) {
           if (stemmedTags.contains(input)) {
             score += 5;
@@ -119,7 +119,7 @@ public class MatchEvents {
 
         String organizerWords = event.eventOrganizer().toLowerCase();
 
-        //if your fav event organizer is the event organizer, add 10 points
+        // if your fav event organizer is the event organizer, add 10 points
 
         for (String favOrg : favEventOrgs) {
           if (favOrg != null && organizerWords.equals(favOrg.toLowerCase())) {
@@ -133,7 +133,7 @@ public class MatchEvents {
       }
     }
 
-    //rank the events with highest core and return their event id
+    // rank the events with highest core and return their event id
     return eventScores.entrySet().stream()
         .sorted((a, b) -> Integer.compare(b.getValue(), a.getValue()))
         .map(entry -> entry.getKey().eventID())

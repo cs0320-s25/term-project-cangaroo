@@ -9,14 +9,14 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
-//this class will stem words to ensure words like "hiking" and "hikes" match
+// this class will stem words to ensure words like "hiking" and "hikes" match
 public class Stemmer {
 
   /*
-       this method will stem a sentence
-       @param words the sentence whose words you are trying to stem
-       @returns: a sentence of stemmed words
-    */
+     this method will stem a sentence
+     @param words the sentence whose words you are trying to stem
+     @returns: a sentence of stemmed words
+  */
   public static List<String> stemSentence(List<String> words) throws IOException {
     List<String> stems = new ArrayList<>();
     String joined = String.join(" ", words).toLowerCase(); // Join and lowercase
@@ -35,10 +35,10 @@ public class Stemmer {
   }
 
   /*
-       this method stems a word
-       @param word the word you are trying to stem
-       @returns: the stemmed word
-    */
+     this method stems a word
+     @param word the word you are trying to stem
+     @returns: the stemmed word
+  */
   public static String stemWord(String word) throws IOException {
     try (Analyzer analyzer = new EnglishAnalyzer()) {
       TokenStream tokenStream = analyzer.tokenStream(null, new StringReader(word.toLowerCase()));

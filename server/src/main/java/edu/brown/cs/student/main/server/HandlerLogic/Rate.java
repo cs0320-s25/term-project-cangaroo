@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-//allows you to rate an event which will update the algorithm if you enjoyed it
+// allows you to rate an event which will update the algorithm if you enjoyed it
 public class Rate {
 
   public Rate() {}
@@ -28,7 +28,7 @@ public class Rate {
           NoEventFoundException,
           NoProfileFoundException {
 
-    //if you liked the event
+    // if you liked the event
     if (likedEvent) {
       String eventOrganizer = (String) storageHandler.getEvent(eventID).get("eventOrganizer");
       List<String> profileFavOrganizers =
@@ -45,7 +45,7 @@ public class Rate {
         profileFavOrganizers.add(eventOrganizer);
       }
 
-      //edit the profiile to add the fav event organizer
+      // edit the profiile to add the fav event organizer
       storageHandler.editProfile(profileID, tagsList, profileFavOrganizers, null);
     }
   }
