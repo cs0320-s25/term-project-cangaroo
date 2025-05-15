@@ -77,10 +77,10 @@ export default function EventPage({ eventID, onClose, cameFromHome }: EventPageP
                   summary: name + " (" + organizerName + ")",
                   description: description,
                   start: {
-                    dateTime: date + "T" + startTime + ":00-05:00",
+                    dateTime: date + "T" + startTime + ":00-04:00",
                   },
                   end: {
-                    dateTime: date + "T" + endTime + ":00-05:00",
+                    dateTime: date + "T" + endTime + ":00-04:00",
                   },
                 }
                 )}>Add to GCal</button>
