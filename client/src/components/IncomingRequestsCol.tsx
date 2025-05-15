@@ -1,23 +1,21 @@
-import FriendCard from "./FriendCard";
-import { useState, useEffect} from "react";
-import { useNavigate } from "react-router-dom";
 import "../styles/FriendsList.css"; 
-// import { viewFriends } from "../utils/api";
-import { useParams } from "react-router"
 import FriendCardIncomingRequest from "./FriendCardIncomingRequest";
-import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutgoingFriendRequests, getReceivedFriendRequests,
-  unfriend, viewFriends, viewProfile
-} from "../utils/api";
 
+/**
+ * Props for this section. Handles relevant FriendCard functionality and includes the users to display here.
+ */
 interface IncomingRequestsColumnProps {
-  friendUIDs: [string, string][];
+  userTuples: [string, string][];
   onNameClick: (uid: string) => void;
   handleAccept: (uid: string) => void;
   handleReject: (uid: string) => void;
 }
 
+/**
+ * The section to display all incoming friend requests
+ */
 export default function IncomingRequestsColumn({
-  friendUIDs,
+  userTuples,
   onNameClick,
   handleAccept,
   handleReject
@@ -25,7 +23,7 @@ export default function IncomingRequestsColumn({
   return (
     <div className="friends-column left">
       <div className="friend-cards-container">
-        {friendUIDs.map((userTuple, index) => (
+        {userTuples.map((userTuple, index) => (
           <FriendCardIncomingRequest
             key={userTuple[0]}
             uid={userTuple[0]}

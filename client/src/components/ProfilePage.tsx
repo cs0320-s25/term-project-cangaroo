@@ -11,7 +11,9 @@ import FriendsList from "./FriendsList";
 import { editProfile, viewProfile, getEventHistory } from "../utils/api";
 import EventPage from "./EventPage";
 
-
+/**
+ * Profile Page component
+ */
 export default function ProfilePage() {
   const { user } = useUser();
   const { userId } = useParams<{ userId: string }>();

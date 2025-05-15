@@ -5,6 +5,9 @@ import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutg
          unfriend, viewFriends, viewProfile
  } from "../utils/api";
 
+ /**
+ * Relevant FriendCard Props
+ */
 interface FriendCardIncomingRequestProps {
   uid: string;
   handleNameClick: () => void;
@@ -13,9 +16,7 @@ interface FriendCardIncomingRequestProps {
 };
 
 /**
- * Method to render an friend card component. Contains various interactions with other users (friend, unfriend, accept, reject, send invite, click profile)
- * 
- * @returns - the JSX FriendCard component.
+ * Method to render a friend card component for the Incoming Requests Section. 
  */
 function FriendCardIncomingRequest({
   uid,

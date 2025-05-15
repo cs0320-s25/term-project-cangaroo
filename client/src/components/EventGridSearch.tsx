@@ -10,6 +10,9 @@ interface EventCardGridSearchProps {
   onPlusClick: () => void;
 }
 
+/**
+ * The main grid of event cards that show up for users to search
+ */
 function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
   const { user } = useUser();
 

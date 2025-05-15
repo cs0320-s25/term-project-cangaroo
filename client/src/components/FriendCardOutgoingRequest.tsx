@@ -1,30 +1,31 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom'; 
 import "../styles/FriendCard.css";
-import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutgoingFriendRequests, getReceivedFriendRequests,
-         unfriend, viewFriends, viewProfile
- } from "../utils/api";
+import { viewProfile } from "../utils/api";
 
+/**
+ * Relevant FriendCard Props
+ */
 interface FriendCardOutgoingRequestProps {
   uid: string;
   handleNameClick: () => void;
+  handleUnsend: () => void;
 };
 
 /**
- * Method to render an friend card component. Contains various interactions with other users (friend, unfriend, accept, reject, send invite, click profile)
- * 
- * @returns - the JSX FriendCard component.
+ * Method to render a friend card component for the Pending Requests Section. 
  */
 function FriendCardOutgoingRequest({
   uid,
   handleNameClick,
+  handleUnsend,
 }: FriendCardOutgoingRequestProps){
 
   const [name, setName] = useState("")
   const [numFriends, setNumFriends] = useState(0)
   const navigate = useNavigate();
   const [profilePic, setProfilePic] = useState("")
-  
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -61,7 +62,7 @@ function FriendCardOutgoingRequest({
                   : (<div className="friend-icon">
                         <h2>{name.charAt(0)}</h2>
                     </div>)}
-                    
+
       <div className="friend-info">
 
         <h2 
@@ -77,6 +78,13 @@ function FriendCardOutgoingRequest({
         </p>
 
         <p>➤ Request Sent! </p>
+
+        <button
+          onClick={handleUnsend} 
+          className="friend-button"
+        >
+          Unsend Friend Request
+        </button>
 
       </div>
 

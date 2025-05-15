@@ -1,37 +1,30 @@
-import { useState, useEffect, useId} from "react";
-import FriendCard from "./FriendCard";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/FriendsList.css"; 
-// import { viewFriends } from "../utils/api";
 import { useParams } from "react-router"
+
+// components
 import IncomingRequestsColumn from "./IncomingRequestsCol";
 import CurrentFriendsColumn from "./CurrentFriendsCol";
 import NonFriendsColumn from "./NonFriendsCol";
 import OutgoingRequestsColumn from "./OutgoingRequestsCol";
-import FriendCardIncomingRequest from "./FriendCardIncomingRequest";
+
 
 import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutgoingFriendRequests, getReceivedFriendRequests,
   unfriend, viewFriends, viewProfile, viewNonFriends
 } from "../utils/api";
 
+/**
+ * Props for FriendList. Includes a boolean for open / closed, and handling closing.
+ */
 interface FriendsListProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-// defining relevant interfaces w/ props
-interface User {
-  name: string;
-  profilePictureUrl: string;
-  friendCount: number;
-  requestStatus: "incoming" | "friend" | "none"; 
-}
-
-interface FriendsListProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
+/**
+ * FriendsList component that handles all the friending functionality
+ */
 export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   // routing
   const navigate = useNavigate();
@@ -60,7 +53,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           }
           console.log("Successfully fetched current friends from Firebase:", viewFriendsResponse.friends);
           const friendsList: [string, string][] = Array.from(Object.entries(viewFriendsResponse.friends));
-          
+
           console.log("List of current friends tuples: ", friendsList);
           setCurrentFriends(friendsList);
         }
@@ -69,7 +62,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
         return;
       }
     };
-  
+
     getCurrentFriends();
   }, []);
 
@@ -89,10 +82,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
             return;
           }
           console.log("Successfully fetched non-friends from Firebase:", getNonFriendsResponse.users);
-          const nonFriendsList: [string, string][] = Array.from(Object.entries(getNonFriendsResponse.users));
-          // const filteredNonFriendsList = nonFriendsList.filter(
-          //   ([uid]) => !outgoingRequests.some(([requestUid]) => requestUid === uid)
-          // );          
+          const nonFriendsList: [string, string][] = Array.from(Object.entries(getNonFriendsResponse.users));     
           console.log("List of non-friends tuples: ", nonFriendsList);
           setNonFriends(nonFriendsList);
         }
@@ -101,7 +91,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
         return;
       }
     };
-  
+
     getNonFriends();
   }, []);
 
@@ -128,7 +118,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           else {
             console.log("Successfully fetched incoming requests from Firebase:", viewIncomingRequestsResponse.receivedFriendRequests);
             const requestsList: [string, string][] = Array.from(Object.entries(viewIncomingRequestsResponse.receivedFriendRequests));
-            
+
             console.log("List of incoming requests user tuples: ", requestsList);
             setIncomingRequests(requestsList);
           }  
@@ -138,7 +128,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
         return;
       }
     };
-  
+
     getIncomingRequests();
   }, []);
 
@@ -166,7 +156,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           else {
             console.log("Successfully fetched outgoing requests from Firebase:", viewOutgoingRequestsResponse.outgoingFriendRequests);
             const requestsList: [string, string][] = Array.from(Object.entries(viewOutgoingRequestsResponse.outgoingFriendRequests));
-            
+
             console.log("List of current outgoing requests user tuples: ", requestsList);
             setOutgoingRequests(requestsList);
           }  
@@ -176,10 +166,10 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
         return;
       }
     };
-  
+
     getOutgoingRequests();
   }, []);
-  
+
   /**
    * Handles sending friend request
    * @param receiveruid the friend to send the request to
@@ -202,6 +192,31 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
       }
     } catch (err) {
       console.error("Failed to send request to ", receiveruid, err);
+      return;
+    }  
+  };
+
+  /**
+   * Handles unsending friend request
+   * @param receiveruid the friend to send the request to
+   * @returns 
+   */
+  const handleUnsendFriendRequest = async (receiveruid: string) => {
+    try {
+      if (userId) {
+        const result = await unsendFriendRequest(userId, receiveruid);
+        if (result.result !== "success") {
+          console.error(result.error_message);
+          return;
+        }
+        console.log("SUCCESS: FRIEND REQUEST UNSENT.");
+        const profile = await viewProfile(receiveruid);
+        setOutgoingRequests(outgoingRequests.filter(([uid, username]) => uid !== receiveruid))
+
+        setNonFriends([...nonFriends, [receiveruid, profile.data.username]])
+      }
+    } catch (err) {
+      console.error("Failed to unsend request to ", receiveruid, err);
       return;
     }  
   };
@@ -253,7 +268,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
       return;
     }  
   };
-  
+
   /**
    * Handles unfriending two users
    * @param frienduid the uid of the friend to unfriend :(
@@ -301,7 +316,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
     } else {
       document.body.style.overflow = "";
     }
-  
+
     return () => {
       document.body.style.overflow = "";
     };
@@ -321,7 +336,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           <h3>Incoming Friend Requests</h3>
           <div className="request-section">
             <IncomingRequestsColumn
-              friendUIDs={incomingRequests} 
+              userTuples={incomingRequests} 
               onNameClick={handleFriendCardNameClick}
               handleAccept={handleAcceptFriendRequest}
               handleReject={handleRejectFriendRequest}
@@ -332,11 +347,10 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
             <OutgoingRequestsColumn
               userTuples={outgoingRequests} 
               onNameClick={handleFriendCardNameClick}
+              handleUnfriendClick={handleUnsendFriendRequest}
             />
           </div>
         </div>
-        {/* column 1: incoming requests */}
-
 
         {/* column 2: current friends */}
         <CurrentFriendsColumn
@@ -346,8 +360,6 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           onNameClick={handleFriendCardNameClick}
           handleUnfriendClick={handleUnfriend}
         />
-        {/* column 2: current friends (each col handles searching within the child component) */}
-        
 
         {/* column 3: general users (search for new friends) */}
         <NonFriendsColumn
@@ -357,10 +369,9 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           handleSendRequest={handleSendFriendRequest}
           onNameClick={handleFriendCardNameClick}
         />
-        {/* column 3: general users (search for new friends) */}
-      
+
       </div>
-        
+
     </div>
   );
 }

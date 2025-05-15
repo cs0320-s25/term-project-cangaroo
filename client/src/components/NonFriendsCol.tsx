@@ -1,5 +1,10 @@
 import FriendCard from "./FriendCard";
 import "../styles/FriendsList.css"; 
+
+/**
+ * Props for this section. Handles relevant FriendCard functionality and includes the users to display here. 
+ * Also includes the search term from the search bar.
+ */
 interface NonFriendColProps {
   nonFriendTuples: [string,string][];
   searchTerm: string;
@@ -9,6 +14,9 @@ interface NonFriendColProps {
 }
 import FriendCardNonFriend from "./FriendCardNonFriend";
 
+/**
+ * The section to display all currently non-friended users
+ */
 export default function NonFriendsColumn({
   nonFriendTuples,
   searchTerm,

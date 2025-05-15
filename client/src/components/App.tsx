@@ -32,6 +32,7 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 
+/** This creates the home page */
 function Home() {
   const [isModalOpen, setModalOpen] = useState(false);
   useCreateProfileOnFirstSignIn(); // profile creation
@@ -65,6 +66,7 @@ function Home() {
   );
 }
 
+/** This handles the main routing logic for home, profiles, and gcal functionality */
 export default function App() {
   return (
     <Router>
