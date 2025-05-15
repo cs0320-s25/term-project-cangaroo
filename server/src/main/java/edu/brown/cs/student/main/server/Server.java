@@ -20,6 +20,7 @@ import edu.brown.cs.student.main.server.Handlers.RSVPHandler;
 import edu.brown.cs.student.main.server.Handlers.RandomRecommendHandler;
 import edu.brown.cs.student.main.server.Handlers.RateHandler;
 import edu.brown.cs.student.main.server.Handlers.RecommendHandler;
+import edu.brown.cs.student.main.server.Handlers.RemoveEventHistoryHandler;
 import edu.brown.cs.student.main.server.Handlers.RespondToFriendRequestHandler;
 import edu.brown.cs.student.main.server.Handlers.SearchHandler;
 import edu.brown.cs.student.main.server.Handlers.SendFriendRequestHandler;
@@ -83,6 +84,7 @@ public class Server {
       Spark.get("get-non-friends", new GetNonFriendsHandler(storageHandler));
       Spark.get("get-event-history", new GetEventHistoryHandler(storageHandler));
       Spark.get("add-event-history", new AddEventHistoryHandler(storageHandler));
+      Spark.get("remove-event-history", new RemoveEventHistoryHandler(storageHandler));
       Spark.notFound(
           (request, response) -> {
             response.status(404); // Not Found
