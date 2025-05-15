@@ -1,7 +1,7 @@
 import "../styles/EventPage.css";
 import { useState, useEffect } from "react";
 import EventCardGridSearch from "./EventGridSearch";
-import { viewEvent, changeAttendance, viewProfile, addEventHistory } from "../utils/api";
+import { viewEvent, changeAttendance, removeEventHistory, addEventHistory } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import useEventDetails from "../hooks/useEventDetails";
 import EditEventForm from "./EditEventForm";
@@ -112,8 +112,12 @@ export default function EventPage({ eventID, onClose, cameFromHome }: EventPageP
                       setAttendeeCount((prev) => prev - 1);
                       setAttendeeInfo((prev) => prev.filter((info) => info.id !== user.id));
 
-                      // remove-event-history
-                      // set event history
+                      try {
+                        const response = await removeEventHistory(user.id, eventID);
+                        console.log("removeEventHistory response:", response);
+                      } catch (err) {
+                        console.error("Failed to remove event from history:", err);
+                      }
                     }
                     
                   } catch (err) {

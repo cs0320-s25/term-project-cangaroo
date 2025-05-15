@@ -228,7 +228,7 @@ test('test other profile views', async ({ page }) => {
     // checking attendence in RSVP block
     await expect(page.getByRole('button', { name: 'Aarav Kumar' })).toBeVisible();
 
-    // clciking on other profile
+    // clicking on other profile
     await page.getByRole('button', { name: 'Outdoor Adventures' }).click();
     await page.waitForTimeout(2000);
     await expect(page.getByRole('heading', { name: 'EvilGuy321' })).toBeVisible();
