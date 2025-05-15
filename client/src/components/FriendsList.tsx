@@ -197,6 +197,31 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   };
 
   /**
+   * Handles unsending friend request
+   * @param receiveruid the friend to send the request to
+   * @returns 
+   */
+  const handleUnsendFriendRequest = async (receiveruid: string) => {
+    try {
+      if (userId) {
+        const result = await unsendFriendRequest(userId, receiveruid);
+        if (result.result !== "success") {
+          console.error(result.error_message);
+          return;
+        }
+        console.log("SUCCESS: FRIEND REQUEST UNSENT.");
+        const profile = await viewProfile(receiveruid);
+        setOutgoingRequests(outgoingRequests.filter(([uid, username]) => uid !== receiveruid))
+
+        setNonFriends([...nonFriends, [receiveruid, profile.data.username]])
+      }
+    } catch (err) {
+      console.error("Failed to unsend request to ", receiveruid, err);
+      return;
+    }  
+  };
+
+  /**
    * Handles accepting a friend request
    * @param senderuid the other person who has sent YOU the request
    * @returns 
@@ -322,6 +347,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
             <OutgoingRequestsColumn
               userTuples={outgoingRequests} 
               onNameClick={handleFriendCardNameClick}
+              handleUnfriendClick={handleUnsendFriendRequest}
             />
           </div>
         </div>

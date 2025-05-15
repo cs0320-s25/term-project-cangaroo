@@ -8,6 +8,7 @@ import FriendCardOutgoingRequest from "./FriendCardOutgoingRequest";
 interface OutgoingRequestsColumnProps {
   userTuples: [string, string][];
   onNameClick: (uid: string) => void;
+  handleUnfriendClick: (uid: string) => void;
 }
 
 /**
@@ -16,6 +17,7 @@ interface OutgoingRequestsColumnProps {
 export default function OutgoingRequestsColumn({
   userTuples,
   onNameClick,
+  handleUnfriendClick,
 }: OutgoingRequestsColumnProps) {
   console.log(userTuples)
   return (
@@ -26,6 +28,7 @@ export default function OutgoingRequestsColumn({
             key={userTuple[0]}
             uid={userTuple[0]}
             handleNameClick={() => onNameClick(userTuple[0])}
+            handleUnsend={() => handleUnfriendClick(userTuple[0])}
           />
         ))}
       </div>

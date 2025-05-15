@@ -9,6 +9,7 @@ import { viewProfile } from "../utils/api";
 interface FriendCardOutgoingRequestProps {
   uid: string;
   handleNameClick: () => void;
+  handleUnsend: () => void;
 };
 
 /**
@@ -17,6 +18,7 @@ interface FriendCardOutgoingRequestProps {
 function FriendCardOutgoingRequest({
   uid,
   handleNameClick,
+  handleUnsend,
 }: FriendCardOutgoingRequestProps){
 
   const [name, setName] = useState("")
@@ -76,6 +78,13 @@ function FriendCardOutgoingRequest({
         </p>
 
         <p>➤ Request Sent! </p>
+
+        <button
+          onClick={handleUnsend} 
+          className="friend-button"
+        >
+          Unsend Friend Request
+        </button>
 
       </div>
 
