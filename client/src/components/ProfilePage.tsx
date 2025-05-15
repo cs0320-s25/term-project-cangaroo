@@ -310,7 +310,18 @@ export default function ProfilePage() {
         {selectedEvent && (
                     <EventPage
                       eventID={selectedEvent}
-                      onClose={() => setSelectedEvent(null)}
+                      onClose={async () => {
+                        setSelectedEvent(null)
+                        const updatedHistory = await getEventHistory(userId!);
+                        setEventHistory(updatedHistory.data.map((event: any) => ({
+                          title: event.name,
+                          description: event.description,
+                          imageUrl: event.thumbnailUrl,
+                          id: event.ID,
+                        })));
+                      }
+                        
+                      }
                       cameFromHome={false}
                     />
                   )}

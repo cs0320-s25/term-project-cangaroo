@@ -258,13 +258,7 @@ export async function viewProfile(uid: string) {
 export async function getEventHistory(uid: string) {
   return await queryAPI("get-event-history", { uid });
 }
-/**
- * Method that queries the backend using the edit-profile endpoint
- * @param uid - user's Clerk ID
- * @param interestedTags - comma-separated string of interests
- * @param favEventOrganizers - comma-separated string of favorite organizers
- * @param profilePicUrl - string URL to profile picture
- */
+
 
 /**
  * Method that queries the backend using the add-event-history endpoint
@@ -278,6 +272,14 @@ export async function addEventHistory(uid: string, eventID: string) {
     eventID
   });
 }
+
+/**
+ * Method that queries the backend using the edit-profile endpoint
+ * @param uid - user's Clerk ID
+ * @param interestedTags - comma-separated string of interests
+ * @param favEventOrganizers - comma-separated string of favorite organizers
+ * @param profilePicUrl - string URL to profile picture
+ */
 export async function editProfile(
   uid: string,
   interestedTags: string,
@@ -348,6 +350,20 @@ export async function editEvent(
     endTime,
     tags,
     thumbnailUrl
+  });
+}
+
+/**
+ * Method that queries the backend using the remove-event-history endpoint
+ */
+
+export async function removeEventHistory(
+  uid: string,
+  eventID: string
+){
+  return await queryAPI("remove-event-history", {
+    uid,
+    eventID
   });
 }
 
