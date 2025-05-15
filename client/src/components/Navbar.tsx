@@ -1,13 +1,12 @@
 import "../styles/Navbar.css";
 import { useNavigate } from "react-router-dom";
-import { SignOutButton } from "@clerk/clerk-react";
-import { useUser } from "@clerk/clerk-react";
+import { SignOutButton, useUser, UserButton } from "@clerk/clerk-react";
 
 interface NavbarProps {
   onPlusClick: () => void;
   minimal?: boolean;
   onRecommendClick?: () => void;
-  onLogoClick?: () => void; // ✅ New prop
+  onLogoClick?: () => void;
 }
 
 function Navbar({ onPlusClick, minimal = false, onRecommendClick, onLogoClick }: NavbarProps) {
@@ -25,7 +24,7 @@ function Navbar({ onPlusClick, minimal = false, onRecommendClick, onLogoClick }:
       <div className="navbar-left">
         <div className="logo" onClick={() => {
           navigate("/");
-          onLogoClick?.(); // ✅ Trigger the callback
+          onLogoClick?.();
         }}>
           CanGo
         </div>
@@ -38,6 +37,19 @@ function Navbar({ onPlusClick, minimal = false, onRecommendClick, onLogoClick }:
             <button className="nav-button" onClick={onRecommendClick}>Recommend</button>
           </>
         )}
+        <UserButton
+          appearance={{
+            elements: {
+              userButtonAvatarBox: {
+                width: '40px',
+                height: '40px',
+                border: '2px solid #8D99AE',
+                borderRadius: '50%',
+              },
+            },
+          }}
+        />
+
         <button className="profile-button" onClick={handleProfileClick}>Profile</button>
         <SignOutButton>
           <button className="nav-button">Sign Out</button>

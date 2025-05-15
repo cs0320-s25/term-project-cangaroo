@@ -5,5 +5,3 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
 })
-
-"process.env.CLIENT_ID": JSON.stringify(env.CLIENT_ID),

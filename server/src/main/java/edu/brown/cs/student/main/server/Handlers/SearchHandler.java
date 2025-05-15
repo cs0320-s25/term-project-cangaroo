@@ -13,6 +13,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+// handler processes the api requests for searching for events
 public class SearchHandler implements Route {
 
   Event e1 =

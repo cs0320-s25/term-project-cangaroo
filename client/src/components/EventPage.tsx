@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import useEventDetails from "../hooks/useEventDetails";
 import EditEventForm from "./EditEventForm";
 import { createGcalEvent } from "./OAuthCallback";
-      
 import { useUser } from "@clerk/clerk-react";
 
 interface EventPageProps {
@@ -69,7 +68,10 @@ export default function EventPage({ eventID, onClose, cameFromHome }: EventPageP
             <h1>{name}</h1>
             <div className="event-header">
               
-                <button id="org" onClick={() => navigate(`/profile/${organizerID}`)}>
+                <button id="org" onClick={() => {
+                  navigate(`/profile/${organizerID}`)
+                  onClose();
+                }}>
                   {organizerName}
                 </button>
 
@@ -160,9 +162,12 @@ export default function EventPage({ eventID, onClose, cameFromHome }: EventPageP
 
         <EditEventForm
           isOpen={showEditForm}
-          onClose={() => {
-            setShowEditForm(false);
-            refetch();
+          onClose={() => {setShowEditForm(false)}}
+          onSuccessfulEdit={() => {
+            setTimeout(() => {
+              console.log("Refetching updated event after slight delay");
+              refetch();
+            }, 1000);
           }}
           initialData={{
             eventID: eventID,
