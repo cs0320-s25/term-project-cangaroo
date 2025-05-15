@@ -22,7 +22,6 @@ export default function OutgoingRequestsColumn({
   console.log(userTuples)
   return (
     <div className="friends-column left">
-      <h3>Pending Friend Requests</h3>
       <div className="friend-cards-container">
         {userTuples.map((userTuple, index) => (
           <FriendCardOutgoingRequest

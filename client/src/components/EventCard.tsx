@@ -18,15 +18,6 @@ interface EventCardProps {
  */
 
 function EventCard ({ eventID, onClick }: EventCardProps) {
-  // let title;
-  // let startTime;
-  // let endTime;
-  // let attendees;
-  // let attendeeCount;
-  // let organizer;
-  // let date;
-  // let description;
-  // let tags;
 
   const [organizer, setOrganizer] = useState("Organizer");
   const [rsvp, setRSVP] = useState(false);

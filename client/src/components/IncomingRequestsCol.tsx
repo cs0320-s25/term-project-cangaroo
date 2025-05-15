@@ -24,7 +24,6 @@ export default function IncomingRequestsColumn({
 }: IncomingRequestsColumnProps) {
   return (
     <div className="friends-column left">
-      <h3>Incoming Friend Requests</h3>
       <div className="friend-cards-container">
         {friendUIDs.map((userTuple, index) => (
           <FriendCardIncomingRequest

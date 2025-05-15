@@ -318,6 +318,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
       <div className="friends-list-grid">
         {/* column 1: incoming requests */}
         <div className="friends-column">
+          <h3>Incoming Friend Requests</h3>
           <div className="request-section">
             <IncomingRequestsColumn
               friendUIDs={incomingRequests} 
@@ -326,6 +327,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
               handleReject={handleRejectFriendRequest}
           />
           </div>
+          <h3>Pending Friend Requests</h3>
           <div className="request-section">
             <OutgoingRequestsColumn
               userTuples={outgoingRequests} 

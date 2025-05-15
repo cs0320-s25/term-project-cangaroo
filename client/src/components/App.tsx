@@ -30,10 +30,7 @@ const firebaseConfig = {
   appId: process.env.APP_ID,
 };
 
-
-
 initializeApp(firebaseConfig);
-
 
 function Home() {
   const [isModalOpen, setModalOpen] = useState(false);

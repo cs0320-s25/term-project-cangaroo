@@ -38,9 +38,10 @@ function FriendCardOutgoingRequest({
         const data = result.data;
         setName(data.username);
         setNumFriends(data.friendsList?.length || 0);
-        if (data.ProfilePicUrl) {
-          setProfilePic(data.profilePicUrl);
-          console.log("Profile Picture Successfully Loaded: ", data.profilePicUrl)
+        setProfilePic(data.profilePicUrl);
+        if (!data.profilePicUrl || data.profilePicUrl === "") {
+          console.log("String is empty");
+          setProfilePic("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg");
         }
         
       } catch (err) {

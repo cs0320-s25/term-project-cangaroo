@@ -1,4 +1,3 @@
-import FriendCard from "./FriendCard";
 import FriendCardCurrentFriend from "./FriendCardCurrentFriend";
 
 interface CurrentFriendsColumnProps {
