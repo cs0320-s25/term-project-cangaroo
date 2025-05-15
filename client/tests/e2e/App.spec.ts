@@ -88,7 +88,8 @@ test('test recommend', async ({ page }) => {
  */
 test('test event creation/editing/deletion', async ({ page }) => {
     // event creation
-    await page.getByRole('button', { name: '+' }).nth(1).click();
+    await page.setViewportSize({ width: 1600, height: 900 });
+    await page.getByRole('button', { name: '+' }).nth(1).click({ force: true });
 
     // checking relevant fields are visible
     await expect(page.getByRole('heading', { name: 'New Event' })).toBeVisible();
