@@ -10,21 +10,6 @@ import EventCardSmall from "./EventCardSmall";
 import FriendsList from "./FriendsList";
 import { editProfile, viewProfile, getEventHistory } from "../utils/api";
 import EventPage from "./EventPage";
-// later can import the recommended events from elsewhere
-const events = [
-  { title: "Spring Weekend", 
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ", 
-    imageUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg" },
-  { title: "Spring Weekend", 
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ", 
-    imageUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg" },
-  { title: "Spring Weekend", 
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ", 
-    imageUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg" },
-  { title: "Spring Weekend", 
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ", 
-    imageUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg" },
-];
 
 
 export default function ProfilePage() {
@@ -39,6 +24,8 @@ export default function ProfilePage() {
   const [tags, setTags] = useState<string[]>([]);
   const [orgs, setOrgs] = useState<string[]>([]);
   const [profilePicUrl, setProfilePicUrl] = useState<string | null>(null);
+  const [profileLoaded, setProfileLoaded] = useState(false);
+
 
   const [eventHistory, setEventHistory] = useState<{title: string, description: string, imageUrl: string, id: string}[]>([]); // Placeholder for event history data
 
@@ -51,15 +38,7 @@ export default function ProfilePage() {
       setSelfProfile(false);
     }
   }, [user?.id, userId]);    
-  // user is looking at their own profile, so fields should be editable
-
-
-  useEffect(() => {
-    if (!userId) {
-      navigate("/");
-    }
-  }, [userId, navigate]);
-
+  // user is looking at their own profile, so fields should be editable  
 
   useEffect(() => {
     if (!userId) {
@@ -73,6 +52,7 @@ export default function ProfilePage() {
         if (result.result !== "success") {
           console.error(result.error_message);
           navigate("/");
+          alert("Sorry, this profile no longer exists or couldn't be loaded.");
           return;
         }
 
@@ -83,6 +63,24 @@ export default function ProfilePage() {
         setOrgs(data.interestedOrganizations);
         setProfilePicUrl(data.profilePicUrl || null);
 
+        // adding profile picture 
+
+        if (userId === user?.id && user.imageUrl && user.imageUrl !== (data.profilePicUrl || null)) {
+          try {
+            console.log("Syncing profile pic...");
+            await editProfile(
+              user.id,
+              data.interestedTags.join(","),
+              data.interestedOrganizations.join(","),
+              user.imageUrl
+            );
+            setProfilePicUrl(user.imageUrl); // update locally to prevent re-trigger
+          } catch (err) {
+            console.error("Failed to sync profile picture:", err);
+          }
+        }
+      
+        // setting event history
         const eventHist = await getEventHistory(userId);
 
         if (result.result !== "success") {
@@ -90,6 +88,7 @@ export default function ProfilePage() {
           navigate("/");
           return;
         }
+
         const eventData = eventHist.data;
         setEventHistory(eventData.map((event: any) => {
 
@@ -107,6 +106,9 @@ export default function ProfilePage() {
         console.error("Failed to load profile:", err);
         navigate("/");
       }
+
+      setProfileLoaded(true);
+
     };
   
     fetchProfile();

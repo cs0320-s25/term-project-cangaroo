@@ -24,6 +24,7 @@ async function queryAPI(
     console.error(response.status, response.statusText);
   }
   return response.json();
+  
 }
 
 
@@ -308,6 +309,7 @@ export async function changeAttendance(
     eventID,
     isAttending: isAttending.toString(), // convert boolean to string for query param
   });
+
 }
 
 /**
