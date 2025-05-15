@@ -1,0 +1,35 @@
+.card {
+    position: relative;
+    width: 450px;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    border: 0.5px solid #131212;
+    overflow: hidden;
+    font-family: "Inter", sans-serif;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: white;
+    cursor: pointer;
+}
+
+.overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(74, 11, 47, 0.75), rgba(255, 230, 230, 0) 70%);
+  color: white;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+}
+
+.description {
+  font-size: 15px;
+  color: white;
+}

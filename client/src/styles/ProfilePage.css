@@ -1,0 +1,228 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
+
+.profile-page-all {
+  margin-top: 80px;
+}
+
+.modal-overlay {
+  background: #fbfbfb00;
+  min-height: 100vh;
+  padding: 2rem 4rem;
+  font-family: "Inter", sans-serif;
+}
+  
+.modal-content {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.profile-grid {
+  display: flex;
+  /* grid-template-columns: repeat(2, 1fr); */
+  /* gap: 40px; */
+  /* gap: 5rem; */
+  justify-content: space-between;
+  min-height: 100vh;
+  /* padding: 2rem 4rem; */
+  font-family: "Inter", sans-serif;
+}
+
+.profile-section {
+  min-height: 100vh;
+  padding: 2rem 2rem;
+  font-family: "Inter", sans-serif;
+  flex: 1;
+}
+
+.profile-overlay {
+    background: #FBFBFB;
+    min-height: 100vh;
+    padding: 2rem 2rem;
+    font-family: "Inter", sans-serif;
+}
+  
+.profile-content {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+  
+
+/* --- PROFILE HEADER --- */
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.profile-header-section:first-child {
+  width: 140px;
+  height: 140px;
+  border: 1.5px solid #8D99AE;
+  border-radius: 50%;
+  font-size: 50px;
+  font-weight: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #EFEFEF;
+  color: #8D99AE;
+  font-weight: bold;
+}
+
+.profile-section h2 {
+  font-size: 30px;
+  font-family: "Inter", sans-serif;
+  color: #4A0B2F;
+}
+
+.profile-header-section h2 {
+  font-family: "Inter", sans-serif;
+  font-size: 30px;
+  margin: 0;
+  color: #4A0B2F;
+}
+
+.profile-icon h2 {
+  font-family: "Inter", sans-serif;
+  font-size: 70px;
+  font-weight: 200;
+  color: #8D99AE;
+}
+
+.profile-section h3 {
+  font-family: "Inter", sans-serif;
+  font-size: 25px;
+  font-weight: 500;
+  color: #4A0B2F;
+  margin: 0.5rem 0;
+}
+
+#friend-list {
+  padding: 0.6rem 1rem;
+  background-color: #DD1155;
+  color: white;
+  border: none;
+  border-radius: 100px;
+  font-weight: 500;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}  
+
+/* --- INTEREST / TAG STYLES --- */
+.tag-container button, input {
+  background: #EFEFEF;
+  padding: 0.5rem 1.5rem;
+  border-radius: 999px;
+  font-size: 20px;
+  margin: 0.2rem 0.5rem 0.2rem 0;
+  display: inline-block;
+  color: #8D99AE;
+  cursor: pointer;
+  border: 0px;
+  font-family: "Inter", sans-serif;
+}
+
+#add-tag {
+  border: 2px solid #8D99AE;
+  color: #8D99AE;
+  background: #EFEFEF;
+  width: 110px;
+  font-family: "Inter", sans-serif;
+  font-size: 20px;
+  padding: 0.5rem 1.5rem; 
+  line-height: 1; 
+  height: auto; 
+}
+
+#add-tag::placeholder {
+  font-family: "Inter", sans-serif;
+  font-style: italic;
+  color: #8D99AE;
+}
+
+/* --- FAVORITE ORGANIZER BUTTONS --- */
+.organizer-container button, input {
+  background: #4A0B2F;
+  color: #FBFBFB;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 999px;
+  font-size: 20px;
+  margin: 0.2rem 0.5rem 0.2rem 0;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+}
+
+#add-org {
+  background: #EFEFEF;
+  border: 2px solid #4A0B2F;
+  color: #4A0B2F;
+  width: 110px;
+  font-family: "Inter", sans-serif;
+  font-size: 20px;
+  padding: 0.5rem 1.5rem; 
+  line-height: 1; 
+  height: auto; 
+}
+
+#add-org::placeholder {
+  font-family: "Inter", sans-serif;
+  font-style: italic;
+  color: #4A0B2F;
+}
+
+.tag-container,
+.organizer-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+#can-go {
+  color: #DD1155;
+  font-family: "Outfit", sans-serif;
+  font-size: 30px;
+
+}
+
+.event-header {
+  margin-top: 0.5rem; 
+}
+
+.recommended-events-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  padding: 2rem 0rem;
+}
+
+.profile-page-wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.tag-button, .org-button {
+  transition: text-decoration 0.2s ease;
+}
+
+.tag-button.deletable:hover, .org-button.deletable:hover{
+  text-decoration: line-through;
+  cursor: pointer;
+}
+
+.profile-image {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 1.5px solid #8D99AE;
+  object-fit: cover;
+}

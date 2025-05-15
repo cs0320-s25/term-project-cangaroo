@@ -1,0 +1,116 @@
+.event-grid-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  font-family: "Inter", sans-serif;
+  left: 0px;
+}
+
+  
+.scrollable-grid {
+  flex: 1; /* takes all remaining space below navbar */
+  overflow-y: auto;
+  padding-top: 8px;
+  box-sizing: border-box;
+  margin-top: 140px;
+  left: 0px;
+  /* position:absolute; */
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 40px;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+  left: 0px;
+}
+
+.event-search-bar {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 100px;
+  min-height: 2rem;
+  max-width:600px;
+  color: black;
+}
+
+
+.event-search {
+  display: flex;
+  font-family: "Inter", sans-serif;
+  justify-content: center;
+  width: 40vw;
+  height: 80px;
+  align-items: center;
+  padding: 0.75rem 3rem;
+  background-color: #ffffff;
+  margin-top: 40px;
+  position: absolute; 
+  z-index: 1001; /*makes sure navbar is always on top of other components*/
+  left: 20vw;
+}
+
+.search-button {
+  padding: 0.6rem 1rem;
+  background-color: #DD1155;
+  color: white;
+  border: none;
+  border-radius: 100px;
+  font-weight: 500;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  min-height: 40px;
+  min-width: 140px;
+  text-align: center;
+}
+  
+.search-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+@media (max-width: 1000px) {
+.card-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+}
+
+@media (max-width: 600px) {
+.card-grid {
+    grid-template-columns: 1fr;
+}
+}
+
+@media (max-width: 1400px) {
+  .event-search {
+    width: 35vw;
+    left: 21vw;
+  }
+
+  .event-search-bar {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 1250px) {
+  .event-search {
+    width: 20vw;
+    left: 30vw;
+  }
+
+  .event-search-bar {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  .search-button {
+    font-size: 1.2rem;
+    min-width: 100px;
+    padding: 0.5rem 0.8rem;
+  }
+}

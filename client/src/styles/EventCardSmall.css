@@ -1,0 +1,49 @@
+/*This has styling for EventCard*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
+
+
+* {
+    font-size: small;
+    text-align: start; /*left aligned*/
+    font-family: "Inter", sans-serif;
+}
+
+.card-small {
+    position: relative;
+    width: 300px;
+    height: 280px;
+    background-size: cover;
+    background-position: center;
+    border: 0.5px solid #131212;
+    overflow: hidden;
+    color: white;
+    font-family: "Inter", sans-serif;
+    border-radius: 15px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+  
+  .overlay {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(74, 11, 47, 0.75), rgba(255, 230, 230, 0) 70%);
+    color: white;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  
+  h2.title {
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
+    margin: 0;
+  }
+  
+  .description {
+    font-size: 12px;
+    color: white;
+    margin-top: 0.5rem;
+  }
+  
