@@ -1,17 +1,19 @@
 import "../styles/ProfilePage.css";
 import { useUser } from "@clerk/clerk-react";
 import { useState, useEffect } from "react";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import { SignedIn } from "@clerk/clerk-react";
 import { useNavigate, useParams } from "react-router-dom";
-import Navbar from "./Navbar";
+import { editProfile, viewProfile, getEventHistory } from "../utils/api";
 
 // components
 import EventCardSmall from "./EventCardSmall";
 import FriendsList from "./FriendsList";
-import { editProfile, viewProfile, getEventHistory } from "../utils/api";
 import EventPage from "./EventPage";
+import Navbar from "./Navbar";
 
-
+/**
+ * Profile Page component
+ */
 export default function ProfilePage() {
   const { user } = useUser();
   const { userId } = useParams<{ userId: string }>();
@@ -25,8 +27,6 @@ export default function ProfilePage() {
   const [orgs, setOrgs] = useState<string[]>([]);
   const [profilePicUrl, setProfilePicUrl] = useState<string | null>(null);
   const [profileLoaded, setProfileLoaded] = useState(false);
-
-
   const [eventHistory, setEventHistory] = useState<{title: string, description: string, imageUrl: string, id: string}[]>([]); // Placeholder for event history data
 
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
@@ -64,7 +64,6 @@ export default function ProfilePage() {
         setProfilePicUrl(data.profilePicUrl || null);
 
         // adding profile picture 
-
         if (userId === user?.id && user.imageUrl && user.imageUrl !== (data.profilePicUrl || null)) {
           try {
             console.log("Syncing profile pic...");

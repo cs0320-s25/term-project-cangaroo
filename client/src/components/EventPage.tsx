@@ -1,19 +1,25 @@
 import "../styles/EventPage.css";
-import { useState, useEffect } from "react";
-import EventCardGridSearch from "./EventGridSearch";
-import { viewEvent, changeAttendance, removeEventHistory, addEventHistory } from "../utils/api";
+import { useState } from "react";
+import { changeAttendance, removeEventHistory, addEventHistory } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import useEventDetails from "../hooks/useEventDetails";
 import EditEventForm from "./EditEventForm";
 import { createGcalEvent } from "./OAuthCallback";
 import { useUser } from "@clerk/clerk-react";
 
+/**
+ * Props for Event Page, including the ID of the event to display, 
+ * handling closing, and a boolean that will determine the text of the back button
+ */
 interface EventPageProps {
   eventID: string;
   onClose: () => void;
   cameFromHome: boolean;
 }
 
+/**
+ * Event Page component that displays relevant event information in a popup
+ */
 export default function EventPage({ eventID, onClose, cameFromHome }: EventPageProps) {
   const { user } = useUser();
   const navigate = useNavigate();

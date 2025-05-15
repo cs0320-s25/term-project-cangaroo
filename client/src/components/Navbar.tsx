@@ -2,6 +2,10 @@ import "../styles/Navbar.css";
 import { useNavigate } from "react-router-dom";
 import { SignOutButton, useUser, UserButton } from "@clerk/clerk-react";
 
+/**
+ * Props for Navbar. This includes handling event creation onclick, 
+ * minimal boolean (whether or not to show the search bar), and other button functions.
+ */
 interface NavbarProps {
   onPlusClick: () => void;
   minimal?: boolean;
@@ -9,6 +13,9 @@ interface NavbarProps {
   onLogoClick?: () => void;
 }
 
+/**
+ * Navbar component
+ */
 function Navbar({ onPlusClick, minimal = false, onRecommendClick, onLogoClick }: NavbarProps) {
   const navigate = useNavigate();
   const { user } = useUser();

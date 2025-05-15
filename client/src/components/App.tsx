@@ -1,6 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { initializeApp } from "firebase/app";
-import Star from "./Star";
 import "../styles/App.css";
 import {
   SignedIn,
@@ -8,19 +7,18 @@ import {
   SignInButton,
   SignOutButton} from "@clerk/clerk-react";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import OAuthCallback from "./OAuthCallback";
 import useCreateProfileOnFirstSignIn from "../hooks/useCreateProfileOnFirstSignIn"
-
-import ProfilePage from "./ProfilePage";
 
 // components
 import CreateEventForm from "./CreateEventForm";
 import EventCardGridSearch from "./EventGridSearch";
 import Navbar from "./Navbar";
+import Star from "./Star";
+import ProfilePage from "./ProfilePage";
 
 // Firebase configuration keys
-
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
@@ -32,6 +30,7 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 
+/** This creates the home page */
 function Home() {
   const [isModalOpen, setModalOpen] = useState(false);
   useCreateProfileOnFirstSignIn(); // profile creation
@@ -65,6 +64,7 @@ function Home() {
   );
 }
 
+/** This handles the main routing logic for home, profiles, and gcal functionality */
 export default function App() {
   return (
     <Router>

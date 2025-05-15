@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
 
+/* Styling for users' profile page */
+
 .profile-page-all {
   margin-top: 80px;
 }
@@ -18,12 +20,8 @@
 
 .profile-grid {
   display: flex;
-  /* grid-template-columns: repeat(2, 1fr); */
-  /* gap: 40px; */
-  /* gap: 5rem; */
   justify-content: space-between;
   min-height: 100vh;
-  /* padding: 2rem 4rem; */
   font-family: "Inter", sans-serif;
 }
 
@@ -35,10 +33,10 @@
 }
 
 .profile-overlay {
-    background: #FBFBFB;
-    min-height: 100vh;
-    padding: 2rem 2rem;
-    font-family: "Inter", sans-serif;
+  background: #FBFBFB;
+  min-height: 100vh;
+  padding: 2rem 2rem;
+  font-family: "Inter", sans-serif;
 }
   
 .profile-content {

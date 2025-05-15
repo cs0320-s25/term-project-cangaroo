@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
 
+/* Styling for the Event Page component, which displays event info in a popup */
+
 /* --- OVERLAY + CONTENT WRAPPER --- */
 .event-overlay {
     position: fixed; /* Ensures it sits on top of everything */
@@ -12,18 +14,18 @@
     overflow-y: auto;
     padding: 2rem 4rem;
     font-family: "Inter", sans-serif;
-  }
-  
+}
 
-  .event-content {
+
+.event-content {
     max-width: 1300px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 2rem;
     padding-bottom: 6rem;
-  }
-  
+}
+
 
 .event-grid {
     display: flex;
@@ -155,16 +157,16 @@ h1 {
     cursor: pointer;
     font-family: "Inter", sans-serif;
     transition: all 0.2s ease;
-  }
-  
-  .event-header .rsvped {
+}
+
+.event-header .rsvped {
     background: #8D99AE;
     border: none;
     color: #FBFBFB;
-  }
+}
 
 
-  .return-home-button {
+.return-home-button {
     align-self: flex-start;
     margin-bottom: 1rem;
     padding: 0.5rem 1rem;
@@ -177,13 +179,13 @@ h1 {
     font-family: "Inter", sans-serif;
     cursor: pointer;
     transition: background-color 0.2s ease;
-  }
-  
-  .return-home-button:hover {
-    background-color: #ff71a0;
-  }
-  
-  .edit-button {
+}
+
+.return-home-button:hover {
+    background-color: #ff71a0;  
+}
+
+.edit-button {
     background: #DD1155;
     border: none;
     color: #FBFBFB;
@@ -194,5 +196,4 @@ h1 {
     font-family: "Inter", sans-serif;
     align-self: flex-start;
     width: fit-content;
-  }
-  
+}

@@ -1,5 +1,10 @@
 import FriendCardCurrentFriend from "./FriendCardCurrentFriend";
+import "../styles/FriendsList.css"; 
 
+/**
+ * Props for this section. Handles relevant FriendCard functionality and includes the users to display here.
+ * Also includes the search term from the search bar.
+ */
 interface CurrentFriendsColumnProps {
   friendTuples: [string, string][];
   searchTerm: string;
@@ -8,6 +13,9 @@ interface CurrentFriendsColumnProps {
   handleUnfriendClick: (uid: string) => void;
 }
 
+/**
+ * Section to display all current friends
+ */
 export default function CurrentFriendsColumn({
   friendTuples,
   searchTerm,

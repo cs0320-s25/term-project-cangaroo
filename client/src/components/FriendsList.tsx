@@ -1,37 +1,30 @@
-import { useState, useEffect, useId} from "react";
-import FriendCard from "./FriendCard";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/FriendsList.css"; 
-// import { viewFriends } from "../utils/api";
 import { useParams } from "react-router"
+
+// components
 import IncomingRequestsColumn from "./IncomingRequestsCol";
 import CurrentFriendsColumn from "./CurrentFriendsCol";
 import NonFriendsColumn from "./NonFriendsCol";
 import OutgoingRequestsColumn from "./OutgoingRequestsCol";
-import FriendCardIncomingRequest from "./FriendCardIncomingRequest";
+
 
 import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutgoingFriendRequests, getReceivedFriendRequests,
   unfriend, viewFriends, viewProfile, viewNonFriends
 } from "../utils/api";
 
+/**
+ * Props for FriendList. Includes a boolean for open / closed, and handling closing.
+ */
 interface FriendsListProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-// defining relevant interfaces w/ props
-interface User {
-  name: string;
-  profilePictureUrl: string;
-  friendCount: number;
-  requestStatus: "incoming" | "friend" | "none"; 
-}
-
-interface FriendsListProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
+/**
+ * FriendsList component that handles all the friending functionality
+ */
 export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
   // routing
   const navigate = useNavigate();
@@ -89,10 +82,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
             return;
           }
           console.log("Successfully fetched non-friends from Firebase:", getNonFriendsResponse.users);
-          const nonFriendsList: [string, string][] = Array.from(Object.entries(getNonFriendsResponse.users));
-          // const filteredNonFriendsList = nonFriendsList.filter(
-          //   ([uid]) => !outgoingRequests.some(([requestUid]) => requestUid === uid)
-          // );          
+          const nonFriendsList: [string, string][] = Array.from(Object.entries(getNonFriendsResponse.users));     
           console.log("List of non-friends tuples: ", nonFriendsList);
           setNonFriends(nonFriendsList);
         }
@@ -321,7 +311,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           <h3>Incoming Friend Requests</h3>
           <div className="request-section">
             <IncomingRequestsColumn
-              friendUIDs={incomingRequests} 
+              userTuples={incomingRequests} 
               onNameClick={handleFriendCardNameClick}
               handleAccept={handleAcceptFriendRequest}
               handleReject={handleRejectFriendRequest}
@@ -335,8 +325,6 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
             />
           </div>
         </div>
-        {/* column 1: incoming requests */}
-
 
         {/* column 2: current friends */}
         <CurrentFriendsColumn
@@ -346,8 +334,6 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           onNameClick={handleFriendCardNameClick}
           handleUnfriendClick={handleUnfriend}
         />
-        {/* column 2: current friends (each col handles searching within the child component) */}
-        
 
         {/* column 3: general users (search for new friends) */}
         <NonFriendsColumn
@@ -357,8 +343,7 @@ export default function FriendsList({ isOpen, onClose }: FriendsListProps) {
           handleSendRequest={handleSendFriendRequest}
           onNameClick={handleFriendCardNameClick}
         />
-        {/* column 3: general users (search for new friends) */}
-      
+
       </div>
         
     </div>
