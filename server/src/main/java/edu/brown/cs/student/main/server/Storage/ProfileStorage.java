@@ -254,10 +254,12 @@ public class ProfileStorage {
     List<Map<String, Object>> events =
         (List<Map<String, Object>>) userRef.get().get().get("eventHistory");
     for (Map<String, Object> event : events) {
-      if (event.get("ID").equals(eventID)) {
+      if (event.get("ID").toString().equals(eventID)) {
         userRef.update("eventHistory", FieldValue.arrayRemove(event));
+        return;
       }
     }
+    throw new NoEventFoundException("Event not found.");
   }
 
   public Map<String, Object> getEvent(String eventID)
