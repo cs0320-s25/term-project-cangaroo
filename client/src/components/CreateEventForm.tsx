@@ -13,6 +13,7 @@ export default function CreateEventForm({ isOpen, onClose }: CreateEventFormProp
   if (!isOpen) return null; // should not show up 
   const { user } = useUser();
   const organizerName = user?.username || user?.fullName || "Anon.";
+
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [tags, setTags] = useState<string[]>([]);
