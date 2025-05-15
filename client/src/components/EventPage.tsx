@@ -75,7 +75,8 @@ export default function EventPage({ eventID, onClose, cameFromHome }: EventPageP
                   {organizerName}
                 </button>
 
-                <button onClick={() => createGcalEvent({
+                <button onClick={() => {
+                  createGcalEvent({
                   summary: name + " (" + organizerName + ")",
                   description: description,
                   start: {
@@ -84,8 +85,9 @@ export default function EventPage({ eventID, onClose, cameFromHome }: EventPageP
                   end: {
                     dateTime: date + "T" + endTime + ":00-04:00",
                   },
-                }
-                )}>Add to GCal</button>
+                });
+                alert("Event was added to Google Calendar!");
+              }}>Add to GCal</button>
               
                 <button 
                 className={rsvp ? "rsvp-button rsvped" : "rsvp-button"}
