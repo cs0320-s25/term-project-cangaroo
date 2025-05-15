@@ -85,3 +85,32 @@
     grid-template-columns: 1fr;
 }
 }
+
+@media (max-width: 1400px) {
+  .event-search {
+    width: 35vw;
+    left: 21vw;
+  }
+
+  .event-search-bar {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 1250px) {
+  .event-search {
+    width: 20vw;
+    left: 30vw;
+  }
+
+  .event-search-bar {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  .search-button {
+    font-size: 1.2rem;
+    min-width: 100px;
+    padding: 0.5rem 0.8rem;
+  }
+}
