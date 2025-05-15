@@ -50,7 +50,7 @@ Launch the program:
 Tests:
 To run the Playwright tests, you can type "cd client" in the terminal and run "npx run test". 
 To run the backend tests, you can run the test by clicking the play button on the file.
-
+The Postman tests can be found in `server/src/test/CanGo Endpoints.postman_collection.json`
 
 # Collaboration
 
