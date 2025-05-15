@@ -360,7 +360,6 @@ public class FirebaseUtilities implements StorageInterface {
     return allEventData;
   }
 
-  //
   @Override
   public void updateAttending(String uid, int eventID, boolean isAttending)
       throws ExecutionException,
@@ -368,63 +367,63 @@ public class FirebaseUtilities implements StorageInterface {
           NoProfileFoundException,
           NoEventFoundException,
           EventAlreadyAttendingException {
-    //    Firestore db = FirestoreClient.getFirestore();
+
     DocumentReference profileRef = db.collection("users").document(uid);
     DocumentReference eventRef = db.collection("events").document("event-" + eventID);
-    // change database architecture to allow storing all events in their own collection
 
-    ApiFuture<DocumentSnapshot> profileFuture = profileRef.get();
-    DocumentSnapshot profileSnapshot = profileFuture.get();
+    DocumentSnapshot profileSnapshot = profileRef.get().get();
+    DocumentSnapshot eventSnapshot = eventRef.get().get();
 
-    ApiFuture<DocumentSnapshot> eventFuture = eventRef.get();
-    DocumentSnapshot eventSnapshot = eventFuture.get();
-
-    if (profileSnapshot.exists()) {
-      if (eventSnapshot.exists()) {
-        List<Integer> oldAttending = (List<Integer>) profileSnapshot.get("eventsAttending");
-        assert oldAttending != null;
-        assert oldAttending != null;
-        String eventCreatorUID = Objects.requireNonNull(eventSnapshot.get("uid")).toString();
-        @SuppressWarnings("unchecked")
-        List<String> oldEventAttendingList = (List<String>) eventSnapshot.get("usersAttending");
-
-        assert oldEventAttendingList != null;
-        List<String> oldEventModifiable = new ArrayList<>(oldEventAttendingList);
-        if (isAttending && !oldEventAttendingList.contains((long) eventID)) {
-          oldEventModifiable.add(uid);
-        } else if (!isAttending) {
-          oldEventModifiable.remove(uid);
-        } else {
-          throw new EventAlreadyAttendingException("Event already attending");
-        }
-        eventRef.update("usersAttending", oldEventModifiable);
-        DocumentReference eventProfileRef =
-            db.collection("users")
-                .document(eventCreatorUID)
-                .collection("events")
-                .document("event-" + eventID);
-        eventProfileRef.update("usersAttending", oldEventModifiable);
-        // update profile
-
-        //        assert event != null;
-
-        if (isAttending) {
-          //          event.put("usersAttending", oldEventModifiable);
-          oldAttending.add(eventID);
-        } else {
-          oldAttending.remove(eventID);
-        }
-
-        //        System.out.println(event);
-        profileRef.update("eventsAttending", oldAttending);
-        // update event (get uid)
-
-      } else {
-        throw new NoEventFoundException("Event does not exist.");
-      }
-    } else {
+    if (!profileSnapshot.exists()) {
       throw new NoProfileFoundException("Profile does not exist.");
     }
+
+    if (!eventSnapshot.exists()) {
+      throw new NoEventFoundException("Event does not exist.");
+    }
+
+    // get and copy mutable list of eventsAttending
+    List<Integer> oldAttending = (List<Integer>) profileSnapshot.get("eventsAttending");
+    if (oldAttending == null) {
+      oldAttending = new ArrayList<>();
+    } else {
+      oldAttending = new ArrayList<>(oldAttending); // make mutable copy
+    }
+
+    String eventCreatorUID = Objects.requireNonNull(eventSnapshot.get("uid")).toString();
+
+    @SuppressWarnings("unchecked")
+    List<String> oldEventAttendingList = (List<String>) eventSnapshot.get("usersAttending");
+    if (oldEventAttendingList == null) {
+      oldEventAttendingList = new ArrayList<>();
+    }
+    List<String> oldEventModifiable = new ArrayList<>(oldEventAttendingList);
+
+    // Determine whether to add/remove attendance
+    if (isAttending) {
+      if (oldEventAttendingList.contains(uid)) {
+        throw new EventAlreadyAttendingException("User already attending event.");
+      }
+      oldEventModifiable.add(uid);
+      if (!oldAttending.contains(eventID)) {
+        oldAttending.add(eventID);
+      }
+    } else {
+      oldEventModifiable.remove(uid);
+      oldAttending.remove(Integer.valueOf(eventID)); // remove by value, not index
+    }
+
+    // Update both the global event and user-specific event doc
+    eventRef.update("usersAttending", oldEventModifiable);
+    DocumentReference eventProfileRef =
+        db.collection("users")
+            .document(eventCreatorUID)
+            .collection("events")
+            .document("event-" + eventID);
+    eventProfileRef.update("usersAttending", oldEventModifiable);
+
+    // Update user's profile with new eventsAttending
+    profileRef.update("eventsAttending", oldAttending);
   }
 
   private void checkProfilesExist(String user1, String user2) throws NoProfileFoundException {
