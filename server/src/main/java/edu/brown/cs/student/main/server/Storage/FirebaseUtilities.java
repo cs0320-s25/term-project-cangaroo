@@ -661,6 +661,23 @@ public class FirebaseUtilities implements StorageInterface {
   }
 
   @Override
+  public void removeEventHistory(String uid, String eventID)
+      throws NoProfileFoundException,
+          ExecutionException,
+          InterruptedException,
+          NoEventFoundException {
+    this.checkProfilesExist(uid, null);
+    DocumentReference userRef = db.collection("users").document(uid);
+    List<Map<String, Object>> events =
+        (List<Map<String, Object>>) userRef.get().get().get("eventHistory");
+    for (Map<String, Object> event : events) {
+      if (event.get("ID").equals(eventID)) {
+        userRef.update("eventHistory", FieldValue.arrayRemove(event));
+      }
+    }
+  }
+
+  @Override
   public Map<String, Object> getEvent(String eventID)
       throws ExecutionException, InterruptedException, NoEventFoundException {
 
