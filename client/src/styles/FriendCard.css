@@ -16,6 +16,23 @@
   margin-right: 1rem;
 }
 
+.friend-icon h2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Inter", sans-serif;
+  font-size: 40px;
+  font-weight: 200;
+  color: #8D99AE;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1rem;
+  border: 2px solid #8D99AE;
+  background: #EFEFEF;
+}
+
 .friend-info {
   flex: 1;
 }

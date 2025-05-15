@@ -132,9 +132,9 @@
   width: 110px;
   font-family: "Inter", sans-serif;
   font-size: 20px;
-  padding: 0.5rem 1.5rem; /* Explicitly match buttons */
-  line-height: 1; /* Reset line height */
-  height: auto; /* Avoid browser autofixing */
+  padding: 0.5rem 1.5rem; 
+  line-height: 1; 
+  height: auto; 
 }
 
 #add-tag::placeholder {
@@ -163,9 +163,9 @@
   width: 110px;
   font-family: "Inter", sans-serif;
   font-size: 20px;
-  padding: 0.5rem 1.5rem; /* Explicitly match buttons */
-  line-height: 1; /* Reset line height */
-  height: auto; /* Avoid browser autofixing */
+  padding: 0.5rem 1.5rem; 
+  line-height: 1; 
+  height: auto; 
 }
 
 #add-org::placeholder {

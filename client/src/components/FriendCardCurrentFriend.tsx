@@ -25,7 +25,7 @@ function FriendCardCurrentFriend({
   const [name, setName] = useState("")
   const [numFriends, setNumFriends] = useState(0)
   const navigate = useNavigate();
-  const [profilePic, setProfilePic] = useState("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg")
+  const [profilePic, setProfilePic] = useState("")
   
   useEffect(() => {
     const fetchProfile = async () => {
@@ -40,10 +40,6 @@ function FriendCardCurrentFriend({
         setName(data.username);
         setNumFriends(data.friendsList?.length || 0);
         setProfilePic(data.profilePicUrl);
-        if (!data.profilePicUrl || data.profilePicUrl === "") {
-          console.log("String is empty");
-          setProfilePic("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Goldfish_1.jpg/2278px-Goldfish_1.jpg");
-        }
         
       } catch (err) {
         console.error("Failed to load profile:", err);
@@ -63,7 +59,10 @@ function FriendCardCurrentFriend({
   return (
     <div className="friend-card">
 
-      <img src={profilePic} className="friend-image" />
+      {profilePic ? (<img src={profilePic} alt="Profile" className="friend-image" onError={() => setProfilePic("https://fivepointsdentalnj.com/wp-content/uploads/2015/11/anonymous-user.png")}/>) 
+                  : (<div className="friend-icon">
+                        <h2>{name.charAt(0)}</h2>
+                    </div>)}
 
       <div className="friend-info">
 

@@ -303,7 +303,7 @@ export default function ProfilePage() {
           </div>
 
            
-          {/* PROFILE AREA */}
+      
 
         </div>
 
