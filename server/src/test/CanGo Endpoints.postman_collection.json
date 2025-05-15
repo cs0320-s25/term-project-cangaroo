@@ -1,0 +1,1242 @@
+{
+	"info": {
+		"_postman_id": "3d17cf13-77f6-4498-9391-d8ac38eddc09",
+		"name": "CanGo Endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42045319",
+		"_collection_link": "https://idk666-1658.postman.co/workspace/My-Workspace~8893ada3-351c-48f1-83d1-24c06402359f/collection/42045319-3d17cf13-77f6-4498-9391-d8ac38eddc09?action=share&source=collection_link&creator=42045319"
+	},
+	"item": [
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "create-event",
+					"item": [
+						{
+							"name": "create-event (success)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/create-event?uid=Nathan&name=rager&description=very+cool&date=05/23/2025&startTime=7:00PM&tags=awesome,fun, epic&endTime=9:00PM&eventOrganizer=Cangaroo",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"create-event"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan"
+										},
+										{
+											"key": "name",
+											"value": "rager"
+										},
+										{
+											"key": "description",
+											"value": "very+cool"
+										},
+										{
+											"key": "date",
+											"value": "05/23/2025"
+										},
+										{
+											"key": "startTime",
+											"value": "7:00PM"
+										},
+										{
+											"key": "tags",
+											"value": "awesome,fun, epic"
+										},
+										{
+											"key": "endTime",
+											"value": "9:00PM"
+										},
+										{
+											"key": "eventOrganizer",
+											"value": "Cangaroo"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create-event (null parameter)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/create-event?uid=Nathan&name=rager&date=05/23/2025&startTime=7:00PM&tags=awesome,fun, epic&endTime=9:00PM",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"create-event"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan"
+										},
+										{
+											"key": "name",
+											"value": "rager"
+										},
+										{
+											"key": "description",
+											"value": "very+cool",
+											"disabled": true
+										},
+										{
+											"key": "date",
+											"value": "05/23/2025"
+										},
+										{
+											"key": "startTime",
+											"value": "7:00PM"
+										},
+										{
+											"key": "tags",
+											"value": "awesome,fun, epic"
+										},
+										{
+											"key": "endTime",
+											"value": "9:00PM"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create-event (nonexistant profile)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "delete-event",
+					"item": [
+						{
+							"name": "delete-event (null parameter)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/delete-event?uid=Nathan",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"delete-event"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete-event (success)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/delete-event?uid=Nathan&eventID=3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"delete-event"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan"
+										},
+										{
+											"key": "eventID",
+											"value": "3",
+											"description": "replace this parameter with the eventID of the event that you want to delete"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete-event (event not found)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/delete-event?uid=Nathan&eventID=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"delete-event"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan"
+										},
+										{
+											"key": "eventID",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "edit-event",
+					"item": [
+						{
+							"name": "edit-event (success)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/edit-event?uid=Nathan&eventID=0&tags=something,awesome, yeah&name=new+name&description=idk&date=02/29/2029&startTime=3:00AM&endTime=3:01AM&eventOrganizer=EvilCangaroo",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"edit-event"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan"
+										},
+										{
+											"key": "eventID",
+											"value": "0",
+											"description": "replace this parameter with the eventID of the event that you want to delete"
+										},
+										{
+											"key": "tags",
+											"value": "something,awesome, yeah"
+										},
+										{
+											"key": "name",
+											"value": "new+name"
+										},
+										{
+											"key": "description",
+											"value": "idk"
+										},
+										{
+											"key": "date",
+											"value": "02/29/2029"
+										},
+										{
+											"key": "startTime",
+											"value": "3:00AM"
+										},
+										{
+											"key": "endTime",
+											"value": "3:01AM"
+										},
+										{
+											"key": "eventOrganizer",
+											"value": "EvilCangaroo"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit-event (null parameter)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/edit-event?uid=Nathan&eventID=2&tags=something,awesome, yeah&description=idk&date=02/29/2029&startTime=3:00AM&endTime=3:01AM",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"edit-event"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan"
+										},
+										{
+											"key": "eventID",
+											"value": "2"
+										},
+										{
+											"key": "tags",
+											"value": "something,awesome, yeah"
+										},
+										{
+											"key": "name",
+											"value": "new+name",
+											"disabled": true
+										},
+										{
+											"key": "description",
+											"value": "idk"
+										},
+										{
+											"key": "date",
+											"value": "02/29/2029"
+										},
+										{
+											"key": "startTime",
+											"value": "3:00AM"
+										},
+										{
+											"key": "endTime",
+											"value": "3:01AM"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit-event (event not found)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/edit-event?uid=Nathan&eventID=0&tags=something,awesome, yeah&name=new+name&description=idk&date=02/29/2029&startTime=3:00AM&endTime=3:01AM&eventOrganizer=EvilCangaroo",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"edit-event"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan"
+										},
+										{
+											"key": "eventID",
+											"value": "0"
+										},
+										{
+											"key": "tags",
+											"value": "something,awesome, yeah"
+										},
+										{
+											"key": "name",
+											"value": "new+name"
+										},
+										{
+											"key": "description",
+											"value": "idk"
+										},
+										{
+											"key": "date",
+											"value": "02/29/2029"
+										},
+										{
+											"key": "startTime",
+											"value": "3:00AM"
+										},
+										{
+											"key": "endTime",
+											"value": "3:01AM"
+										},
+										{
+											"key": "eventOrganizer",
+											"value": "EvilCangaroo"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "view-event",
+					"item": [
+						{
+							"name": "view-event (success)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/view-event?uid=Nathan&eventID=4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"view-event"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan"
+										},
+										{
+											"key": "eventID",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "view-event (null parameter)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/view-event",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"view-event"
+									],
+									"query": [
+										{
+											"key": "eventID",
+											"value": "2",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "view-event (event not found)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/view-event?&eventID=1000",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"view-event"
+									],
+									"query": [
+										{
+											"key": null,
+											"value": null
+										},
+										{
+											"key": "eventID",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "change-attendance",
+					"item": [
+						{
+							"name": "attend-event (success)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/change-attendance?uid=Nathan2&eventID=0&isAttending=true",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"change-attendance"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan2"
+										},
+										{
+											"key": "eventID",
+											"value": "0"
+										},
+										{
+											"key": "isAttending",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "attend-event (null parameter)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/change-attendance?uid=Nathan2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"change-attendance"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "attend-event (event not found)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/change-attendance?uid=Nathan2&eventID=123910293&isAttending=true",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"change-attendance"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan2"
+										},
+										{
+											"key": "eventID",
+											"value": "123910293"
+										},
+										{
+											"key": "isAttending",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "attend-event (profile not found)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/change-attendance?uid=Nathan123402134&eventID=0&isAttending=true",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"change-attendance"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan123402134"
+										},
+										{
+											"key": "eventID",
+											"value": "0"
+										},
+										{
+											"key": "isAttending",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "attend-event (isAttending not a boolean)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/change-attendance?uid=Nathan2&eventID=0&isAttending=notABoolean",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"change-attendance"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan2"
+										},
+										{
+											"key": "eventID",
+											"value": "0"
+										},
+										{
+											"key": "isAttending",
+											"value": "notABoolean"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "unattend-event (success)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/change-attendance?uid=Nathan2&eventID=0&isAttending=false",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"change-attendance"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan2"
+										},
+										{
+											"key": "eventID",
+											"value": "0"
+										},
+										{
+											"key": "isAttending",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "add-event-history",
+					"item": [
+						{
+							"name": "add-event-history (success)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "add-event-history (profile not found)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "add-event-history (event not found)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Profiles",
+			"item": [
+				{
+					"name": "create-profile",
+					"item": [
+						{
+							"name": "create-profile (success)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/create-profile?uid=Nathan2&interestedTags=cooking,flying+kites,poetry",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"create-profile"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan2"
+										},
+										{
+											"key": "interestedTags",
+											"value": "cooking,flying+kites,poetry"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create-profile (null parameter)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/create-profile?uid=Nathan2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"create-profile"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan2"
+										},
+										{
+											"key": "interestedTags",
+											"value": "cooking,flying+kites,poetry",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "edit-profile",
+					"item": [
+						{
+							"name": "edit-profile (success)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/edit-profile?uid=Nathan2&interestedTags=sleeping,skating,food",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"edit-profile"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan2"
+										},
+										{
+											"key": "interestedTags",
+											"value": "sleeping,skating,food"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit-profile (null parameter)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/edit-profile?uid=Nathan2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"edit-profile"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit-profile (profile not found)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/edit-profile?uid=Nathan1011&interestedTags=cooking,flying+kites,poetry",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"edit-profile"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan1011"
+										},
+										{
+											"key": "interestedTags",
+											"value": "cooking,flying+kites,poetry"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "view-profile",
+					"item": [
+						{
+							"name": "view-profile (success)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/view-profile?uid=Nathan2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"view-profile"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "view-profile (null parameter)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/view-profile",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"view-profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "view-profile (profile not found)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3232/view-profile?uid=Nathan101010",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3232",
+									"path": [
+										"view-profile"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "Nathan101010"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "get-event-history (success)",
+					"item": [
+						{
+							"name": "get-event-history (success)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "get-event-history (profile not found)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "remove-event-history",
+					"item": [
+						{
+							"name": "remove-event-history (success)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "remove-event-history (profile not found)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "remove-event-history (event not found)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Friending",
+			"item": [
+				{
+					"name": "send-friend-request",
+					"item": [
+						{
+							"name": "send-friend-request (success)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "send-friend-request (null parameter)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "send-friend-request (profile not found)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "unsend-friend-request",
+					"item": [
+						{
+							"name": "unsend-friend-request (success)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "unsend-friend-request (null parameter)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "unsend-friend-request (profile not found)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "respond-to-friend-request",
+					"item": [
+						{
+							"name": "respond-to-friend-request (accept success)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "respond-to-friend-request (reject success)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "respond-to-friend-request (null parameter)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "respond-to-friend-request (profile not found)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "respond-to-friend-request (isAccepted not boolean)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "respond-to-friend-request (friend request doesn't exist)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "unfriend",
+					"item": [
+						{
+							"name": "unfriend (success)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "unfriend (null parameter)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "unfriend (profile not found)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "unfriend (not currently friends)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "view-friends",
+					"item": [
+						{
+							"name": "view-friends (success)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "view-friends (null parameter)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "view-friends (profile not found)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "get-{outgoing, received}-friend-requests",
+					"item": [
+						{
+							"name": "get-received-friend-requests (success)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "get-received-friend-requests (success)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "get-{outgoing, received}-friend-requests (null parameter)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "get-{outgoing, received}-friend-requests (profile not found)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "get-non-friends",
+					"item": [
+						{
+							"name": "get-non-friends (success)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "get-non-friends (profile not found)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Testing",
+			"item": [
+				{
+					"name": "deleteDatabase (for easy cleanup of database while testing)",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -9,15 +9,14 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-/**
- * Handler that gets the event history of a user
- */
+/** Handler that gets the event history of a user */
 public class GetEventHistoryHandler implements Route {
   // database object
   public ProfileStorage storageHandler;
 
   /**
    * Handler that gets the event history of a user
+   *
    * @param storageHandler - a ProfileStorage object that has the Firestore object
    */
   public GetEventHistoryHandler(ProfileStorage storageHandler) {

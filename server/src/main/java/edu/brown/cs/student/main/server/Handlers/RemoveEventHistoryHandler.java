@@ -8,15 +8,14 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-/**
- * Handler that removes an event from a user's history
- */
+/** Handler that removes an event from a user's history */
 public class RemoveEventHistoryHandler implements Route {
   // database object
   public ProfileStorage storageHandler;
 
   /**
    * Handler that removes an event from a user's history
+   *
    * @param storageHandler - a ProfileStorage object that has the Firestore object
    */
   public RemoveEventHistoryHandler(ProfileStorage storageHandler) {

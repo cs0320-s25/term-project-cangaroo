@@ -10,15 +10,14 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-/**
- * Handler that creates a profile
- */
+/** Handler that creates a profile */
 public class ProfileCreationHandler implements Route {
   // database object
   public ProfileStorage storageHandler;
 
   /**
    * Handler that creates a profile
+   *
    * @param storageHandler - a ProfileStorage object that has the Firestore object
    */
   public ProfileCreationHandler(ProfileStorage storageHandler) {

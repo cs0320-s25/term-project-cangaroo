@@ -19,20 +19,23 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Class that manipulates profile data in the Firestore database
- */
+/** Class that manipulates profile data in the Firestore database */
 public class ProfileStorage {
   // database object
   private Firestore db;
+
   /**
    * Manipulates profile data in the Firestore database
+   *
    * @param db - the Firestore database created by GeneralStorage
    */
-  public ProfileStorage(Firestore db) throws IOException {this.db = db;}
+  public ProfileStorage(Firestore db) throws IOException {
+    this.db = db;
+  }
 
   /**
    * Retrieves a profile
+   *
    * @param uid - clerkID of the profile
    * @return a Map<String, Object> containing the profile details
    * @throws ExecutionException - if the computation threw an exception
@@ -56,6 +59,7 @@ public class ProfileStorage {
 
   /**
    * Edits a profile's details
+   *
    * @param uid - clerkID of the profile
    * @param tags - the tags of a user
    * @param favEventOrganizers - the user's favorite organizers
@@ -80,6 +84,7 @@ public class ProfileStorage {
 
   /**
    * Gets all the events in the database
+   *
    * @return All the events as a list of Event records
    * @throws ExecutionException - if the computation threw an exception
    * @throws InterruptedException - if the current thread was interrupted while waiting
@@ -125,6 +130,7 @@ public class ProfileStorage {
 
   /**
    * Returns all events as a list of maps
+   *
    * @return a list of Map<String, Object> of all the events
    * @throws ExecutionException - if the computation threw an exception
    * @throws InterruptedException - if the current thread was interrupted while waiting
@@ -155,6 +161,7 @@ public class ProfileStorage {
 
   /**
    * Updates whether a user is attending an event
+   *
    * @param uid - clerkID of the user
    * @param eventID - unique ID of the event
    * @param isAttending - boolean that is true if the user is RSVPing (false if unRSVPing)
@@ -162,7 +169,8 @@ public class ProfileStorage {
    * @throws InterruptedException - if the current thread was interrupted while waiting
    * @throws NoProfileFoundException - if profile not found
    * @throws NoEventFoundException - if event not found
-   * @throws EventAlreadyAttendingException - if the user wants to RSVP but is already attending the event
+   * @throws EventAlreadyAttendingException - if the user wants to RSVP but is already attending the
+   *     event
    */
   public void updateAttending(String uid, int eventID, boolean isAttending)
       throws ExecutionException,
@@ -231,6 +239,7 @@ public class ProfileStorage {
 
   /**
    * Checks if two profiles exist
+   *
    * @param user1 - one of the users
    * @param user2 - the other user (can be null, then method only checks if user1 exists)
    * @throws NoProfileFoundException
@@ -253,6 +262,7 @@ public class ProfileStorage {
 
   /**
    * Adds a profile to the database
+   *
    * @param uid - clerkID of the user
    * @param data - profile details of the user
    */
@@ -262,6 +272,7 @@ public class ProfileStorage {
 
   /**
    * Adds an event to a user's event history
+   *
    * @param uid - clerkID of the user
    * @param eventID - ID for the event
    * @throws NoProfileFoundException - if profile not found
@@ -287,6 +298,7 @@ public class ProfileStorage {
 
   /**
    * Retrieves the events in a user's history
+   *
    * @param uid - clerkID of the user
    * @return a list of Map<String,Object> that represents the events in a user's history
    * @throws NoProfileFoundException - if profile not found
@@ -302,6 +314,7 @@ public class ProfileStorage {
 
   /**
    * Removes an event from a user's history
+   *
    * @param uid - clerkID of the user
    * @param eventID - ID of the event
    * @throws NoProfileFoundException - if profile not found
@@ -329,6 +342,7 @@ public class ProfileStorage {
 
   /**
    * gets an event
+   *
    * @param eventID - the ID for the event
    * @return the event as a Map<String, Object>
    * @throws ExecutionException - if the computation threw an exception

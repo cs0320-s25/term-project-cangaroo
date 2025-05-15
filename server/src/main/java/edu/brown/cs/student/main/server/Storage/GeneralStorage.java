@@ -14,13 +14,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 /**
- * Class that manipulates miscellaneous data in the Firebase database; starts the Firebase application
+ * Class that manipulates miscellaneous data in the Firebase database; starts the Firebase
+ * application
  */
 public class GeneralStorage {
   // database
@@ -28,6 +26,7 @@ public class GeneralStorage {
 
   /**
    * Initializes the Firebase application and creates a database object
+   *
    * @throws IOException - if error occurs while starting app
    */
   public GeneralStorage() throws IOException {
@@ -54,10 +53,7 @@ public class GeneralStorage {
     this.db = FirestoreClient.getFirestore();
   }
 
-
-  /**
-   * Deletes the entire database (used for testing)
-   */
+  /** Deletes the entire database (used for testing) */
   public void deleteDatabase() {
     clearCollection(db.collection("users"));
     clearCollection(db.collection("events"));
@@ -66,6 +62,7 @@ public class GeneralStorage {
 
   /**
    * Clears a collection of all documents
+   *
    * @param collection - the reference to the collection to be deleted
    */
   private void clearCollection(CollectionReference collection) {
@@ -79,6 +76,7 @@ public class GeneralStorage {
 
   /**
    * Helper method to delete a collection
+   *
    * @param collection - a reference to the collection
    */
   private void deleteCollection(CollectionReference collection) {
@@ -102,6 +100,7 @@ public class GeneralStorage {
 
   /**
    * Helper method to delete a document
+   *
    * @param doc - the DocumentReference to the document
    */
   private void deleteDocument(DocumentReference doc) {

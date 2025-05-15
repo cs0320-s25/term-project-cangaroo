@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Record that contains details for an event
+ *
  * @param name - name of the event
  * @param description - description for the event
  * @param date - date of the event in YYYY/MM/DD
