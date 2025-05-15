@@ -10,10 +10,17 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Handler that changes a profile's attendance to an event
+ */
 public class ChangeAttendanceHandler implements Route {
-
+  // database object
   public ProfileStorage storageHandler;
 
+  /**
+   * Handler that changes a profile's attendance to an event
+   * @param storageHandler - a ProfileStorage object that has the Firestore object
+   */
   public ChangeAttendanceHandler(ProfileStorage storageHandler) {
     this.storageHandler = storageHandler;
   }

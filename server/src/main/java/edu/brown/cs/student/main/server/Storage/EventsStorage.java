@@ -16,36 +16,55 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Class that manipulates event data in the Firestore database
+ */
 public class EventsStorage {
+  // database object
   private Firestore db;
 
-  public EventsStorage(Firestore db) throws IOException {
+  /**
+   * Manipulates event data in the Firestore database
+   * @param db - the Firestore database created by GeneralStorage
+   */
+  public EventsStorage(Firestore db){
     this.db = db;
   }
 
-  public void updateEventID(int newVal) {
-    //    Firestore db = FirestoreClient.getFirestore();
-    Map<String, Object> data = new HashMap<>();
-    data.put("eventID", newVal);
-    db.collection("currentIDs").document("currentEventID").set(data);
-  }
-
+  /**
+   * Gets the current available eventID
+   * @return the current available eventID
+   * @throws ExecutionException - if the computation threw an exception
+   * @throws InterruptedException - if the current thread was interrupted while waiting
+   */
   public int getCurrEventID() throws ExecutionException, InterruptedException {
 
-    //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference docRef = db.collection("currentIDs").document("currentEventID");
-
-    ApiFuture<DocumentSnapshot> future = docRef.get();
-    // ...
-    // future.get() blocks on response
-    DocumentSnapshot document = future.get();
+    DocumentSnapshot document = docRef.get().get();
     if (document.exists()) {
       return Integer.parseInt(Objects.requireNonNull(document.get("eventID")).toString());
     } else {
+      // return 0 as the first ID if not in the database
       return 0;
     }
   }
 
+  /**
+   * Edits the details of an event in the database
+   * @param uid - clerkID of the creator of the event
+   * @param eventID - the unique ID for an event
+   * @param name - name of the event
+   * @param description - event's description
+   * @param date - YYYY/MM/DD format
+   * @param startTime - starting time in military time
+   * @param endTime - starting time in military time
+   * @param tags - a list of strings that represents the tags associated with the event
+   * @param eventOrganizer - name of the event organizer
+   * @param thumbnailUrl - url that links to the thumbnail
+   * @throws ExecutionException - if the computation threw an exception
+   * @throws InterruptedException - if the current thread was interrupted while waiting
+   * @throws NoEventFoundException - if the event doesn't exist
+   */
   public void editEvent(
       String uid,
       String eventID,
@@ -58,8 +77,8 @@ public class EventsStorage {
       String eventOrganizer,
       String thumbnailUrl)
       throws ExecutionException, InterruptedException, NoEventFoundException {
-    //    Firestore db = FirestoreClient.getFirestore();
 
+    // need to update the event in the list of events as well as the user's list of events
     DocumentReference docRef =
         db.collection("users").document(uid).collection("events").document("event-" + eventID);
 
@@ -82,6 +101,18 @@ public class EventsStorage {
     }
   }
 
+  /**
+   * helper method that updates the event details for an event
+   * @param name - name of the event
+   * @param description - event's description
+   * @param date - YYYY/MM/DD format
+   * @param startTime - starting time in military time
+   * @param endTime - starting time in military time
+   * @param tags - a list of strings that represents the tags associated with the event
+   * @param eventOrganizer - name of the event organizer
+   * @param thumbnailUrl - url that links to the thumbnail
+   * @param docRef - DocumentReference of where the data is being updated
+   */
   private void updateEventData(
       String name,
       String description,
@@ -102,19 +133,21 @@ public class EventsStorage {
     docRef.update("thumbnailUrl", thumbnailUrl);
   }
 
-  private String getNameFromID(String id) throws ExecutionException, InterruptedException {
-    //    Firestore db = FirestoreClient.getFirestore();
-    return db.collection("users").document(id).get().get().get("username").toString();
-  }
-
+  /**
+   * returns an Event given its ID
+   * @param eventID - the unique eventID for the event
+   * @return a Map<String, Object> that represents an Event
+   * @throws InterruptedException - if the current thread was interrupted while waiting
+   * @throws ExecutionException - if the computation threw an exception
+   * @throws NoEventFoundException - if the event doesn't exist
+   * @throws NoEventFoundException - if the event wasn't found
+   */
   public Map<String, Object> getEvent(String eventID)
       throws ExecutionException, InterruptedException, NoEventFoundException {
 
-    //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference docRef = db.collection("events").document("event-" + eventID);
 
-    ApiFuture<DocumentSnapshot> future = docRef.get();
-    DocumentSnapshot snapshot = future.get();
+    DocumentSnapshot snapshot = docRef.get().get();
 
     if (!snapshot.exists()) {
       throw new NoEventFoundException("Event does not exist.");
@@ -136,13 +169,19 @@ public class EventsStorage {
     return data;
   }
 
+  /**
+   * Deletes an event in the database
+   * @param uid - clerkID of the creator of the event
+   * @param id - eventID of the event
+   * @throws NoEventFoundException - if the event isn't found
+   */
   public void deleteEvent(String uid, String id) throws NoEventFoundException {
 
-    //    Firestore db = FirestoreClient.getFirestore();
     CollectionReference dataRef = db.collection("users").document(uid).collection("events");
 
     for (DocumentReference eventRef : dataRef.listDocuments()) {
       if (eventRef.getId().equals("event-" + id)) {
+        // delete the document in both the user's events and the big list of events
         deleteDocument(eventRef);
         deleteDocument(db.collection("events").document("event-" + id));
         return;
@@ -151,21 +190,45 @@ public class EventsStorage {
     throw new NoEventFoundException("Event does not exist.");
   }
 
+  /**
+   * Adds an event to the database
+   * @param user - clerkID of the creator
+   * @param id - eventID of the event
+   * @param data - the event details
+   * @throws InterruptedException - if the current thread was interrupted while waiting
+   * @throws ExecutionException - if the computation threw an exception
+   * @throws NoProfileFoundException - if profile not found
+   */
   public void addEvent(String user, int id, Map<String, Object> data)
-      throws IllegalArgumentException,
-          ExecutionException,
+      throws ExecutionException,
           InterruptedException,
           NoProfileFoundException {
-    //    Firestore db = FirestoreClient.getFirestore();
+
     if (!db.collection("users").document(user).get().get().exists()) {
       throw new NoProfileFoundException("Profile does not exist");
     }
+
     CollectionReference collection = db.collection("users").document(user).collection("events");
 
     collection.document("event-" + id).set(data);
     db.collection("events").document("event-" + id).set(data);
   }
 
+  /**
+   * Updates the next available eventID
+   * @param newVal - the next available eventID
+   */
+  public void updateEventID(int newVal) {
+    //    Firestore db = FirestoreClient.getFirestore();
+    Map<String, Object> data = new HashMap<>();
+    data.put("eventID", newVal);
+    db.collection("currentIDs").document("currentEventID").set(data);
+  }
+
+  /**
+   * Helper method to delete a document
+   * @param doc - the DocumentReference to the document
+   */
   private void deleteDocument(DocumentReference doc) {
     // for each subcollection, run deleteCollection()
     Iterable<CollectionReference> collections = doc.listCollections();
@@ -176,6 +239,10 @@ public class EventsStorage {
     doc.delete();
   }
 
+  /**
+   * Helper method to delete a collection
+   * @param collection - a reference to the collection
+   */
   private void deleteCollection(CollectionReference collection) {
     try {
 

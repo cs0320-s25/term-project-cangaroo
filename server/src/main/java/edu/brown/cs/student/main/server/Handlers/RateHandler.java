@@ -1,7 +1,7 @@
 package edu.brown.cs.student.main.server.Handlers;
 
 import edu.brown.cs.student.main.server.HandlerLogic.Rate;
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import edu.brown.cs.student.main.server.Storage.ProfileStorage;
 import java.util.HashMap;
 import java.util.Map;
 import spark.Request;
@@ -11,10 +11,10 @@ import spark.Route;
 // handler processes the api requests for rating events
 public class RateHandler implements Route {
 
-  public StorageInterface storageHandler;
+  public ProfileStorage storageHandler;
   private Map<String, Object> responseMap;
 
-  public RateHandler(StorageInterface storageHandler) {
+  public RateHandler(ProfileStorage storageHandler) {
     this.storageHandler = storageHandler;
   }
 

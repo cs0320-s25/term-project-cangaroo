@@ -31,7 +31,6 @@ import edu.brown.cs.student.main.server.Storage.EventsStorage;
 import edu.brown.cs.student.main.server.Storage.FriendsStorage;
 import edu.brown.cs.student.main.server.Storage.GeneralStorage;
 import edu.brown.cs.student.main.server.Storage.ProfileStorage;
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
 import java.io.IOException;
 import spark.Filter;
 import spark.Spark;
@@ -51,19 +50,22 @@ public class Server {
               response.header("Access-Control-Allow-Methods", "*");
             });
 
-    // pondered mocking this, but figured it would be too complex mock the entire database
-    StorageInterface firebaseUtils;
     GeneralStorage generalStorage;
     EventsStorage eventsStorage;
     ProfileStorage profileStorage;
     FriendsStorage friendsStorage;
     try {
-      //      StorageInterface storageHandler = new FirebaseUtilities();
+      /*
+      should instantiate the GeneralStorage first, since it starts the Firebase app and creates
+      the Firestore object
+       */
+
       generalStorage = new GeneralStorage();
       eventsStorage = new EventsStorage(generalStorage.db);
       profileStorage = new ProfileStorage(generalStorage.db);
       friendsStorage = new FriendsStorage(generalStorage.db);
 
+      // set up endpoints
       Spark.get("send-friend-request", new SendFriendRequestHandler(friendsStorage));
       Spark.get("unsend-friend-request", new UnsendFriendRequestHandler(friendsStorage));
       Spark.get("edit-event", new EditEventHandler(eventsStorage));

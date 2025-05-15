@@ -8,10 +8,17 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Handler that gets all users that aren't friends with a user
+ */
 public class GetNonFriendsHandler implements Route {
-
+  // database object
   public FriendsStorage storageHandler;
 
+  /**
+   * Handler that gets all users that aren't friends with a user
+   * @param storageHandler - a FriendsStorage object that has the Firestore object
+   */
   public GetNonFriendsHandler(FriendsStorage storageHandler) {
     this.storageHandler = storageHandler;
   }

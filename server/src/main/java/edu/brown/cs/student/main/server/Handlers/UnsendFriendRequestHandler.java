@@ -8,10 +8,17 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Handler that unsends a friend request
+ */
 public class UnsendFriendRequestHandler implements Route {
-
+  // database object
   public FriendsStorage storageHandler;
 
+  /**
+   * Handler that unsends a friend request
+   * @param storageHandler - a FriendsStorage object that has the Firestore object
+   */
   public UnsendFriendRequestHandler(FriendsStorage storageHandler) {
     this.storageHandler = storageHandler;
   }

@@ -8,10 +8,17 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Handler that returns the details of an event
+ */
 public class ViewEventHandler implements Route {
-
+  // database object
   public EventsStorage storageHandler;
 
+  /**
+   * Handler that returns the details of an event
+   * @param storageHandler - an EventsStorage object that has the Firestore object
+   */
   public ViewEventHandler(EventsStorage storageHandler) {
     this.storageHandler = storageHandler;
   }

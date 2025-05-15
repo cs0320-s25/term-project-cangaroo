@@ -7,9 +7,17 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Handler that deletes the entire database (used for testing)
+ */
 public class DeleteAllHandler implements Route {
+  // database object
   public GeneralStorage storageHandler;
 
+  /**
+   * Handler that deletes the entire database (used for testing)
+   * @param storageHandler - a GeneralStorage object that has the Firestore object
+   */
   public DeleteAllHandler(GeneralStorage storageHandler) {
     this.storageHandler = storageHandler;
   }
