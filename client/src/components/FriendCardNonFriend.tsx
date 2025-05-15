@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'; 
 import "../styles/FriendCard.css";
-import { viewProfile } from "../utils/api";
+import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutgoingFriendRequests, getReceivedFriendRequests,
+         unfriend, viewFriends, viewProfile
+ } from "../utils/api";
 
-/**
- * Relevant FriendCard Props
- */
 interface FriendCardNonFriendProps {
   uid: string;
   handleNameClick: () => void;
@@ -13,7 +12,9 @@ interface FriendCardNonFriendProps {
 };
 
 /**
- * Method to render a friend card component for the Non-Friends Section. 
+ * Method to render an friend card component. Contains various interactions with other users (friend, unfriend, accept, reject, send invite, click profile)
+ * 
+ * @returns - the JSX FriendCard component.
  */
 function FriendCardNonFriend({
   uid,

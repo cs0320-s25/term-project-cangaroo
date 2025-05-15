@@ -71,9 +71,9 @@ const OAuthCallback = () => {
   return <p>Handling OAuth redirect...</p>;
 };
 
-/**
- * Handles creating a Google Calendar Event
- */
+
+
+
 export function createGcalEvent(event: { summary: string; description: string; start: { dateTime: string; }; end: { dateTime: string; }; }) {
     
     sessionStorage.setItem("event", JSON.stringify(event));

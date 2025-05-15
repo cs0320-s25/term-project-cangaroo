@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate, useParams } from 'react-router-dom'; 
 import "../styles/FriendCard.css";
-import { viewProfile } from "../utils/api";
+import { sendFriendRequest, unsendFriendRequest, respondToFriendRequest, getOutgoingFriendRequests, getReceivedFriendRequests,
+         unfriend, viewFriends, viewProfile
+ } from "../utils/api";
 
-/**
- * Relevant FriendCard Props
- */
 interface FriendCardCurrentFriendProps {
   uid: string;
   handleNameClick: () => void;
@@ -13,7 +12,9 @@ interface FriendCardCurrentFriendProps {
 };
 
 /**
- * Method to render a friend card component for the Current Friends Section. 
+ * Method to render an friend card component. Contains various interactions with other users (friend, unfriend, accept, reject, send invite, click profile)
+ * 
+ * @returns - the JSX FriendCard component.
  */
 function FriendCardCurrentFriend({
   uid,

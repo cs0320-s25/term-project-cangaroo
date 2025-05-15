@@ -2,6 +2,7 @@ import "../styles/EventCard.css";
 import { viewEvent } from "../utils/api";
 import { useState, useEffect } from "react";
 
+
 /**
  * Props to pass into an event card.
  */
@@ -11,8 +12,11 @@ interface EventCardProps {
   }
 
 /**
- * Event card component
+ * Method to render an event card component. 
+ * 
+ * @returns - the JSX EventCard component.
  */
+
 function EventCard ({ eventID, onClick }: EventCardProps) {
 
   const [organizer, setOrganizer] = useState("Organizer");
@@ -65,5 +69,6 @@ function EventCard ({ eventID, onClick }: EventCardProps) {
     </div>
   );
 };
+
 
 export default EventCard;

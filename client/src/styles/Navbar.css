@@ -1,22 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
 
-/* Styling for the Navbar component*/
-
 .navbar {
-  display: flex;
-  font-family: "Inter", sans-serif;
-  justify-content: space-between;
-  width: 95vw;
-  height: 80px;
-  align-items: center;
-  padding: 0.75rem 3rem;
-  background-color: #ffffff;
-  border-bottom: 1px solid #ddd;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-  position: absolute; /*sticks on scroll, so the navbar stays put*/
-  top: 0;
-  left: 0;
-  z-index: 1000; /*makes sure navbar is always on top of other components*/
+    display: flex;
+    font-family: "Inter", sans-serif;
+    justify-content: space-between;
+    width: 95vw;
+    height: 80px;
+    align-items: center;
+    padding: 0.75rem 3rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    position: absolute; /*sticks on scroll, so the navbar stays put*/
+    top: 0;
+    left: 0;
+    z-index: 1000; /*makes sure navbar is always on top of other components*/
 }
   
 .navbar-left {

@@ -1,20 +1,15 @@
 import { useEffect, useState } from "react";
-import "../styles/EventGridSearch.css";
-import { randomRecommend, search, rankEventsByFriends, recommend } from "../utils/api";
-import { useUser } from "@clerk/clerk-react";
-
-// components
 import EventCard from "./EventCard";
 import EventPage from "./EventPage";
 import Navbar from "./Navbar";
+import "../styles/EventGridSearch.css";
+import { randomRecommend, search, rankEventsByFriends, recommend } from "../utils/api";
+import { useUser } from "@clerk/clerk-react";
 
 interface EventCardGridSearchProps {
   onPlusClick: () => void;
 }
 
-/**
- * The main grid of event cards that show up for users to search
- */
 function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
   const { user } = useUser();
 
@@ -27,6 +22,7 @@ function EventCardGridSearch({ onPlusClick }: EventCardGridSearchProps) {
   const [eventIDs, setEventIDs] = useState<string[]>([]);
   const [searchSource, setSearchSource] = useState<"default" | "search" | "recommend" | "friends">("default");
   const [loading, setLoading] = useState(true);
+
 
   // Fetch random events when searchSource is "default"
   useEffect(() => {

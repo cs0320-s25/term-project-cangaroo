@@ -1,7 +1,8 @@
 import "../styles/EventCardSmall.css";
 
+
 /**
- * Props to pass into an event card, including relevant info to display.
+ * Props to pass into an event card.
  */
 interface EventCardProps {
     title: string;
@@ -11,7 +12,9 @@ interface EventCardProps {
   }
 
 /**
- * Small Event Card component (for event history display)
+ * Method to render an event card component. 
+ * 
+ * @returns - the JSX EventCard component.
  */
 
 const EventCardSmall = ({title, description, imageUrl, onClick}: EventCardProps) =>{

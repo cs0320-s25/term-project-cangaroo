@@ -1,18 +1,13 @@
+/* For logo: */
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
-
-/* Styling for FriendsList modal and column formatting */
-
 .friends-list-modal {
     background-color: #FBFBFB;
-    padding: 10rem;
+    /* padding: 8rem; */
+    /* border-radius: 10px; */
+    position: relative;
     max-width: 1300px;
-    margin: auto;
-    margin-top: 0rem;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
+    /* margin: auto; */
+    margin-top: 6rem;
     align-items: flex-start;
     overflow-y: auto;
     z-index: 1000;
@@ -23,6 +18,7 @@
     top: 0rem;
     left: 0rem;
     background: #DD1155;
+    /* width: 50px; */
     padding: 0.6rem 1rem;
     background-color: #DD1155;
     color: white;
@@ -80,6 +76,7 @@
     flex-direction: column;
     gap: 1rem;
 }
+
 
 .header-container {
     display: flex;
