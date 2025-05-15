@@ -19,9 +19,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Class that manipulates miscellaneous data in the Firebase database; starts the Firebase application
+ */
 public class GeneralStorage {
+  // database
   public Firestore db;
 
+  /**
+   * Initializes the Firebase application and creates a database object
+   * @throws IOException - if error occurs while starting app
+   */
   public GeneralStorage() throws IOException {
 
     // TODO: FIRESTORE PART 0:
@@ -46,52 +54,20 @@ public class GeneralStorage {
     this.db = FirestoreClient.getFirestore();
   }
 
-  public List<Map<String, Object>> getCollection(String user, String collection_id)
-      throws InterruptedException, ExecutionException, IllegalArgumentException {
-    if (user == null || collection_id == null) {
-      throw new IllegalArgumentException("getCollection: user and/or collection_id cannot be null");
-    }
 
-    // gets all documents in the collection 'collection_id' for user 'user'
-
-    //    Firestore db = FirestoreClient.getFirestore();
-    // 1: Make the data payload to add to your collection
-    CollectionReference dataRef = db.collection("users").document(user).collection(collection_id);
-
-    // 2: Get pin documents
-    QuerySnapshot dataQuery = dataRef.get().get();
-
-    // 3: Get data from document queries
-    List<Map<String, Object>> data = new ArrayList<>();
-    for (QueryDocumentSnapshot doc : dataQuery.getDocuments()) {
-      data.add(doc.getData());
-    }
-
-    return data;
-  }
-
-  public List<Map<String, Object>> getCompleteCollection()
-      throws InterruptedException, ExecutionException, IllegalArgumentException {
-
-    //    Firestore db = FirestoreClient.getFirestore();
-
-    // Get all pin documents for all users
-    List<Map<String, Object>> data = new ArrayList<>();
-    List<QueryDocumentSnapshot> docs = db.collectionGroup("pins").get().get().getDocuments();
-    for (QueryDocumentSnapshot doc : docs) {
-      data.add(doc.getData());
-    }
-
-    return data;
-  }
-
+  /**
+   * Deletes the entire database (used for testing)
+   */
   public void deleteDatabase() {
-    //    Firestore db = FirestoreClient.getFirestore();
     clearCollection(db.collection("users"));
     clearCollection(db.collection("events"));
     clearCollection(db.collection("currentIDs"));
   }
 
+  /**
+   * Clears a collection of all documents
+   * @param collection - the reference to the collection to be deleted
+   */
   private void clearCollection(CollectionReference collection) {
     for (DocumentReference docRef : collection.listDocuments()) {
       for (CollectionReference collectionRef : docRef.listCollections()) {
@@ -101,6 +77,10 @@ public class GeneralStorage {
     }
   }
 
+  /**
+   * Helper method to delete a collection
+   * @param collection - a reference to the collection
+   */
   private void deleteCollection(CollectionReference collection) {
     try {
 
@@ -120,6 +100,10 @@ public class GeneralStorage {
     }
   }
 
+  /**
+   * Helper method to delete a document
+   * @param doc - the DocumentReference to the document
+   */
   private void deleteDocument(DocumentReference doc) {
     // for each subcollection, run deleteCollection()
     Iterable<CollectionReference> collections = doc.listCollections();

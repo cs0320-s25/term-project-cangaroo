@@ -18,16 +18,28 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Class that manipulates friends data in the Firestore database
+ */
 public class FriendsStorage {
+  // database object
   private Firestore db;
 
+  /**
+   * Manipulates friends data in the Firestore database
+   * @param db - the Firestore database created by GeneralStorage
+   */
   public FriendsStorage(Firestore db) throws IOException {
     this.db = db;
   }
 
+  /**
+   * Sends a friend request from one user to another
+   * @param senderID - clerkID of the sender
+   * @param receiverID - clerkID of the receiver
+   * @throws NoProfileFoundException - if one of the profiles not found
+   */
   public void sendFriendRequest(String senderID, String receiverID) throws NoProfileFoundException {
-
-    //    Firestore db = FirestoreClient.getFirestore();
     this.checkProfilesExist(senderID, receiverID);
     // create a document in the receiver's collection for the friend request
     db.collection("users")
@@ -43,6 +55,12 @@ public class FriendsStorage {
         .set(new HashMap<>());
   }
 
+  /**
+   * Unsends a friend request from one user to another
+   * @param senderID - clerkID of the sender
+   * @param receiverID - clerkID of the receiver
+   * @throws NoProfileFoundException - if one of the profiles not found
+   */
   public void unsendFriendRequest(String senderID, String receiverID)
       throws NoProfileFoundException {
     //    Firestore db = FirestoreClient.getFirestore();
@@ -61,6 +79,15 @@ public class FriendsStorage {
             .document(senderID));
   }
 
+  /**
+   * Responds a friend request from one user to another
+   * @param senderID - clerkID of the sender
+   * @param receiverID - clerkID of the receiver
+   * @throws NoProfileFoundException - if one of the profiles not found
+   * @throws ExecutionException - if the computation threw an exception
+   * @throws InterruptedException - if the current thread was interrupted while waiting
+   * @throws NoExistingFriendRequestException - if there is no friend request between them
+   */
   public void respondToFriendRequest(String senderID, String receiverID, boolean isAccepted)
       throws NoProfileFoundException,
           ExecutionException,
@@ -93,14 +120,21 @@ public class FriendsStorage {
     this.unsendFriendRequest(senderID, receiverID);
   }
 
+  /**
+   * Unfriends two users
+   * @param user1 - one of the users (order doesn't matter)
+   * @param user2 - the other user (order doesn't matter)
+   * @throws NoProfileFoundException - if profile not found
+   * @throws NotFriendsException - if users weren't friends in the first place
+   * @throws ExecutionException - if the computation threw an exception
+   * @throws InterruptedException - if the current thread was interrupted while waiting
+   */
   public void removeFriends(String user1, String user2)
       throws NoProfileFoundException,
           NotFriendsException,
           ExecutionException,
           InterruptedException {
     this.checkProfilesExist(user1, user2);
-
-    //    Firestore db = FirestoreClient.getFirestore();
 
     // check if they are friends
     DocumentReference user1Ref = db.collection("users").document(user1);
@@ -114,10 +148,17 @@ public class FriendsStorage {
     user2Ref.update("friendsList", FieldValue.arrayRemove(user1));
   }
 
+  /**
+   * Gets the friends of a user
+   * @param uid - clerkID of the user
+   * @return a HashMap that maps uid -> username
+   * @throws NoProfileFoundException - if no profile found
+   * @throws ExecutionException - if the computation threw an exception
+   * @throws InterruptedException - if the current thread was interrupted while waiting
+   */
   public Map<String, String> viewFriends(String uid)
       throws NoProfileFoundException, ExecutionException, InterruptedException {
     this.checkProfilesExist(uid, null);
-    //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference userRef = db.collection("users").document(uid);
     Map<String, String> idToName = new HashMap<>();
     for (String friend : (List<String>) userRef.get().get().get("friendsList")) {
@@ -126,10 +167,18 @@ public class FriendsStorage {
     return idToName;
   }
 
+  /**
+   * Gets either all outgoing or received friend requests
+   * @param uid - clerkID of the user
+   * @param isOutgoing - a boolean that is true when intending to get all outgoing requests
+   * @return a Hashmap from uid -> username
+   * @throws NoProfileFoundException - if profile not found
+   * @throws ExecutionException - if the computation threw an exception
+   * @throws InterruptedException - if the current thread was interrupted while waiting
+   */
   public Map<String, String> getFriendRequests(String uid, boolean isOutgoing)
       throws NoProfileFoundException, ExecutionException, InterruptedException {
     this.checkProfilesExist(uid, null);
-    //    Firestore db = FirestoreClient.getFirestore();
     Map<String, String> idToName = new HashMap<>();
     String friendRequestCollection;
     if (isOutgoing) {
@@ -144,10 +193,17 @@ public class FriendsStorage {
     return idToName;
   }
 
+  /**
+   * Gets all non-friends of a user
+   * @param uid - clerkID of a user
+   * @return - a map from uid -> username
+   * @throws NoProfileFoundException - if profile not found
+   * @throws ExecutionException - if the computation threw an exception
+   * @throws InterruptedException - if the current thread was interrupted while waiting
+   */
   public Map<String, String> getUsers(String uid)
       throws NoProfileFoundException, ExecutionException, InterruptedException {
     this.checkProfilesExist(uid, null);
-    //    Firestore db = FirestoreClient.getFirestore();
     DocumentReference userRef = db.collection("users").document(uid);
     List<String> friends = (List<String>) userRef.get().get().get("friendsList");
 
@@ -172,14 +228,26 @@ public class FriendsStorage {
     return usersList;
   }
 
+  /**
+   *
+   * @param id
+   * @return
+   * @throws ExecutionException
+   * @throws InterruptedException
+   */
   private String getNameFromID(String id) throws ExecutionException, InterruptedException {
     //    Firestore db = FirestoreClient.getFirestore();
     return db.collection("users").document(id).get().get().get("username").toString();
   }
 
+  /**
+   * Checks if two profiles exist
+   * @param user1 - one of the users
+   * @param user2 - the other user (can be null, then method only checks if user1 exists)
+   * @throws NoProfileFoundException
+   */
   private void checkProfilesExist(String user1, String user2) throws NoProfileFoundException {
-    // probably do some error-checking to see if the ids actually correspond to profiles
-    //    Firestore db = FirestoreClient.getFirestore();
+
     boolean foundUser1 = false;
     boolean foundUser2 = false;
     for (DocumentReference userRef : db.collection("users").listDocuments()) {
@@ -195,6 +263,10 @@ public class FriendsStorage {
     }
   }
 
+  /**
+   * Helper method to delete a document
+   * @param doc - the DocumentReference to the document
+   */
   private void deleteDocument(DocumentReference doc) {
     // for each subcollection, run deleteCollection()
     Iterable<CollectionReference> collections = doc.listCollections();
@@ -204,7 +276,10 @@ public class FriendsStorage {
     // then delete the document
     doc.delete();
   }
-
+  /**
+   * Helper method to delete a collection
+   * @param collection - a reference to the collection
+   */
   private void deleteCollection(CollectionReference collection) {
     try {
 

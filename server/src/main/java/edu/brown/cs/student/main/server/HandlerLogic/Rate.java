@@ -2,7 +2,7 @@ package edu.brown.cs.student.main.server.HandlerLogic;
 
 import edu.brown.cs.student.main.server.Exceptions.NoEventFoundException;
 import edu.brown.cs.student.main.server.Exceptions.NoProfileFoundException;
-import edu.brown.cs.student.main.server.Storage.StorageInterface;
+import edu.brown.cs.student.main.server.Storage.ProfileStorage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -19,10 +19,10 @@ public class Rate {
    * param storageHandler - an object allowing you to use firebase utilities
    * @param profileID - the ID of the profile of the rater
    * @param eventID - the event the person is rating
-   * @param likedEvent - whether or not someone liked the event
+   * @param likedEvent - whether someone liked the event
    */
   public void rateEvent(
-      StorageInterface storageHandler, String profileID, String eventID, Boolean likedEvent)
+      ProfileStorage storageHandler, String profileID, String eventID, Boolean likedEvent)
       throws ExecutionException,
           InterruptedException,
           NoEventFoundException,

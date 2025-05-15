@@ -9,10 +9,17 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Handler that unfriends two users
+ */
 public class UnfriendHandler implements Route {
-
+  // database object
   public FriendsStorage storageHandler;
 
+  /**
+   * Handler that unfriends two users
+   * @param storageHandler - a FriendsStorage object that has the Firestore object
+   */
   public UnfriendHandler(FriendsStorage storageHandler) {
     this.storageHandler = storageHandler;
   }

@@ -8,10 +8,17 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Handler that returns all of a user's friends
+ */
 public class ViewFriendsHandler implements Route {
-
+  // database object
   public FriendsStorage storageHandler;
 
+  /**
+   * Handler that returns all of a user's friends
+   * @param storageHandler - a FriendsStorage object that has the Firestore object
+   */
   public ViewFriendsHandler(FriendsStorage storageHandler) {
     this.storageHandler = storageHandler;
   }

@@ -10,9 +10,17 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Handler that edits an event
+ */
 public class EditEventHandler implements Route {
+  // database object
   public EventsStorage storageHandler;
 
+  /**
+   * Handler that edits an event
+   * @param storageHandler - an EventsStorage object that has the Firestore object
+   */
   public EditEventHandler(EventsStorage storageHandler) {
     this.storageHandler = storageHandler;
   }

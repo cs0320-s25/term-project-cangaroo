@@ -10,9 +10,17 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * Handler that edits a profile
+ */
 public class EditProfileHandler implements Route {
+  // database object
   public ProfileStorage storageHandler;
 
+  /**
+   * Handler that edits a profile
+   * @param storageHandler - a ProfileStorage object that has the Firestore object
+   */
   public EditProfileHandler(ProfileStorage storageHandler) {
     this.storageHandler = storageHandler;
   }
